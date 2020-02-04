@@ -15,11 +15,11 @@ class Versao extends StatelessWidget {
             title: Recursos.instance.plataforma == 'android' ? Text("Versão Android: 1.0.3 (4)") : Text("Versão Chrome: 1.0.3 (4) Build: 201912032020"),
           ),
           ListTile(
-            title: Text("Suporte via WhatsApp pelo número +55 63 984495507"),
+            title: Text("Suporte via WhatsApp pelo número +55 63 984495508"),
             trailing: Icon(Icons.phonelink_ring),
           ),
           ListTile(
-            title: Text("Suporte via email em brintec.education@gmail.com"),
+            title: Text("Suporte via email em catalunha.mj@gmail.com"),
             trailing: Icon(Icons.email),
           ),
           ListTile(
@@ -31,10 +31,10 @@ class Versao extends StatelessWidget {
               } catch (e) {}
             },
           ),
-          Container(
-                alignment: Alignment.center,
-                child: Image.asset('assets/imagem/logo2.png'),
-              ),
+          // Container(
+          //       alignment: Alignment.center,
+          //       child: Image.asset('assets/imagem/logo2.png'),
+          //     ),
         ],
       ),
     );

@@ -79,7 +79,7 @@ class _ProblemaCRUDPageState extends State<ProblemaCRUDPage> {
               if (snapshot.data?.liberaAtivo())
                 SwitchListTile(
                   title: Text(
-                    'Situação ativa ? ',
+                    'Problema ativo ? ',
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   ),
                   value: snapshot.data?.ativo,
@@ -88,15 +88,6 @@ class _ProblemaCRUDPageState extends State<ProblemaCRUDPage> {
                   },
                   // secondary: Icon(Icons.thumbs_up_down),
                 ),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    '* Nome:',
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: _TextFieldMultiplo(bloc, 'nome')),
               Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
@@ -109,7 +100,16 @@ class _ProblemaCRUDPageState extends State<ProblemaCRUDPage> {
               Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
-                    'Link para o arquivo de simulações:',
+                    '* Nome:',
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  )),
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: _TextFieldMultiplo(bloc, 'nome')),
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    'Link para o arquivo de solução:',
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   )),
               Padding(

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:aiprof/bootstrap.dart';
 import 'package:aiprof/paginas/turma/turma_aluno_list_bloc.dart';
-import 'package:aiprof/naosuportato/url_launcher.dart'
-    if (dart.library.io) 'package:url_launcher/url_launcher.dart';
+import 'package:aiprof/naosuportato/url_launcher.dart' if (dart.library.io) 'package:url_launcher/url_launcher.dart';
 
 class TurmaAlunoListPage extends StatefulWidget {
   final String turmaID;
@@ -37,8 +36,7 @@ class _TurmaAlunoListPageState extends State<TurmaAlunoListPage> {
         ),
         body: StreamBuilder<TurmaAlunoListBlocState>(
             stream: bloc.stateStream,
-            builder: (BuildContext context,
-                AsyncSnapshot<TurmaAlunoListBlocState> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<TurmaAlunoListBlocState> snapshot) {
               if (snapshot.hasError) {
                 return Text("Existe algo errado! Informe o suporte.");
               }
@@ -156,18 +154,12 @@ class _TurmaAlunoListPageState extends State<TurmaAlunoListPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text("Nome: $nome",
-                            style: Theme.of(context).textTheme.subhead),
-                        Text("matricula: $matricula",
-                            style: Theme.of(context).textTheme.subhead),
-                        Text("E-mail: $email",
-                            style: Theme.of(context).textTheme.subhead),
-                        Text("Celular: $celular",
-                            style: Theme.of(context).textTheme.subhead),
-                        Text("Cracha: $cracha",
-                            style: Theme.of(context).textTheme.subhead),
-                        Text("Id: $id",
-                            style: Theme.of(context).textTheme.subhead),
+                        Text("Nome: $nome", style: Theme.of(context).textTheme.subhead),
+                        Text("matricula: $matricula", style: Theme.of(context).textTheme.subhead),
+                        Text("E-mail: $email", style: Theme.of(context).textTheme.subhead),
+                        Text("Celular: $celular", style: Theme.of(context).textTheme.subhead),
+                        Text("Cracha: $cracha", style: Theme.of(context).textTheme.subhead),
+                        Text("Id: $id", style: Theme.of(context).textTheme.subhead),
                       ],
                     ),
                   ),
@@ -186,7 +178,7 @@ class _TurmaAlunoListPageState extends State<TurmaAlunoListPage> {
                       image: url != null
                           ? NetworkImage(url)
                           : NetworkImage(
-                              "https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/PIBrintec_512x512px_Aluno.png?alt=media&token=3890ede1-b09f-48da-a07a-2eea315503fd"),
+                              "https://firebasestorage.googleapis.com/v0/b/aiia01.appspot.com/o/semaluno.png?alt=media&token=428bfa64-2e2c-411d-94a0-8509e32d9ad4"),
                     ),
                   ),
                 )
