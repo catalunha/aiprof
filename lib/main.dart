@@ -37,7 +37,6 @@ import 'package:aiprof/paginas/upload/uploader_page.dart';
 import 'package:aiprof/paginas/usuario/perfil_page.dart';
 import 'package:aiprof/plataforma/recursos.dart';
 import 'package:aiprof/web.dart';
-// import 'package:aiprof/web.dart';
 
 void main() {
   webSetUp();
@@ -52,7 +51,7 @@ class MyApp extends StatelessWidget {
     // Intl.defaultLocale = 'pt_br';
 
     return MaterialApp(
-      title: 'AI - Prof',
+      title: 'PI - Prof',
       theme: ThemeData.dark(),
       initialRoute: "/",
       routes: {

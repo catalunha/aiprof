@@ -109,12 +109,22 @@ class AuthBloc {
 
   void _getPerfilUsuarioFromFirebaseUser(String userId) {
     _state.usuarioID = userId;
-
+    print('_state.usuarioID: ' + _state.usuarioID);
     final perfilRef = _firestore.collection(UsuarioModel.collection).document(userId);
+    print('perfilRef.documentID: ' + perfilRef.documentID);
 
     final perfilStream =
         perfilRef.snapshots().map((perfilSnap) => UsuarioModel(id: perfilSnap.documentID).fromMap(perfilSnap.data));
 
+    // final perfilStream = perfilRef.snapshots().map((perfilSnap) {
+    //   print('perfilSnap.documentID: '+perfilSnap.documentID);
+    //   return UsuarioModel(id: perfilSnap.documentID).fromMap(perfilSnap.data);
+    // });
+    print('+++');
+perfilStream.listen((usuarioModel){
+print('usuarioModel.nome:' + usuarioModel.nome);
+});
+    print('---');
     if (_perfilSubscription != null) {
       _perfilSubscription.cancel().then((_) {
         _perfilSubscription = perfilStream.listen(_pipPerfil);

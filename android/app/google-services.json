@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:434212952899:android:4de957fa77af52beb02df6",
+        "mobilesdk_app_id": "1:434212952899:android:9ac898c7f4a78677b02df6",
         "android_client_info": {
-          "package_name": "br.pro.aiia.aialuno"
+          "package_name": "br.pro.aiia.aiprof"
         }
       },
       "oauth_client": [
@@ -37,9 +37,9 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:434212952899:android:5522b61026275615b02df6",
+        "mobilesdk_app_id": "1:434212952899:android:4de957fa77af52beb02df6",
         "android_client_info": {
-          "package_name": "br.pro.aiia.aiprof"
+          "package_name": "br.pro.aiia.aialuno"
         }
       },
       "oauth_client": [
