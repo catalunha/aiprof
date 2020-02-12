@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:aiprof/bootstrap.dart';
 import 'package:aiprof/modelos/arguments_page.dart';
 import 'package:aiprof/paginas/simulacao/simulacao_list_bloc.dart';
-import 'package:aiprof/naosuportato/url_launcher.dart'
-    if (dart.library.io) 'package:url_launcher/url_launcher.dart';
+import 'package:aiprof/naosuportato/url_launcher.dart' if (dart.library.io) 'package:url_launcher/url_launcher.dart';
 
 class SimulacaoListPage extends StatefulWidget {
   final String problemaID;
@@ -51,8 +50,7 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
       ),
       body: StreamBuilder<SimulacaoListBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<SimulacaoListBlocState> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<SimulacaoListBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("Existe algo errado! Informe o suporte.");
           }
@@ -65,16 +63,13 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
             List<String> variavelTipoList = List<String>();
             List<String> gabaritoList = List<String>();
             List<String> gabaritoTipoList = List<String>();
-            if (snapshot.data.simulacaoList != null &&
-                snapshot.data.simulacaoList.length > 0) {
+            if (snapshot.data.simulacaoList != null && snapshot.data.simulacaoList.length > 0) {
               if (snapshot.data?.simulacaoList[0]?.variavel != null) {
-                for (var variavel
-                    in snapshot.data?.simulacaoList[0].variavel.entries) {
+                for (var variavel in snapshot.data?.simulacaoList[0].variavel.entries) {
                   variavelList.add(variavel.value.nome);
                 }
                 variavelList.sort((a, b) => a.compareTo(b));
-                for (var variavel
-                    in snapshot.data?.simulacaoList[0].variavel.entries) {
+                for (var variavel in snapshot.data?.simulacaoList[0].variavel.entries) {
                   variavelTipoList.add(variavel.value.tipo);
                 }
                 variavelTipoList.sort((a, b) => a.compareTo(b));
@@ -82,14 +77,12 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
               }
 
               if (snapshot.data?.simulacaoList[0]?.gabarito != null) {
-                for (var gabarito
-                    in snapshot.data?.simulacaoList[0].gabarito.entries) {
+                for (var gabarito in snapshot.data?.simulacaoList[0].gabarito.entries) {
                   gabaritoList.add(gabarito.value.nome);
                 }
                 gabaritoList.sort((a, b) => a.compareTo(b));
 
-                for (var gabarito
-                    in snapshot.data?.simulacaoList[0].gabarito.entries) {
+                for (var gabarito in snapshot.data?.simulacaoList[0].gabarito.entries) {
                   gabaritoTipoList.add(gabarito.value.tipo);
                 }
                 gabaritoTipoList.sort((a, b) => a.compareTo(b));
@@ -100,8 +93,7 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
             bool alerta = false;
             String msg = '';
             for (var simulacao in snapshot.data.simulacaoList) {
-              if (simulacao?.gabarito?.length == null ||
-                  simulacao?.gabarito?.length == 0) {
+              if (simulacao?.gabarito?.length == null || simulacao?.gabarito?.length == 0) {
                 alerta = true;
                 msg = '\n\nFALTA GABARITO. FAVOR CORRIGIR !';
               } else {
@@ -128,16 +120,14 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
                 print(variavelList);
                 print(variavelListAtual);
                 alerta = true;
-                msg =
-                    msg + '\n\nVALORES COM NOMES DIFERENTES. FAVOR CORRIGIR !';
+                msg = msg + '\n\nVALORES COM NOMES DIFERENTES. FAVOR CORRIGIR !';
               }
               if (!listEquals(variavelTipoList, variavelTipoListAtual)) {
                 print('${simulacao.nome}');
                 print(variavelList);
                 print(variavelListAtual);
                 alerta = true;
-                msg =
-                    msg + '\n\nVALORES COM TIPOS DIFERENTES. FAVOR CORRIGIR !';
+                msg = msg + '\n\nVALORES COM TIPOS DIFERENTES. FAVOR CORRIGIR !';
               }
 
               List<String> gabaritoListAtual = List<String>();
@@ -159,16 +149,14 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
                 print(gabaritoList);
                 print(gabaritoListAtual);
                 alerta = true;
-                msg = msg +
-                    '\n\nGABARITOS COM NOMES DIFERENTES. FAVOR CORRIGIR !';
+                msg = msg + '\n\nGABARITOS COM NOMES DIFERENTES. FAVOR CORRIGIR !';
               }
               if (!listEquals(gabaritoTipoList, gabaritoTipoListAtual)) {
                 print('${simulacao.nome}');
                 print(gabaritoList);
                 print(gabaritoListAtual);
                 alerta = true;
-                msg = msg +
-                    '\n\nGABARITOS COM TIPOS DIFERENTES. FAVOR CORRIGIR !';
+                msg = msg + '\n\nGABARITOS COM TIPOS DIFERENTES. FAVOR CORRIGIR !';
               }
 
               listaWidget.add(
@@ -200,8 +188,7 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
                                 );
                               },
                             ),
-                            if (simulacao.url != null &&
-                                simulacao.url.isNotEmpty)
+                            if (simulacao.url != null && simulacao.url.isNotEmpty)
                               IconButton(
                                 tooltip: 'Ver arquivo da simulacao',
                                 icon: Icon(Icons.local_library),

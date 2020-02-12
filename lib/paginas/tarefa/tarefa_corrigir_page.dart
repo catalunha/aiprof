@@ -660,12 +660,10 @@ Tempo: ${tarefa.tempo} h | Usou: ${tarefa.tentou ?? 0} das ${tarefa.tentativa} t
                       image: url != null
                           ? NetworkImage(url)
                           : NetworkImage(
-                              "https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/PIBrintec_512x512px_Aluno.png?alt=media&token=3890ede1-b09f-48da-a07a-2eea315503fd"),
+                              "https://firebasestorage.googleapis.com/v0/b/aiia01.appspot.com/o/semaluno.png?alt=media&token=428bfa64-2e2c-411d-94a0-8509e32d9ad4"),
                     ),
                   ),
                 )
-
-                // Image.network("https://image.freepik.com/vetores-gratis/perfil-de-avatar-de-mulher-no-icone-redondo_24640-14042.jpg",height: 100,)
                 ),
           ],
         ),

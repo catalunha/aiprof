@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:aiprof/bootstrap.dart';
 import 'package:aiprof/modelos/arguments_page.dart';
-import 'package:aiprof/naosuportato/url_launcher.dart'
-    if (dart.library.io) 'package:url_launcher/url_launcher.dart';
+import 'package:aiprof/naosuportato/url_launcher.dart' if (dart.library.io) 'package:url_launcher/url_launcher.dart';
 import 'package:aiprof/paginas/problema/problema_list_bloc.dart';
 
 class ProblemaListPage extends StatefulWidget {
@@ -50,8 +49,7 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
         ),
         body: StreamBuilder<ProblemaListBlocState>(
             stream: bloc.stateStream,
-            builder: (BuildContext context,
-                AsyncSnapshot<ProblemaListBlocState> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<ProblemaListBlocState> snapshot) {
               if (snapshot.hasError) {
                 return Text("Existe algo errado! Informe o suporte.");
               }
@@ -60,10 +58,10 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
               }
               if (snapshot.data.isDataValid) {
                 if (snapshot.data.pedidoRelatorio != null) {
-            launch(
-                'https://us-central1-pi-brintec.cloudfunctions.net/relatorioOnRequest/listadesimulacoesdoproblema?pedido=${snapshot.data.pedidoRelatorio}');
-            bloc.eventSink(ResetCreateRelatorioEvent());
-          }
+                  launch(
+                      'https://us-central1-pi-brintec.cloudfunctions.net/relatorioOnRequest/listadesimulacoesdoproblema?pedido=${snapshot.data.pedidoRelatorio}');
+                  bloc.eventSink(ResetCreateRelatorioEvent());
+                }
                 List<Widget> listaWidget = List<Widget>();
 
                 int lengthTurma = snapshot.data.problemaList.length;
@@ -74,32 +72,23 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
                       child: Column(
                         children: <Widget>[
                           ListTile(
-                            leading: problema.ativo
-                                ? null
-                                : Icon(Icons.airplanemode_inactive),
-                            trailing:
-                                problema.url != null && problema.url.isNotEmpty
-                                    ? IconButton(
-                                        tooltip: 'Ver doc do problema',
-                                        icon: Icon(
-                                          Icons.local_library,
-                                          color:
-                                              problema.precisaAlgoritmoPSimulacao ==
-                                                      true
-                                                  ? Colors.blue
-                                                  : null,
-                                        ),
-                                        onPressed: () {
-                                          try {
-                                            launch(problema.url);
-                                          } catch (e) {}
-                                        },
-                                      )
-                                    : null,
-                            title: Text(
-                                '${problema.nome}\nFonte: ${problema.descricao}'),
-                            subtitle: Text(
-                                'Simulações: ${problema.simulacaoNumero ?? 0}\nid: ${problema.id}'),
+                            leading: problema.ativo ? null : Icon(Icons.airplanemode_inactive),
+                            trailing: problema.url != null && problema.url.isNotEmpty
+                                ? IconButton(
+                                    tooltip: 'Ver doc do problema',
+                                    icon: Icon(
+                                      Icons.local_library,
+                                      color: problema.precisaAlgoritmoPSimulacao == true ? Colors.blue : null,
+                                    ),
+                                    onPressed: () {
+                                      try {
+                                        launch(problema.url);
+                                      } catch (e) {}
+                                    },
+                                  )
+                                : null,
+                            title: Text('${problema.nome}\nFonte: ${problema.descricao}'),
+                            subtitle: Text('Simulações: ${problema.simulacaoNumero ?? 0}\nid: ${problema.id}'),
                           ),
                           Center(
                             child: Wrap(
@@ -111,8 +100,7 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
                                     Navigator.pushNamed(
                                       context,
                                       "/problema/crud",
-                                      arguments: ProblemaCRUDPageArguments(
-                                          problemaID: problema.id),
+                                      arguments: ProblemaCRUDPageArguments(problemaID: problema.id),
                                     );
                                   },
                                 ),
@@ -121,8 +109,7 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
                                   icon: Icon(Icons.arrow_downward),
                                   onPressed: (ordemLocal) < lengthTurma
                                       ? () {
-                                          bloc.eventSink(
-                                              OrdenarEvent(problema, false));
+                                          bloc.eventSink(OrdenarEvent(problema, false));
                                         }
                                       : null,
                                 ),
@@ -131,19 +118,15 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
                                   icon: Icon(Icons.arrow_upward),
                                   onPressed: ordemLocal > 1
                                       ? () {
-                                          bloc.eventSink(
-                                              OrdenarEvent(problema, true));
+                                          bloc.eventSink(OrdenarEvent(problema, true));
                                         }
                                       : null,
                                 ),
-        
                                 IconButton(
-                                  tooltip:
-                                      'Listar de problema e simulações em planilha',
+                                  tooltip: 'Listar de problema e simulações em planilha',
                                   icon: Icon(Icons.grid_on),
                                   onPressed: () {
-                                                      bloc.eventSink(CreateRelatorioEvent(problema.id));
-
+                                    bloc.eventSink(CreateRelatorioEvent(problema.id));
                                   },
                                 ),
                                 IconButton(
@@ -153,6 +136,16 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
                                       Navigator.pushNamed(
                                         context,
                                         "/simulacao/list",
+                                        arguments: problema.id,
+                                      );
+                                    }),
+                                IconButton(
+                                    tooltip: 'Incluir simulações via texto',
+                                    icon: Icon(Icons.text_fields),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        "/simulacao/viatexto",
                                         arguments: problema.id,
                                       );
                                     }),

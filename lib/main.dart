@@ -1,3 +1,4 @@
+import 'package:aiprof/paginas/simulacao/simulacao_viatexto_page.dart';
 import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
 import 'package:aiprof/bootstrap.dart';
@@ -192,7 +193,10 @@ class MyApp extends StatelessWidget {
             gabaritoKey: args.gabaritoKey,
           );
         },
-
+        "/simulacao/viatexto": (context) {
+          final settings = ModalRoute.of(context).settings;
+          return SimulacaoViatextoPage(settings.arguments);
+        },
 
         //tarefa
         "/tarefa/list": (context) {
