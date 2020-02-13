@@ -166,9 +166,9 @@ print('usuarioModel.nome:' + usuarioModel.nome);
     } else if (event is LogoutAuthBlocEvent) {
       _authApi.logout();
     } else if (event is ResetPassword) {
-      // _authApi.sendPasswordResetEmail(_state.email);
-    } else if (event is EhProfessor) {
-      // _authApi.sendPasswordResetEmail(_state.email);
+      _authApi.sendPasswordResetEmail(_state.email);
+    // } else if (event is EhProfessor) {
+    //   _authApi.sendPasswordResetEmail(_state.email);
     }
   }
 
