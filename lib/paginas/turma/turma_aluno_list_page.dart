@@ -47,7 +47,7 @@ class _TurmaAlunoListPageState extends State<TurmaAlunoListPage> {
                 List<Widget> listaWidget = List<Widget>();
                 if (snapshot.data.pedidoRelatorio != null) {
                   launch(
-                      'https://us-central1-pi-brintec.cloudfunctions.net/relatorioOnRequest/listadetarefasdoaluno?pedido=${snapshot.data.pedidoRelatorio}');
+                      'https://us-central1-aiia01.cloudfunctions.net/relatorioOnRequest/listadetarefasdoaluno?pedido=${snapshot.data.pedidoRelatorio}');
                   bloc.eventSink(ResetCreateRelatorioEvent());
                 }
                 for (var aluno in snapshot.data.turmaAlunoList) {

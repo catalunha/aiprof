@@ -59,7 +59,7 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
               if (snapshot.data.isDataValid) {
                 if (snapshot.data.pedidoRelatorio != null) {
                   launch(
-                      'https://us-central1-pi-brintec.cloudfunctions.net/relatorioOnRequest/listadesimulacoesdoproblema?pedido=${snapshot.data.pedidoRelatorio}');
+                      'https://us-central1-aiia01.cloudfunctions.net/relatorioOnRequest/listadesimulacoesdoproblema?pedido=${snapshot.data.pedidoRelatorio}');
                   bloc.eventSink(ResetCreateRelatorioEvent());
                 }
                 List<Widget> listaWidget = List<Widget>();
