@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:aiprof/naosuportato/url_launcher.dart' if (dart.library.io) 'package:url_launcher/url_launcher.dart';
-import 'package:aiprof/plataforma/recursos.dart';
 
 class Versao extends StatelessWidget {
   @override
@@ -12,7 +11,7 @@ class Versao extends StatelessWidget {
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Recursos.instance.plataforma == 'android' ? Text("Versão Android: 1.0.1 (2)") : Text("Versão Chrome: 1.0.1 (2) Build: 20200213"),
+            title: Text("Versão Android: 1.0.1 (2). Versão Chrome: 20200213"),
           ),
           ListTile(
             title: Text("Suporte via WhatsApp pelo número +55 63 984495508"),
@@ -27,7 +26,8 @@ class Versao extends StatelessWidget {
             trailing: Icon(Icons.help),
             onTap: () {
               try {
-                launch('https://docs.google.com/document/d/14GAakF6y4Fjti-6TwmuiDtW-KZxXoxPqRo2kBHcwIvo/edit?usp=sharing');
+                launch(
+                    'https://docs.google.com/document/d/14GAakF6y4Fjti-6TwmuiDtW-KZxXoxPqRo2kBHcwIvo/edit?usp=sharing');
               } catch (e) {}
             },
           ),
