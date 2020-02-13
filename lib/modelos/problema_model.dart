@@ -9,13 +9,9 @@ class ProblemaModel extends FirestoreModel {
   int numero;
   String nome;
   String descricao;
-  String solucao;
   UsuarioFk professor;
   PastaFk pasta;
   String url;
-  bool precisaAlgoritmoPSimulacao;
-  String urlSemAlgoritmo;
-  bool algoritmoPSimulacaoAtivado;
   int simulacaoNumero;
   Map<String, dynamic> uso;
   ProblemaModel({
@@ -25,13 +21,9 @@ class ProblemaModel extends FirestoreModel {
     this.numero,
     this.nome,
     this.descricao,
-    this.solucao,
     this.professor,
     this.pasta,
     this.url,
-    this.precisaAlgoritmoPSimulacao,
-    this.urlSemAlgoritmo,
-    this.algoritmoPSimulacaoAtivado,
     this.simulacaoNumero,
     this.uso,
   }) : super(id);
@@ -46,7 +38,6 @@ class ProblemaModel extends FirestoreModel {
     if (map.containsKey('numero')) numero = map['numero'];
     if (map.containsKey('nome')) nome = map['nome'];
     if (map.containsKey('descricao')) descricao = map['descricao'];
-    if (map.containsKey('solucao')) solucao = map['solucao'];
     if (map.containsKey('url')) url = map['url'];
     professor = map.containsKey('professor') && map['professor'] != null
         ? UsuarioFk.fromMap(map['professor'])
@@ -54,12 +45,6 @@ class ProblemaModel extends FirestoreModel {
     pasta = map.containsKey('pasta') && map['pasta'] != null
         ? PastaFk.fromMap(map['pasta'])
         : null;
-    if (map.containsKey('precisaAlgoritmoPSimulacao'))
-      precisaAlgoritmoPSimulacao = map['precisaAlgoritmoPSimulacao'];
-    if (map.containsKey('urlProblemaSemAlgoritmo'))
-      urlSemAlgoritmo = map['urlProblemaSemAlgoritmo'];
-    if (map.containsKey('algoritmoPSimulacaoAtivado'))
-      algoritmoPSimulacaoAtivado = map['algoritmoPSimulacaoAtivado'];
     if (map.containsKey('simulacaoNumero'))
       simulacaoNumero = map['simulacaoNumero'];
     if (map.containsKey('uso')) uso = map['uso'];
@@ -77,7 +62,6 @@ class ProblemaModel extends FirestoreModel {
     if (nome != null) data['nome'] = this.nome;
     if (uso != null) data['uso'] = this.uso;
     if (descricao != null) data['descricao'] = this.descricao;
-    if (solucao != null) data['solucao'] = this.solucao;
     data['url'] = this.url;
     if (this.professor != null) {
       data['professor'] = this.professor.toMap();
@@ -85,12 +69,6 @@ class ProblemaModel extends FirestoreModel {
     if (this.pasta != null) {
       data['pasta'] = this.pasta.toMap();
     }
-    if (precisaAlgoritmoPSimulacao != null)
-      data['precisaAlgoritmoPSimulacao'] = this.precisaAlgoritmoPSimulacao;
-    if (urlSemAlgoritmo != null)
-      data['urlProblemaSemAlgoritmo'] = this.urlSemAlgoritmo;
-    if (algoritmoPSimulacaoAtivado != null)
-      data['algoritmoPSimulacaoAtivado'] = this.algoritmoPSimulacaoAtivado;
     if (simulacaoNumero != null)
       data['simulacaoNumero'] = this.simulacaoNumero;
 

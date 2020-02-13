@@ -44,7 +44,7 @@ class TarefaCorrigirBlocState {
     }
     var dic = Dictionary.fromMap(gabaritoInfoMap);
     var dicOrderBy = dic
-        .orderBy((kv) => kv.value.gabarito.ordem)
+        .orderBy((kv) => kv.value.gabarito.numero)
         .toDictionary$1((kv) => kv.key, (kv) => kv.value);
     gabaritoInfoMap = dicOrderBy.toMap();
   }

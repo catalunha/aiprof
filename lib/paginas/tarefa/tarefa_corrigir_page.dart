@@ -96,7 +96,7 @@ class _TarefaCorrigirPageState extends State<TarefaCorrigirPage> {
             gabaritoMap.clear();
             var dicGabarito = Dictionary.fromMap(tarefa.gabarito);
             var gabaritoOrderBy =
-                dicGabarito.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
+                dicGabarito.orderBy((kv) => kv.value.numero).toDictionary$1((kv) => kv.key, (kv) => kv.value);
             gabaritoMap = gabaritoOrderBy.toMap();
             notas = '';
             for (var gabarito in gabaritoMap.entries) {
@@ -170,7 +170,7 @@ Tempo: ${tarefa.tempo} h | Usou: ${tarefa.tentou ?? 0} das ${tarefa.tentativa} t
 
             Map<String, Variavel> variavelMap;
             var dic = Dictionary.fromMap(tarefa.variavel);
-            var dicOrderBy = dic.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
+            var dicOrderBy = dic.orderBy((kv) => kv.value.numero).toDictionary$1((kv) => kv.key, (kv) => kv.value);
             variavelMap = dicOrderBy.toMap();
 
             // Map<String, Gabarito> gabaritoMap = Map<String, Gabarito>();

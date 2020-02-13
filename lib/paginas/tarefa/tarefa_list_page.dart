@@ -62,7 +62,7 @@ class _TarefaListPageState extends State<TarefaListPage> {
                   gabaritoMap.clear();
                   var dicGabarito = Dictionary.fromMap(tarefa.gabarito);
                   var gabaritoOrderBy = dicGabarito
-                      .orderBy((kv) => kv.value.ordem)
+                      .orderBy((kv) => kv.value.numero)
                       .toDictionary$1((kv) => kv.key, (kv) => kv.value);
                   gabaritoMap = gabaritoOrderBy.toMap();
                   notas = '';

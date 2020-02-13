@@ -64,7 +64,7 @@ class _SimulacaoViatextoPageState extends State<SimulacaoViatextoPage> {
               Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
-                    'Informe a lista de simulacoes a serem cadastrados.\nUsando o ponto e vírgula para separar as informações.\nUse o formato:\n* simulacaoNome ; tipoCadastro ; ordem ; nome ; tipoValor ; valor\ntipoCadastro pode ser valor ou gabarito.\nSe tipoCadastro é valor tipoValor pode ser numero|palavra|texto|link|linkImagem\nSe tipoCadastro é gabarito tipoValor pode ser numero|palavra|texto|link|linkImagem|Anexo|AnexoImagem',
+                    'Informe a lista de simulacoes a serem cadastrados.\nUsando o ponto e vírgula para separar as informações.\nUse o formato:\n\nsimulacao ; tipoCadastro ; nome ; tipoValor ; valor\n\nsimulacao: numero ou nome.\ntipoCadastro: pode ser valor ou gabarito.\nnome: nome para valor ou gabarito\ntipoValor: Se tipoCadastro é valor será numero|palavra|texto|url|urlimagem. Se tipoCadastro é gabarito será numero|palavra|texto|url|urlimagem|arquivo|imagem\nvalor: numero ou texto',
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   )),
               Padding(
@@ -87,7 +87,7 @@ class _SimulacaoViatextoPageState extends State<SimulacaoViatextoPage> {
                           ),
                           for (var item in snapshot.data.simulacoesEmLista)
                             ListTile(
-                              title: Text('Simulação nome: ${item[0]}\nTipo: ${item[1]}\nordem: ${item[2]}\nnome: ${item[3]}\nValor tipo: ${item[4]}\nValor: ${item[5]}'),
+                              title: Text('Simulação nome: ${item[0]}\nTipo Cadastro: ${item[1]}\nnome: ${item[2]}\nTipo Valor: ${item[3]}\nValor: ${item[4]}'),
                             ),
                           FlatButton(
                             child: Text("OK"),

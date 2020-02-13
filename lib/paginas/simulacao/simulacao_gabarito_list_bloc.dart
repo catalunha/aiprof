@@ -27,7 +27,7 @@ class SimulacaoGabaritoListBlocState {
       gabaritoMap.clear();
       var dic = Dictionary.fromMap(simulacao.gabarito);
       var dicOrderBy = dic
-          .orderBy((kv) => kv.value.ordem)
+          .orderBy((kv) => kv.value.numero)
           .toDictionary$1((kv) => kv.key, (kv) => kv.value);
       gabaritoMap = dicOrderBy.toMap();
     }
@@ -106,13 +106,13 @@ class SimulacaoGabaritoListBloc {
 
       docRef.setData({
         "gabarito": {
-          "$keyOrigem": {"ordem": objDestino.ordem}
+          "$keyOrigem": {"numero": objDestino.numero}
         }
       }, merge: true);
 
       docRef.setData({
         "gabarito": {
-          "$keyDestino": {"ordem": objOrigem.ordem}
+          "$keyDestino": {"numero": objOrigem.numero}
         }
       }, merge: true);
     }

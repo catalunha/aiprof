@@ -31,8 +31,7 @@ class _ProblemaCRUDPageState extends State<ProblemaCRUDPage> {
       widget.authBloc,
     );
     if (widget.pastaID != null) bloc.eventSink(GetPastaEvent(widget.pastaID));
-    if (widget.problemaID != null)
-      bloc.eventSink(GetProblemaEvent(widget.problemaID));
+    if (widget.problemaID != null) bloc.eventSink(GetProblemaEvent(widget.problemaID));
   }
 
   @override
@@ -59,14 +58,12 @@ class _ProblemaCRUDPageState extends State<ProblemaCRUDPage> {
                     }
                   : null,
               child: Icon(Icons.cloud_upload),
-              backgroundColor:
-                  snapshot.data.isDataValid ? Colors.blue : Colors.grey,
+              backgroundColor: snapshot.data.isDataValid ? Colors.blue : Colors.grey,
             );
           }),
       body: StreamBuilder<ProblemaCRUDBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<ProblemaCRUDBlocState> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<ProblemaCRUDBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("Existe algo errado! Informe o suporte.");
           }
@@ -76,76 +73,45 @@ class _ProblemaCRUDPageState extends State<ProblemaCRUDPage> {
           return ListView(
             padding: EdgeInsets.all(5),
             children: <Widget>[
-              if (snapshot.data?.liberaAtivo())
-                SwitchListTile(
-                  title: Text(
-                    'Problema ativo ? ',
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  ),
-                  value: snapshot.data?.ativo,
-                  onChanged: (bool value) {
-                    bloc.eventSink(UpdateAtivoEvent(value));
-                  },
-                  // secondary: Icon(Icons.thumbs_up_down),
+              SwitchListTile(
+                title: Text(
+                  'Problema ativo ? ',
+                  style: TextStyle(fontSize: 15, color: Colors.blue),
                 ),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    '* Fonte (livro, página, letra, etc ou site):',
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: _TextFieldMultiplo(bloc, 'descricao')),
+                value: snapshot.data?.ativo,
+                onChanged: (bool value) {
+                  bloc.eventSink(UpdateAtivoEvent(value));
+                },
+                // secondary: Icon(Icons.thumbs_up_down),
+              ),
               Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
                     '* Nome:',
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   )),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: _TextFieldMultiplo(bloc, 'nome')),
+              Padding(padding: EdgeInsets.all(5.0), child: _TextFieldMultiplo(bloc, 'nome')),
               Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
-                    'Link para o arquivo de solução:',
+                    '* Link para o arquivo do problema:',
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   )),
+              Padding(padding: EdgeInsets.all(5.0), child: _TextFieldMultiplo(bloc, 'url')),
               Padding(
                   padding: EdgeInsets.all(5.0),
-                  child: _TextFieldMultiplo(bloc, 'solucao')),
-              SwitchListTile(
-                title: Text(
-                  'Precisa de algoritmo para simulação ? ',
-                  style: TextStyle(fontSize: 15, color: Colors.blue),
-                ),
-                value: snapshot.data?.precisaAlgoritmoPSimulacao ?? false,
-                onChanged: (bool value) {
-                  bloc.eventSink(UpdatePrecisaAlgoritmoPSimulacaoEvent(value));
-                },
-              ),
-              if (snapshot.data?.precisaAlgoritmoPSimulacao != null &&
-                  snapshot.data?.precisaAlgoritmoPSimulacao == false)
-                Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text(
-                      '* Link para o arquivo do problema, que será visto pelo aluno:',
-                      style: TextStyle(fontSize: 15, color: Colors.blue),
-                    )),
-              if (snapshot.data?.precisaAlgoritmoPSimulacao != null &&
-                  snapshot.data?.precisaAlgoritmoPSimulacao == false)
-                Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child:
-                        _TextFieldMultiplo(bloc, 'urlSemAlgoritmo')),
-               Padding(
-                  padding: EdgeInsets.all(5.0),
                   child: Text(
-                    'Pasta deste problema:',
+                    '* Fonte ou caminho deste link em sua núvem:',
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   )),
-                  _pasta(context),
+              Padding(padding: EdgeInsets.all(5.0), child: _TextFieldMultiplo(bloc, 'descricao')),
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    '* Pasta deste problema:',
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  )),
+              _pasta(context),
               Divider(),
               Padding(
                 padding: EdgeInsets.all(5.0),
@@ -223,18 +189,14 @@ class _TextFieldMultiploState extends State<_TextFieldMultiplo> {
   Widget build(BuildContext context) {
     return StreamBuilder<ProblemaCRUDBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<ProblemaCRUDBlocState> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<ProblemaCRUDBlocState> snapshot) {
         if (_textFieldController.text.isEmpty) {
           if (campo == 'nome') {
             _textFieldController.text = snapshot.data?.nome;
           } else if (campo == 'descricao') {
             _textFieldController.text = snapshot.data?.descricao;
-          } else if (campo == 'solucao') {
-            _textFieldController.text = snapshot.data?.solucao;
-          } else if (campo == 'urlSemAlgoritmo') {
-            _textFieldController.text =
-                snapshot.data?.urlSemAlgoritmo;
+          } else if (campo == 'url') {
+            _textFieldController.text = snapshot.data?.url;
           }
         }
         return TextField(
@@ -260,8 +222,7 @@ class UsuarioListaModalSelect extends StatefulWidget {
   const UsuarioListaModalSelect(this.bloc);
 
   @override
-  _UsuarioListaModalSelectState createState() =>
-      _UsuarioListaModalSelectState(this.bloc);
+  _UsuarioListaModalSelectState createState() => _UsuarioListaModalSelectState(this.bloc);
 }
 
 class _UsuarioListaModalSelectState extends State<UsuarioListaModalSelect> {
@@ -272,8 +233,7 @@ class _UsuarioListaModalSelectState extends State<UsuarioListaModalSelect> {
   Widget _listarPasta() {
     return StreamBuilder<ProblemaCRUDBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<ProblemaCRUDBlocState> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<ProblemaCRUDBlocState> snapshot) {
         if (snapshot.hasError)
           return Center(
             child: Text("Erro. Informe ao administrador do aplicativo"),

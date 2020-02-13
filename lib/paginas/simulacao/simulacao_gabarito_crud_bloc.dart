@@ -132,10 +132,10 @@ class SimulacaoGabaritoCRUDBloc {
       );
       if (_state.gabaritoKey == null) {
         final uuidG = uuid.Uuid();
-        gabaritoUpdate.ordem = _state.simulacao.ordem ?? 1;
+        gabaritoUpdate.numero = _state.simulacao.valorGabaritoNumero ?? 1;
         print(uuidG.v4());
         _state.simulacao.gabarito = {uuidG.v4(): gabaritoUpdate};
-        _state.simulacao.ordem = _state.simulacao.ordem + 1;
+        _state.simulacao.valorGabaritoNumero = _state.simulacao.valorGabaritoNumero + 1;
       } else {
         _state.simulacao.gabarito[_state.gabaritoKey] = gabaritoUpdate;
       }

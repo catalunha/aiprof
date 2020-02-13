@@ -94,108 +94,125 @@ class SimulacaoViatextoBloc {
 
       String simulacaoNome; //0
       String tipoCadastro; //1
-      String ordem; //2
-      String nome; //3
-      String tipoValor; //4
-      String valor; //5
+      // String ordem; //2
+      String nome; //2
+      String tipoValor; //3
+      String valor; //4
       if (_state.simulacoesEmTexto != null) {
         List<String> linhas = _state.simulacoesEmTexto.split('\n');
         for (var linha in linhas) {
           if (linha != null) {
             List<String> campos = linha.trim().split(';');
             if (campos != null &&
-                campos.length == 6 &&
-                (campos[1].contains('valor') || campos[1].contains('gabarito')) &&
-                (campos[4].contains('numero') ||
-                    campos[4].contains('palavra') ||
-                    campos[4].contains('texto') ||
-                    campos[4].contains('link') ||
-                    campos[4].contains('linkImagem') ||
-                    campos[4].contains('Anexo') ||
-                    campos[4].contains('AnexoImagem'))) {
+                campos.length == 5 &&
+                (campos[1]=='valor' || campos[1] == 'gabarito') &&
+                (campos[3] == 'numero' ||
+                    campos[3] == 'palavra' ||
+                    campos[3] == 'texto' ||
+                    campos[3] == 'url' ||
+                    campos[3] == 'urlimagem' ||
+                    campos[3] == 'arquivo' ||
+                    campos[3] == 'imagem')) {
               simulacaoNome = campos[0].trim();
               tipoCadastro = campos[1].trim();
-              ordem = campos[2].trim();
-              nome = campos[3].trim();
-              tipoValor = campos[4].trim();
-              valor = campos[5].trim();
-              _state.simulacoesEmLista.add([simulacaoNome, tipoCadastro, ordem, nome, tipoValor, valor]);
+              nome = campos[2].trim();
+              tipoValor = campos[3].trim();
+              valor = campos[4].trim();
+              _state.simulacoesEmLista.add([simulacaoNome, tipoCadastro, nome, tipoValor, valor]);
+            }else{
+      _state.simulacoesEmLista.clear();
+              break;
             }
           }
         }
       }
     }
 
+    Future enviarSimulacao(SimulacaoModel simulacao) async {
+      // +++ Gravar a simulacao atual
+      final docRef = _firestore.collection(SimulacaoModel.collection).document();
+      await docRef.setData(simulacao.toMap(), merge: true).then((_) async {
+        //+++ Atualizar problema com mais uma em seu cadastro
+        final usuarioDocRef = _firestore.collection(ProblemaModel.collection).document(_state.problema.id);
+        await usuarioDocRef.setData({
+          'simulacaoNumero': Bootstrap.instance.fieldValue.increment(1),
+        }, merge: true);
+        //---
+      });
+      // --- Gravar a simulacao atual
+    }
+
     if (event is CadastrarSimulacaoEvent) {
+      String simulacaoNome; //0
+      String tipoCadastro; //1
+      String nome; //2
+      String tipoValor; //3
+      String valor; //4
+      String simulacaoAtual;
+      SimulacaoModel simulacao = SimulacaoModel();
       if (_state.simulacoesEmLista != null &&
           _state.simulacoesEmLista.isNotEmpty &&
           _state.simulacoesEmLista.length > 0) {
-        String simulacaoNome; //0
-        String tipoCadastro; //1
-        String ordem; //2
-        String nome; //3
-        String tipoValor; //4
-        String valor; //5
-        String simulacaoAtual;
-        SimulacaoModel simulacao = SimulacaoModel();
-        Variavel variavel = Variavel();
-        Gabarito gabarito = Gabarito();
-
         for (var simulacaoLinha in _state.simulacoesEmLista) {
           simulacaoNome = simulacaoLinha[0];
           tipoCadastro = simulacaoLinha[1];
-          ordem = simulacaoLinha[2];
-          nome = simulacaoLinha[3];
-          tipoValor = simulacaoLinha[4];
-          valor = simulacaoLinha[5];
-
+          nome = simulacaoLinha[2];
+          tipoValor = simulacaoLinha[3];
+          valor = simulacaoLinha[4];
+          print(simulacaoAtual);
+          print(simulacaoNome);
+          print(tipoCadastro);
+          print(valor);
+          print(simulacao);
+          if (simulacaoAtual != null && simulacaoAtual != simulacaoNome) {
+            print('simulacao pronta enviando $simulacao');
+            // +++ Gravar a simulacao atual
+            await enviarSimulacao(simulacao);
+            // --- Gravar a simulacao atual
+            simulacaoAtual = null;
+            simulacao = SimulacaoModel();
+          }
           if (simulacaoAtual == null) {
+            print('criando simulação');
             simulacaoAtual = simulacaoNome;
             simulacao.nome = simulacaoNome;
-            simulacao.ordem = 0;
+            simulacao.valorGabaritoNumero = 0;
             simulacao.numero = (_state.problema.simulacaoNumero ?? 0) + 1;
             simulacao.professor = UsuarioFk(id: _state.problema.professor.id, nome: _state.problema.professor.nome);
             simulacao.problema = ProblemaFk(id: _state.problema.id, nome: _state.problema.nome);
+            simulacao.variavel = {};
+            simulacao.gabarito = {};
           }
+
           if (simulacaoAtual == simulacaoNome && tipoCadastro == 'valor') {
+            print('add valor na simulacao');
             Variavel variavelUpdate = Variavel(
-              ordem: simulacao.ordem ?? 1,
+              numero: simulacao.valorGabaritoNumero ?? 1,
               nome: nome,
               tipo: tipoValor,
               valor: valor,
             );
-            simulacao.ordem = simulacao.ordem + 1;
+            simulacao.valorGabaritoNumero = simulacao.valorGabaritoNumero + 1;
             final uuidG = uuid.Uuid();
-            simulacao.variavel = {uuidG.v4(): variavelUpdate};
+            simulacao.variavel.addAll({uuidG.v4(): variavelUpdate});
           }
           if (simulacaoAtual == simulacaoNome && tipoCadastro == 'gabarito') {
+            print('add gabarito na simulacao');
             Gabarito gabaritoUpdate = Gabarito(
-              ordem: simulacao.ordem ?? 1,
+              numero: simulacao.valorGabaritoNumero ?? 1,
               nome: nome,
               tipo: tipoValor,
               valor: valor,
             );
-            simulacao.ordem = simulacao.ordem + 1;
+            simulacao.valorGabaritoNumero = simulacao.valorGabaritoNumero + 1;
             final uuidG = uuid.Uuid();
-            simulacao.gabarito = {uuidG.v4(): gabaritoUpdate};
-          }
-          if (simulacaoAtual != simulacaoNome) {
-            print(simulacao);
-            // // +++ Gravar a simulacao atual
-            // final docRef = _firestore.collection(SimulacaoModel.collection).document();
-            // await docRef.setData(simulacao.toMap(), merge: true).then((_) async {
-            //   //+++ Atualizar problema com mais uma em seu cadastro
-            //   final usuarioDocRef = _firestore.collection(ProblemaModel.collection).document(_state.problema.id);
-            //   await usuarioDocRef.setData({
-            //     'simulacaoNumero': Bootstrap.instance.fieldValue.increment(1),
-            //   }, merge: true);
-            //   //---
-            // });
-            // // --- Gravar a simulacao atual
-            simulacaoAtual = null;
-            simulacao=null;
+            simulacao.gabarito.addAll({uuidG.v4(): gabaritoUpdate});
           }
         }
+        print('simulacao pronta enviando $simulacao');
+        // +++ Gravar a simulacao atual
+        await enviarSimulacao(simulacao);
+        // --- Gravar a simulacao atual
       }
     }
 

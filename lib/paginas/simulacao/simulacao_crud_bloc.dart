@@ -142,7 +142,7 @@ class SimulacaoCRUDBloc {
       if (_state.simulacaoID == null) {
         simulacaoModel.numero = (_state.problema.simulacaoNumero ?? 0) + 1;
 
-        simulacaoModel.ordem = 0;
+        simulacaoModel.valorGabaritoNumero = 0;
         simulacaoModel.professor =
             UsuarioFk(id: _state.usuarioAuth.id, nome: _state.usuarioAuth.nome);
         simulacaoModel.problema =

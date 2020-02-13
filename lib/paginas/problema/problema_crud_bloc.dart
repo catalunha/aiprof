@@ -66,32 +66,18 @@ class ProblemaCRUDBlocState {
   // dynamic data;
   String nome;
   String descricao;
-  String solucao;
+  String url;
   bool ativo = true;
-  bool precisaAlgoritmoPSimulacao = false;
-  String urlSemAlgoritmo;
-  bool algoritmoPSimulacaoAtivado;
   PastaFk pastaDestino;
 
   void updateState() {
     ativo = problema.ativo;
     nome = problema.nome;
     descricao = problema.descricao;
-    solucao = problema.solucao;
-    precisaAlgoritmoPSimulacao = problema.precisaAlgoritmoPSimulacao;
-    urlSemAlgoritmo = problema.urlSemAlgoritmo;
-    algoritmoPSimulacaoAtivado = problema.algoritmoPSimulacaoAtivado;
+    url = problema.url;
     pastaDestino = problema?.pasta;
   }
 
-  bool liberaAtivo() {
-    if (precisaAlgoritmoPSimulacao == true &&
-        problema.algoritmoPSimulacaoAtivado == false) {
-      return false;
-    } else {
-      return true;
-    }
-  }
 }
 
 class ProblemaCRUDBloc {
@@ -135,10 +121,10 @@ class ProblemaCRUDBloc {
     if (_state.descricao == null) {
       _state.isDataValid = false;
     }
-    if (_state.precisaAlgoritmoPSimulacao == false &&
-        _state.urlSemAlgoritmo == null) {
+    if (_state.url == null) {
       _state.isDataValid = false;
     }
+
   }
 
   _mapEventToState(ProblemaCRUDBlocEvent event) async {
@@ -195,16 +181,9 @@ class ProblemaCRUDBloc {
         _state.nome = event.texto;
       } else if (event.campo == 'descricao') {
         _state.descricao = event.texto;
-      } else if (event.campo == 'solucao') {
-        _state.solucao = event.texto;
-      } else if (event.campo == 'urlSemAlgoritmo') {
-        _state.urlSemAlgoritmo = event.texto;
+      } else if (event.campo == 'url') {
+        _state.url = event.texto;
       }
-    }
-
-    if (event is UpdatePrecisaAlgoritmoPSimulacaoEvent) {
-      _state.precisaAlgoritmoPSimulacao = event.precisa;
-      _state.algoritmoPSimulacaoAtivado = false;
     }
 
     if (event is SelectPastaIDEvent) {
@@ -217,24 +196,13 @@ class ProblemaCRUDBloc {
           .document(_state.problemaID);
 
       ProblemaModel problemaUpdate = ProblemaModel(
-        ativo: _state.precisaAlgoritmoPSimulacao &&
-                _state.problema.algoritmoPSimulacaoAtivado == false
-            ? false
-            : _state.ativo,
+        ativo: _state.ativo,
         nome: _state.nome,
         descricao: _state.descricao,
-        solucao: _state.solucao,
-        precisaAlgoritmoPSimulacao: _state.precisaAlgoritmoPSimulacao,
-        urlSemAlgoritmo: _state.urlSemAlgoritmo,
-        algoritmoPSimulacaoAtivado: _state.algoritmoPSimulacaoAtivado,
+        url: _state.url,
         modificado: DateTime.now(),
         pasta: _state.pastaDestino,
       );
-      if (_state.precisaAlgoritmoPSimulacao) {
-        problemaUpdate.url = null;
-      } else {
-        problemaUpdate.url = _state.urlSemAlgoritmo;
-      }
       if (_state.problemaID == null) {
         problemaUpdate.numero = (_state.usuarioAuth.problemaNumero ?? 0) + 1;
         problemaUpdate.professor = UsuarioFk(

@@ -76,10 +76,7 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
                             trailing: problema.url != null && problema.url.isNotEmpty
                                 ? IconButton(
                                     tooltip: 'Ver doc do problema',
-                                    icon: Icon(
-                                      Icons.local_library,
-                                      color: problema.precisaAlgoritmoPSimulacao == true ? Colors.blue : null,
-                                    ),
+                                    icon: Icon(Icons.local_library),
                                     onPressed: () {
                                       try {
                                         launch(problema.url);
@@ -130,8 +127,8 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
                                   },
                                 ),
                                 IconButton(
-                                    tooltip: 'Simulações',
-                                    icon: Icon(Icons.bug_report),
+                                    tooltip: 'Incluir simulação uma a uma',
+                                    icon: Icon(Icons.looks_one),
                                     onPressed: () {
                                       Navigator.pushNamed(
                                         context,
@@ -141,7 +138,7 @@ class _ProblemaListPageState extends State<ProblemaListPage> {
                                     }),
                                 IconButton(
                                     tooltip: 'Incluir simulações via texto',
-                                    icon: Icon(Icons.text_fields),
+                                    icon: Icon(Icons.plus_one),
                                     onPressed: () {
                                       Navigator.pushNamed(
                                         context,

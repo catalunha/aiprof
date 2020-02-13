@@ -26,7 +26,7 @@ class SimulacaoVariavelListBlocState {
     variavelMap.clear();
     var dic = Dictionary.fromMap(simulacao.variavel);
     var dicOrderBy = dic
-        .orderBy((kv) => kv.value.ordem)
+        .orderBy((kv) => kv.value.numero)
         .toDictionary$1((kv) => kv.key, (kv) => kv.value);
     variavelMap = dicOrderBy.toMap();
   }
@@ -115,13 +115,13 @@ class SimulacaoVariavelListBloc {
 
       docRef.setData({
         "variavel": {
-          "$keyOrigem": {"ordem": objDestino.ordem}
+          "$keyOrigem": {"numero": objDestino.numero}
         }
       }, merge: true);
 
       docRef.setData({
         "variavel": {
-          "$keyDestino": {"ordem": objOrigem.ordem}
+          "$keyDestino": {"numero": objOrigem.numero}
         }
       }, merge: true);
 

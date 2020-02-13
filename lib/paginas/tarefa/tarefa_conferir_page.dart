@@ -166,7 +166,7 @@ class _TarefaConferirPageState extends State<TarefaConferirPage> {
 
             var dicPedese = Dictionary.fromMap(simulacao.variavel);
             var gabaritoOrderBy =
-                dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
+                dicPedese.orderBy((kv) => kv.value.numero).toDictionary$1((kv) => kv.key, (kv) => kv.value);
             variavelMap = gabaritoOrderBy.toMap();
             Widget icone;
 
@@ -272,7 +272,7 @@ class _TarefaConferirPageState extends State<TarefaConferirPage> {
             Map<String, Gabarito> gabaritoMap;
             var dicPedese = Dictionary.fromMap(gabarito);
             var gabaritoOrderBy =
-                dicPedese.orderBy((kv) => kv.value.ordem).toDictionary$1((kv) => kv.key, (kv) => kv.value);
+                dicPedese.orderBy((kv) => kv.value.numero).toDictionary$1((kv) => kv.key, (kv) => kv.value);
             gabaritoMap = gabaritoOrderBy.toMap();
             Widget icone;
 

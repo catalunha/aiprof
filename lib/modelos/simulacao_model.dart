@@ -9,7 +9,7 @@ class SimulacaoModel extends FirestoreModel {
   int numero;
   UsuarioFk professor;
   ProblemaFk problema;
-  int ordem;
+  int valorGabaritoNumero;
 
   String nome;
   String descricao;
@@ -25,7 +25,7 @@ class SimulacaoModel extends FirestoreModel {
     this.professor,
     this.problema,
     this.nome,
-    this.ordem,
+    this.valorGabaritoNumero,
     this.descricao,
     this.url,
     this.variavel,
@@ -48,8 +48,8 @@ class SimulacaoModel extends FirestoreModel {
             map['modificado'].millisecondsSinceEpoch)
         : null;
 
-    if (map.containsKey('ordemAdicionada'))
-      ordem = map['ordemAdicionada'];
+    if (map.containsKey('valorGabaritoNumero'))
+      valorGabaritoNumero = map['valorGabaritoNumero'];
     if (map.containsKey('nome')) nome = map['nome'];
     if (map.containsKey('descricao')) descricao = map['descricao'];
     if (map.containsKey('url')) url = map['url'];
@@ -83,7 +83,7 @@ class SimulacaoModel extends FirestoreModel {
     }
 
     if (modificado != null) data['modificado'] = this.modificado;
-    if (ordem != null) data['ordemAdicionada'] = this.ordem;
+    if (valorGabaritoNumero != null) data['valorGabaritoNumero'] = this.valorGabaritoNumero;
     if (nome != null) data['nome'] = this.nome;
     if (descricao != null) data['descricao'] = this.descricao;
     if (url != null) data['url'] = this.url;
@@ -105,20 +105,20 @@ class SimulacaoModel extends FirestoreModel {
 }
 /// Tipo: nome | palavra | texto | url | urlimagem
 class Variavel {
-  int ordem;
+  int numero;
   String nome;
   String tipo;
   String valor;
 
   Variavel({
     this.nome,
-    this.ordem,
+    this.numero,
     this.tipo,
     this.valor,
   });
 
   Variavel.fromMap(Map<dynamic, dynamic> map) {
-    if (map.containsKey('ordem')) ordem = map['ordem'];
+    if (map.containsKey('numero')) numero = map['numero'];
     if (map.containsKey('nome')) nome = map['nome'];
     if (map.containsKey('tipo')) tipo = map['tipo'];
     if (map.containsKey('valor')) valor = map['valor'];
@@ -126,7 +126,7 @@ class Variavel {
 
   Map<dynamic, dynamic> toMap() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
-    if (ordem != null) data['ordem'] = this.ordem;
+    if (numero != null) data['numero'] = this.numero;
     if (nome != null) data['nome'] = this.nome;
     if (tipo != null) data['tipo'] = this.tipo;
     if (valor != null) data['valor'] = this.valor;
@@ -136,7 +136,7 @@ class Variavel {
 /// Tipo: nome | palavra | texto | url | urlimagem | arquivo | imagem
 
 class Gabarito {
-  int ordem;
+  int numero;
   String nome;
   String tipo;
   String valor;
@@ -147,7 +147,7 @@ class Gabarito {
 
   Gabarito({
     this.nome,
-    this.ordem,
+    this.numero,
     this.tipo,
     this.valor,
     this.resposta,
@@ -158,7 +158,7 @@ class Gabarito {
 
   Gabarito.fromMap(Map<dynamic, dynamic> map) {
     if (map.containsKey('nome')) nome = map['nome'];
-    if (map.containsKey('ordem')) ordem = map['ordem'];
+    if (map.containsKey('numero')) numero = map['numero'];
     if (map.containsKey('tipo')) tipo = map['tipo'];
     if (map.containsKey('valor')) valor = map['valor'];
     if (map.containsKey('resposta')) resposta = map['resposta'];
@@ -171,7 +171,7 @@ class Gabarito {
   Map<dynamic, dynamic> toMap() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
     if (nome != null) data['nome'] = this.nome;
-    if (ordem != null) data['ordem'] = this.ordem;
+    if (numero != null) data['numero'] = this.numero;
     if (tipo != null) data['tipo'] = this.tipo;
     if (valor != null) data['valor'] = this.valor;
     if (resposta != null) data['resposta'] = this.resposta;

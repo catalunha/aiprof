@@ -135,10 +135,10 @@ class SimulacaoVariavelCRUDBloc {
       );
       if (_state.variavelKey == null) {
         final uuidG = uuid.Uuid();
-        variavelUpdate.ordem = _state.simulacao.ordem ?? 1;
+        variavelUpdate.numero = _state.simulacao.valorGabaritoNumero ?? 1;
         print(uuidG.v4());
         _state.simulacao.variavel = {uuidG.v4(): variavelUpdate};
-        _state.simulacao.ordem = _state.simulacao.ordem + 1;
+        _state.simulacao.valorGabaritoNumero = _state.simulacao.valorGabaritoNumero + 1;
       } else {
         _state.simulacao.variavel[_state.variavelKey] = variavelUpdate;
       }

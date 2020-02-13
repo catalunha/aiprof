@@ -441,43 +441,43 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         variavel: {
           'var01': Variavel(
             nome: 'v1',
-            ordem: 1,
+            numero: 1,
             valor: '1',
             tipo: 'numero',
           ),
           'var02': Variavel(
             nome: 'v2',
-            ordem: 2,
+            numero: 2,
             valor: 'a',
             tipo: 'palavra',
           ),
           'var03': Variavel(
             nome: 'v3',
-            ordem: 3,
+            numero: 3,
             valor: 'b bb bbb',
             tipo: 'texto',
           ),
           'var04': Variavel(
             nome: 'v4',
-            ordem: 4,
+            numero: 4,
             valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086',
             tipo: 'url',
           ),
           'var05': Variavel(
             nome: 'v5',
-            ordem: 5,
+            numero: 5,
             valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086',
             tipo: 'urlimagem',
           )
         },
         gabarito: {
-          'valor01': Gabarito(nome: 'a', ordem: 1, nota:0, tipo: 'numero', valor: '20', resposta:'20'),
-          'valor02': Gabarito(nome: 'b', ordem: 2, nota:0, tipo: 'palavra', valor: 'sim', resposta:'sim'),
-          'valor03': Gabarito(nome: 'c', ordem: 3, nota:0, tipo: 'texto', valor: 'sim ou nao', resposta:'sim ou nao'),
-          'valor04': Gabarito(nome: 'd', ordem: 4, nota:0, tipo: 'url', valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a', resposta:'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a'),
-          'valor05': Gabarito(nome: 'e', ordem: 5, nota:0, tipo: 'urlimagem', valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086', resposta:'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086'),
-          'valor06': Gabarito(nome: 'f', ordem: 6, nota:0, tipo: 'arquivo', valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a', resposta:'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a'),
-          'valor07': Gabarito(nome: 'g', ordem: 7, nota:0, tipo: 'imagem', valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086', resposta:'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086'),
+          'valor01': Gabarito(nome: 'a', numero: 1, nota:0, tipo: 'numero', valor: '20', resposta:'20'),
+          'valor02': Gabarito(nome: 'b', numero: 2, nota:0, tipo: 'palavra', valor: 'sim', resposta:'sim'),
+          'valor03': Gabarito(nome: 'c', numero: 3, nota:0, tipo: 'texto', valor: 'sim ou nao', resposta:'sim ou nao'),
+          'valor04': Gabarito(nome: 'd', numero: 4, nota:0, tipo: 'url', valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a', resposta:'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a'),
+          'valor05': Gabarito(nome: 'e', numero: 5, nota:0, tipo: 'urlimagem', valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086', resposta:'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086'),
+          'valor06': Gabarito(nome: 'f', numero: 6, nota:0, tipo: 'arquivo', valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a', resposta:'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/texto_base.pdf?alt=media&token=617247d1-e4ae-452f-b79a-16a964a6745a'),
+          'valor07': Gabarito(nome: 'g', numero: 7, nota:0, tipo: 'imagem', valor: 'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086', resposta:'https://firebasestorage.googleapis.com/v0/b/pi-brintec.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086'),
         });
 
     // print('=>>>>>>>> ${tarefaModel.aberta}');
@@ -518,22 +518,22 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         variavel: {
           'var01': Variavel(
             nome: 'N1',
-            ordem: 0,
+            numero: 0,
             valor: '1',
           ),
           'var02': Variavel(
             nome: 'N2',
-            ordem: 1,
+            numero: 1,
             valor: '2',
           )
         },
         gabarito: {
-          'valor01': Gabarito(nome: 'a', ordem: 0, tipo: 'numero', valor: '20'),
-          'valor02': Gabarito(nome: 'b', ordem: 1, tipo: 'palavra', valor: 'sim'),
-          'valor03': Gabarito(nome: 'c', ordem: 2, tipo: 'texto', valor: 'sim'),
-          'valor04': Gabarito(nome: 'd', ordem: 3, tipo: 'url', valor: 'sim'),
-          'valor05': Gabarito(nome: 'e', ordem: 4, tipo: 'arquivo', valor: 'sim'),
-          'valor06': Gabarito(nome: 'f', ordem: 5, tipo: 'imagem', valor: 'sim'),
+          'valor01': Gabarito(nome: 'a', numero: 0, tipo: 'numero', valor: '20'),
+          'valor02': Gabarito(nome: 'b', numero: 1, tipo: 'palavra', valor: 'sim'),
+          'valor03': Gabarito(nome: 'c', numero: 2, tipo: 'texto', valor: 'sim'),
+          'valor04': Gabarito(nome: 'd', numero: 3, tipo: 'url', valor: 'sim'),
+          'valor05': Gabarito(nome: 'e', numero: 4, tipo: 'arquivo', valor: 'sim'),
+          'valor06': Gabarito(nome: 'f', numero: 5, tipo: 'imagem', valor: 'sim'),
         });
 
     // print('=>>>>>>>> ${tarefaModel.aberta}');
