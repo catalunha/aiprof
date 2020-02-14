@@ -94,7 +94,6 @@ class SimulacaoViatextoBloc {
 
       String simulacaoNome; //0
       String tipoCadastro; //1
-      // String ordem; //2
       String nome; //2
       String tipoValor; //3
       String valor; //4
@@ -105,6 +104,11 @@ class SimulacaoViatextoBloc {
             List<String> campos = linha.trim().split(';');
             if (campos != null &&
                 campos.length == 5 &&
+                campos[0].length >= 1 &&
+                campos[1].length >= 5 &&
+                campos[2].length >= 1 &&
+                campos[3].length >= 3 &&
+                campos[4].length >= 1 &&
                 (campos[1]=='valor' || campos[1] == 'gabarito') &&
                 (campos[3] == 'numero' ||
                     campos[3] == 'palavra' ||
