@@ -43,7 +43,11 @@ class _TurmaAlunoPageState extends State<TurmaAlunoPage> {
               onPressed: snapshot.data.isDataValid
                   ? () {
                       bloc.eventSink(CadastrarAlunoEvent());
-                      Navigator.pop(context);
+                      Navigator.pushNamed(
+                        context,
+                        "/turma/aluno/list",
+                        arguments: widget.turmaID,
+                      );
                     }
                   : null,
               child: Icon(Icons.cloud_upload),

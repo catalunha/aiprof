@@ -61,6 +61,9 @@ class TurmaAtivaListBloc {
 
   _validateData() {
     _state.isDataValid = true;
+    if (_state.usuarioAuth == null) {
+      _state.isDataValid = false;
+    }
   }
 
   _mapEventToState(TurmaAtivaListBlocEvent event) async {
@@ -69,26 +72,26 @@ class TurmaAtivaListBloc {
     }
 
     if (event is UpdateTurmaAtivaListEvent) {
-      final streamDocsRemetente = _firestore
-          .collection(TurmaModel.collection)
-          .where("ativo", isEqualTo: true)
-          .where("professor.id", isEqualTo: _state.usuarioAuth?.id)
-          .snapshots();
+      if (_state.usuarioAuth != null) {
+        final streamDocsRemetente = _firestore
+            .collection(TurmaModel.collection)
+            .where("ativo", isEqualTo: true)
+            .where("professor.id", isEqualTo: _state.usuarioAuth.id)
+            .snapshots();
 
-      final snapListRemetente = streamDocsRemetente.map((snapDocs) => snapDocs
-          .documents
-          .map((doc) => TurmaModel(id: doc.documentID).fromMap(doc.data))
-          .toList());
+        final snapListRemetente = streamDocsRemetente.map(
+            (snapDocs) => snapDocs.documents.map((doc) => TurmaModel(id: doc.documentID).fromMap(doc.data)).toList());
 
-      snapListRemetente.listen((List<TurmaModel> turmaList) {
-        if (turmaList.length > 1) {
-          turmaList.sort((a, b) => a.numero.compareTo(b.numero));
-        }
+        snapListRemetente.listen((List<TurmaModel> turmaList) {
+          if (turmaList.length > 1) {
+            turmaList.sort((a, b) => a.numero.compareTo(b.numero));
+          }
 
-        _state.turmaList.clear();
-        _state.turmaList = turmaList;
-        if (!_stateController.isClosed) _stateController.add(_state);
-      });
+          _state.turmaList.clear();
+          _state.turmaList = turmaList;
+          if (!_stateController.isClosed) _stateController.add(_state);
+        });
+      }
     }
 
     if (event is OrdenarEvent) {

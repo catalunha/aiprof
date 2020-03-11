@@ -83,8 +83,7 @@ class _QuestaoCRUDPageState extends State<QuestaoCRUDPage> {
       children: <Widget>[
         StreamBuilder<QuestaoCRUDBlocState>(
             stream: bloc.stateStream,
-            builder: (BuildContext context,
-                AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
               if (snapshot.hasError) {
                 return Text("Existe algo errado! Informe o suporte.");
               }
@@ -155,8 +154,7 @@ class _QuestaoCRUDPageState extends State<QuestaoCRUDPage> {
       children: <Widget>[
         StreamBuilder<QuestaoCRUDBlocState>(
             stream: bloc.stateStream,
-            builder: (BuildContext context,
-                AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
               if (snapshot.hasError) {
                 return Text("Existe algo errado! Informe o suporte.");
               }
@@ -205,14 +203,12 @@ class _QuestaoCRUDPageState extends State<QuestaoCRUDPage> {
                     }
                   : null,
               child: Icon(Icons.cloud_upload),
-              backgroundColor:
-                  snapshot.data.isDataValid ? Colors.blue : Colors.grey,
+              backgroundColor: snapshot.data.isDataValid ? Colors.blue : Colors.grey,
             );
           }),
       body: StreamBuilder<QuestaoCRUDBlocState>(
         stream: bloc.stateStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
           if (snapshot.hasError) {
             return Text("Existe algo errado! Informe o suporte.");
           }
@@ -221,22 +217,82 @@ class _QuestaoCRUDPageState extends State<QuestaoCRUDPage> {
           }
           Widget msgData = Text('');
           if (snapshot.data.inicioQuestao != null &&
-              snapshot.data.fimQuestao != null && snapshot.data.inicioQuestao
-                .isAfter(snapshot.data.fimQuestao)) {
-              msgData = Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Center(
-                  child: Text(
-                    'Data e hora final deve ser após a inicial.',
-                    style: TextStyle(fontSize: 15, color: Colors.red),
-                  ),
+              snapshot.data.fimQuestao != null &&
+              snapshot.data.inicioQuestao.isAfter(snapshot.data.fimQuestao)) {
+            msgData = Padding(
+              padding: EdgeInsets.all(5.0),
+              child: Center(
+                child: Text(
+                  'Data e hora final deve ser após a inicial.',
+                  style: TextStyle(fontSize: 15, color: Colors.red),
                 ),
-              );
-            
+              ),
+            );
           }
           return ListView(
             padding: EdgeInsets.all(5),
             children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    '* Selecione um problema:',
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  )),
+              snapshot.data?.questao?.aplicada != null && snapshot.data?.questao?.aplicada == true
+                  ? Text('Questão já aplicada não pode alterar problema.')
+                  : Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: ListTile(
+                        title: snapshot.data.problemaFk == null
+                            ? Text('Aguardado seleção')
+                            : Text('${snapshot.data.problemaFk.nome}'),
+                        trailing: Icon(Icons.search),
+                        onTap: () async {
+                          ProblemaFk problemaFk = await Navigator.push(context, MaterialPageRoute(builder: (context) {
+                            return ProblemaSelecionarPage(widget.authBloc);
+                          }));
+                          if (problemaFk != null) {
+                            bloc.eventSink(SelecionarProblemaEvent(problemaFk));
+                          }
+                        },
+                      ),
+                    ),
+              Divider(),
+              Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      'Outras configurações:',
+                      style: TextStyle(fontSize: 15, color: Colors.greenAccent),
+                    )),
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    '* Horas para resolução (>=1):',
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  )),
+              Padding(padding: EdgeInsets.all(5.0), child: _NumberFieldMultiplo(bloc, 'tempo')),
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    '* Número de tentativas de envio de resposta (>=1):',
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  )),
+              Padding(padding: EdgeInsets.all(5.0), child: _NumberFieldMultiplo(bloc, 'tentativa')),
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    '* Erro relativo na correção numérica. (>=1 a <100):',
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  )),
+              Padding(padding: EdgeInsets.all(5.0), child: _NumberFieldMultiplo(bloc, 'erroRelativo')),
+              Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: Text(
+                    '* Nota ou peso:',
+                    style: TextStyle(fontSize: 15, color: Colors.blue),
+                  )),
+              Padding(padding: EdgeInsets.all(5.0), child: _TextFieldMultiplo(bloc, 'nota')),
+              Divider(),
               if (widget.avaliacaoID != null)
                 Padding(
                     padding: EdgeInsets.all(5.0),
@@ -250,82 +306,15 @@ class _QuestaoCRUDPageState extends State<QuestaoCRUDPage> {
                     '* Data e hora do início:',
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   )),
-              Padding(
-                  padding: EdgeInsets.all(1.0),
-                  child: _inicioAvaliacao(context)),
+              Padding(padding: EdgeInsets.all(1.0), child: _inicioAvaliacao(context)),
               Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Text(
                     '* Data e hora do fim:',
                     style: TextStyle(fontSize: 15, color: Colors.blue),
                   )),
-              Padding(
-                  padding: EdgeInsets.all(1.0), child: _fimAvaliacao(context)),
+              Padding(padding: EdgeInsets.all(1.0), child: _fimAvaliacao(context)),
               msgData,
-              Divider(),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    '* Horas para resolução (>=1):',
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: _NumberFieldMultiplo(bloc, 'tempo')),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    '* Tentativas de resposta ele pode usar (>=1):',
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: _NumberFieldMultiplo(bloc, 'tentativa')),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    '* Erro relativo na correção numérica. (>=1 a <100):',
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: _NumberFieldMultiplo(bloc, 'erroRelativo')),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    '* Nota ou peso:',
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: _TextFieldMultiplo(bloc, 'nota')),
-              Padding(
-                  padding: EdgeInsets.all(5.0),
-                  child: Text(
-                    '* Selectione um problema:',
-                    style: TextStyle(fontSize: 15, color: Colors.blue),
-                  )),
-              snapshot.data?.questao?.aplicada != null &&
-                      snapshot.data?.questao?.aplicada == true
-                  ? Text('Questão já aplicada não pode alterar problema.')
-                  : Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: ListTile(
-                        title: snapshot.data.problemaFk == null
-                            ? Text('Aguardado seleção')
-                            : Text('${snapshot.data.problemaFk.nome}'),
-                        trailing: Icon(Icons.search),
-                        onTap: () async {
-                          ProblemaFk problemaFk = await Navigator.push(context,
-                              MaterialPageRoute(builder: (context) {
-                            return ProblemaSelecionarPage(widget.authBloc);
-                          }));
-                          if (problemaFk != null) {
-                            bloc.eventSink(SelecionarProblemaEvent(problemaFk));
-                          }
-                        },
-                      ),
-                    ),
               Divider(),
               Padding(
                 padding: EdgeInsets.all(5.0),
@@ -345,9 +334,6 @@ class _QuestaoCRUDPageState extends State<QuestaoCRUDPage> {
     );
   }
 }
-
-
-
 
 class _TextFieldMultiplo extends StatefulWidget {
   final QuestaoCRUDBloc bloc;
@@ -377,12 +363,11 @@ class _TextFieldMultiploState extends State<_TextFieldMultiplo> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuestaoCRUDBlocState>(
       stream: bloc.stateStream,
-      builder: (BuildContext context,
-          AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
         if (_textFieldController.text.isEmpty) {
           if (campo == 'nota') {
             _textFieldController.text = snapshot.data?.nota;
-          } 
+          }
         }
         return TextField(
           keyboardType: TextInputType.multiline,
@@ -399,7 +384,6 @@ class _TextFieldMultiploState extends State<_TextFieldMultiplo> {
     );
   }
 }
-
 
 class _NumberFieldMultiplo extends StatefulWidget {
   final QuestaoCRUDBloc bloc;
@@ -429,8 +413,7 @@ class _NumberFieldMultiploState extends State<_NumberFieldMultiplo> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuestaoCRUDBlocState>(
       stream: bloc.stateStream,
-      builder:
-          (BuildContext context, AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<QuestaoCRUDBlocState> snapshot) {
         if (_textFieldController.text.isEmpty) {
           if (campo == 'tempo') {
             _textFieldController.text = snapshot.data?.tempo;

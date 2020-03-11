@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:aiprof/auth_bloc.dart';
 import 'package:aiprof/bootstrap.dart';
 import 'package:aiprof/componentes/default_scaffold.dart';
-import 'package:aiprof/naosuportato/url_launcher.dart'
-    if (dart.library.io) 'package:url_launcher/url_launcher.dart';
+import 'package:aiprof/naosuportato/url_launcher.dart' if (dart.library.io) 'package:url_launcher/url_launcher.dart';
 import 'package:aiprof/paginas/turma/turma_ativa_list_bloc.dart';
 
 class TurmaAtivaListPage extends StatefulWidget {
@@ -49,8 +48,7 @@ class _TurmaAtivaListPageState extends State<TurmaAtivaListPage> {
         ),
         body: StreamBuilder<TurmaAtivaListBlocState>(
             stream: bloc.stateStream,
-            builder: (BuildContext context,
-                AsyncSnapshot<TurmaAtivaListBlocState> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<TurmaAtivaListBlocState> snapshot) {
               if (snapshot.hasError) {
                 return Text("Existe algo errado! Informe o suporte.");
               }
@@ -71,8 +69,7 @@ class _TurmaAtivaListPageState extends State<TurmaAtivaListPage> {
                             trailing: IconButton(
                               tooltip: 'Ver programa',
                               icon: Icon(Icons.local_library),
-                              onPressed: turma.programa != null &&
-                                      turma.programa.isNotEmpty
+                              onPressed: turma.programa != null && turma.programa.isNotEmpty
                                   ? () {
                                       try {
                                         launch(turma.programa);
@@ -104,8 +101,7 @@ Turma: ${turma.nome}'''),
                                 icon: Icon(Icons.arrow_downward),
                                 onPressed: (ordemLocal) < lengthTurma
                                     ? () {
-                                        bloc.eventSink(
-                                            OrdenarEvent(turma, false));
+                                        bloc.eventSink(OrdenarEvent(turma, false));
                                       }
                                     : null,
                               ),
@@ -114,21 +110,9 @@ Turma: ${turma.nome}'''),
                                 icon: Icon(Icons.arrow_upward),
                                 onPressed: ordemLocal > 1
                                     ? () {
-                                        bloc.eventSink(
-                                            OrdenarEvent(turma, true));
+                                        bloc.eventSink(OrdenarEvent(turma, true));
                                       }
                                     : null,
-                              ),
-                              IconButton(
-                                tooltip: 'Agenda de encontros da turma',
-                                icon: Icon(Icons.today),
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    "/turma/encontro/list",
-                                    arguments: turma.id,
-                                  );
-                                },
                               ),
                               IconButton(
                                 tooltip: 'Gerenciar alunos',
@@ -137,6 +121,17 @@ Turma: ${turma.nome}'''),
                                   Navigator.pushNamed(
                                     context,
                                     "/turma/aluno",
+                                    arguments: turma.id,
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                tooltip: 'Agenda de encontros da turma',
+                                icon: Icon(Icons.today),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    "/turma/encontro/list",
                                     arguments: turma.id,
                                   );
                                 },
@@ -168,7 +163,7 @@ Turma: ${turma.nome}'''),
                   children: listaWidget,
                 );
               } else {
-                return Text('Existem dados inválidos. Informe o suporte.');
+                return Center(child: CircularProgressIndicator());
               }
             }));
   }
