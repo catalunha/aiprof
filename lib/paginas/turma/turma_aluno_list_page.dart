@@ -64,9 +64,9 @@ class _TurmaAlunoListPageState extends State<TurmaAlunoListPage> {
                     onTap: () {
                       bloc.eventSink(CreateRelatorioEvent(aluno.id));
                     },
-                    onLongPress: () {
-                      bloc.eventSink(DeleteAlunoEvent(aluno.id));
-                    },
+                    // onLongPress: () {
+                    //   bloc.eventSink(DeleteAlunoEvent(aluno.id));
+                    // },
                   )
 
                       // Card(
