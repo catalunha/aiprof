@@ -438,7 +438,7 @@ class _TarefaConferirPageState extends State<TarefaConferirPage> {
                 secondsRemaining: 2500,
                 whenTimeExpires: () {
                   Navigator.pop(context);
-                  print('terminou clock');
+                  // print('terminou clock');
                 },
                 countDownTimerStyle: TextStyle(color: Color(0XFFf5a623), fontSize: 17.0, height: 2),
               ),
@@ -624,7 +624,7 @@ class ImagemSelect extends StatelessWidget {
         return arquivoPath;
       }
     } catch (e) {
-      print("_selecionarNovoArquivo: Unsupported operation" + e.toString());
+      // print("_selecionarNovoArquivo: Unsupported operation" + e.toString());
     }
     return null;
   }
@@ -673,12 +673,12 @@ class _UploadImagem extends StatelessWidget {
           child: Image.network(url),
         ));
       } on Exception {
-        print('Exception');
+        // print('Exception');
         msg = ListTile(
           title: Text('Não consegui abrir a imagem.'),
         );
       } catch (e) {
-        print('catch');
+        // print('catch');
         msg = ListTile(
           title: Text('Não consegui abrir a imagem.'),
         );
@@ -881,7 +881,7 @@ class ArquivoSelect extends StatelessWidget {
         return arquivoPath;
       }
     } catch (e) {
-      print("_selecionarNovoArquivo: Unsupported operation" + e.toString());
+      // print("_selecionarNovoArquivo: Unsupported operation" + e.toString());
     }
     return null;
   }
@@ -921,12 +921,12 @@ class _UploadArquivo extends StatelessWidget {
           },
         );
       } on Exception {
-        print('Exception');
+        // print('Exception');
         msg = ListTile(
           title: Text('Não consegui abrir o arquivo.'),
         );
       } catch (e) {
-        print('catch');
+        // print('catch');
         msg = ListTile(
           title: Text('Não consegui abrir o arquivo.'),
         );

@@ -103,28 +103,28 @@ class AuthBloc {
     //       .document(userId)
     //       .setData({'tokenFCM': token}, merge: true);
     // }).catchError((err) {
-    //   print('authbloc: '+err.message.toString());
+    //   // print('authbloc: '+err.message.toString());
     // });
   }
 
   void _getPerfilUsuarioFromFirebaseUser(String userId) {
     _state.usuarioID = userId;
-    print('_state.usuarioID: ' + _state.usuarioID);
+    // print('_state.usuarioID: ' + _state.usuarioID);
     final perfilRef = _firestore.collection(UsuarioModel.collection).document(userId);
-    print('perfilRef.documentID: ' + perfilRef.documentID);
+    // print('perfilRef.documentID: ' + perfilRef.documentID);
 
     final perfilStream =
         perfilRef.snapshots().map((perfilSnap) => UsuarioModel(id: perfilSnap.documentID).fromMap(perfilSnap.data));
 
     // final perfilStream = perfilRef.snapshots().map((perfilSnap) {
-    //   print('perfilSnap.documentID: '+perfilSnap.documentID);
+    //   // print('perfilSnap.documentID: '+perfilSnap.documentID);
     //   return UsuarioModel(id: perfilSnap.documentID).fromMap(perfilSnap.data);
     // });
-    print('+++');
+    // print('+++');
 perfilStream.listen((usuarioModel){
-print('usuarioModel.nome:' + usuarioModel.nome);
+// print('usuarioModel.nome:' + usuarioModel.nome);
 });
-    print('---');
+    // print('---');
     if (_perfilSubscription != null) {
       _perfilSubscription.cancel().then((_) {
         _perfilSubscription = perfilStream.listen(_pipPerfil);
@@ -140,12 +140,12 @@ print('usuarioModel.nome:' + usuarioModel.nome);
 
   void _pipPerfil(UsuarioModel usuarioModel) {
     _perfilController.sink.add(usuarioModel);
-    print('+++Usuario: ${usuarioModel.nome} é professor: ${usuarioModel.professor}');
+    // print('+++Usuario: ${usuarioModel.nome} é professor: ${usuarioModel.professor}');
     if (!usuarioModel.professor) {
-      print('Usuario logout: ${usuarioModel.nome} é professor: ${usuarioModel.professor}');
+      // print('Usuario logout: ${usuarioModel.nome} é professor: ${usuarioModel.professor}');
       _authApi.logout();
     }
-    print('---Usuario: ${usuarioModel.nome} é professor: ${usuarioModel.professor}');
+    // print('---Usuario: ${usuarioModel.nome} é professor: ${usuarioModel.professor}');
   }
 
   void _updateStatus(String userId) {

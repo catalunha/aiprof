@@ -133,7 +133,7 @@ class SimulacaoGabaritoCRUDBloc {
       if (_state.gabaritoKey == null) {
         final uuidG = uuid.Uuid();
         gabaritoUpdate.numero = _state.simulacao.valorGabaritoNumero ?? 1;
-        print(uuidG.v4());
+        // print(uuidG.v4());
         _state.simulacao.gabarito = {uuidG.v4(): gabaritoUpdate};
         _state.simulacao.valorGabaritoNumero = _state.simulacao.valorGabaritoNumero + 1;
       } else {
@@ -155,7 +155,7 @@ class SimulacaoGabaritoCRUDBloc {
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print(
+    // print(
         'event.runtimeType em SimulacaoGabaritoCRUDBloc  = ${event.runtimeType}');
   }
 }

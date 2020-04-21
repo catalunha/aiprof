@@ -88,7 +88,7 @@ class TurmaAlunoBloc {
       }
     }
     if (event is NotaListEvent) {
-      print('Gerando csv com lista de alunos da turmaID: ${event.turmaID}');
+      // print('Gerando csv com lista de alunos da turmaID: ${event.turmaID}');
     }
     if (event is UpdateListaDeAlunosEvent) {
       _state.cadastro = event.cadastro.trim();
@@ -98,20 +98,20 @@ class TurmaAlunoBloc {
       String matricula;
       String email;
       String nome;
-      // print('cadastro: ${_state.cadastro}');
+      // // print('cadastro: ${_state.cadastro}');
       if (_state.cadastro != null) {
-        // print('::cadastro::');
-        // print(_state.cadastro);
+        // // print('::cadastro::');
+        // // print(_state.cadastro);
         List<String> linhas = _state.cadastro.split('\n');
-        // print('::linhas::');
-        // print(linhas);
+        // // print('::linhas::');
+        // // print(linhas);
         for (var linha in linhas) {
-          // print('::linha::');
-          // print(linha);
+          // // print('::linha::');
+          // // print(linha);
           if (linha != null) {
             List<String> campos = linha.trim().split(';');
-            // print('::campos::');
-            // print(campos);
+            // // print('::campos::');
+            // // print(campos);
             if (campos != null &&
                 campos.length == 3 &&
                 campos[0] != null &&
@@ -124,9 +124,9 @@ class TurmaAlunoBloc {
               matricula = campos[0].trim();
               email = campos[1].trim();
               nome = campos[2].trim();
-              // print('::matricula::$matricula');
-              // print('::email::$email');
-              // print('::nome::$nome');
+              // // print('::matricula::$matricula');
+              // // print('::email::$email');
+              // // print('::nome::$nome');
               _state.listaDeAlunos.add([matricula, email, nome]);
             }
           }
@@ -136,9 +136,9 @@ class TurmaAlunoBloc {
       //   matricula = aluno[0];
       //   email = aluno[1];
       //   nome = aluno[2];
-      //   print('::matricula2::$matricula');
-      //   print('::email2::$email');
-      //   print('::nome2::$nome');
+      //   // print('::matricula2::$matricula');
+      //   // print('::email2::$email');
+      //   // print('::nome2::$nome');
       // }
     }
 
@@ -177,18 +177,18 @@ class TurmaAlunoBloc {
       // String cadastro = _state.cadastro;
 
       // if (cadastro != null) {
-      //   // print('::cadastro::');
-      //   // print(cadastro);
+      //   // // print('::cadastro::');
+      //   // // print(cadastro);
       //   List<String> linhas = cadastro.split('\n');
-      //   // print('::linhas::');
-      //   // print(linhas);
+      //   // // print('::linhas::');
+      //   // // print(linhas);
       //   for (var linha in linhas) {
-      //     // print('::linha::');
-      //     // print(linha);
+      //     // // print('::linha::');
+      //     // // print(linha);
       //     if (linha != null) {
       //       List<String> campos = linha.trim().split(';');
-      //       // print('::campos::');
-      //       // print(campos);
+      //       // // print('::campos::');
+      //       // // print(campos);
       //       if (campos != null &&
       //           campos.length == 3 &&
       //           campos[0] != null &&
@@ -201,9 +201,9 @@ class TurmaAlunoBloc {
       //         matricula = campos[0].trim();
       //         email = campos[1].trim();
       //         nome = campos[2].trim();
-      //         print('::matricula::$matricula');
-      //         print('::email::$email');
-      //         print('::nome::$nome');
+      //         // print('::matricula::$matricula');
+      //         // print('::email::$email');
+      //         // print('::nome::$nome');
       //         UsuarioModel usuarioModel = UsuarioModel(
       //             professor: false,
       //             ativo: true,
@@ -233,6 +233,6 @@ class TurmaAlunoBloc {
     }
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em TurmaAlunoBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em TurmaAlunoBloc  = ${event.runtimeType}');
   }
 }

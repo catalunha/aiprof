@@ -73,7 +73,7 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
                   variavelTipoList.add(variavel.value.tipo);
                 }
                 variavelTipoList.sort((a, b) => a.compareTo(b));
-                print('variaveis: $variavelList');
+                // print('variaveis: $variavelList');
               }
 
               if (snapshot.data?.simulacaoList[0]?.gabarito != null) {
@@ -87,7 +87,7 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
                 }
                 gabaritoTipoList.sort((a, b) => a.compareTo(b));
 
-                print('gabaritos: $gabaritoList');
+                // print('gabaritos: $gabaritoList');
               }
             }
             bool alerta = false;
@@ -116,16 +116,16 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
                 variavelTipoListAtual.sort((a, b) => a.compareTo(b));
               }
               if (!listEquals(variavelList, variavelListAtual)) {
-                print('${simulacao.nome}');
-                print(variavelList);
-                print(variavelListAtual);
+                // print('${simulacao.nome}');
+                // print(variavelList);
+                // print(variavelListAtual);
                 alerta = true;
                 msg = msg + '\n\nVALORES COM NOMES DIFERENTES. FAVOR CORRIGIR !';
               }
               if (!listEquals(variavelTipoList, variavelTipoListAtual)) {
-                print('${simulacao.nome}');
-                print(variavelList);
-                print(variavelListAtual);
+                // print('${simulacao.nome}');
+                // print(variavelList);
+                // print(variavelListAtual);
                 alerta = true;
                 msg = msg + '\n\nVALORES COM TIPOS DIFERENTES. FAVOR CORRIGIR !';
               }
@@ -145,16 +145,16 @@ class _SimulacaoListPageState extends State<SimulacaoListPage> {
                 gabaritoTipoListAtual.sort((a, b) => a.compareTo(b));
               }
               if (!listEquals(gabaritoList, gabaritoListAtual)) {
-                print('${simulacao.nome}');
-                print(gabaritoList);
-                print(gabaritoListAtual);
+                // print('${simulacao.nome}');
+                // print(gabaritoList);
+                // print(gabaritoListAtual);
                 alerta = true;
                 msg = msg + '\n\nGABARITOS COM NOMES DIFERENTES. FAVOR CORRIGIR !';
               }
               if (!listEquals(gabaritoTipoList, gabaritoTipoListAtual)) {
-                print('${simulacao.nome}');
-                print(gabaritoList);
-                print(gabaritoListAtual);
+                // print('${simulacao.nome}');
+                // print(gabaritoList);
+                // print(gabaritoListAtual);
                 alerta = true;
                 msg = msg + '\n\nGABARITOS COM TIPOS DIFERENTES. FAVOR CORRIGIR !';
               }

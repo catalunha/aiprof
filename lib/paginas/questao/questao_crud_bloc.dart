@@ -388,6 +388,6 @@ class QuestaoCRUDBloc {
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em QuestaoCRUDBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em QuestaoCRUDBloc  = ${event.runtimeType}');
   }
 }

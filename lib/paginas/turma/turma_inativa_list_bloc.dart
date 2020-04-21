@@ -91,7 +91,7 @@ class TurmaInativaListBloc {
     }
 
     if (event is AtivarTurmaEvent) {
-      print(event.turmaID);
+      // print(event.turmaID);
       final docRef =
           _firestore.collection(TurmaModel.collection).document(event.turmaID);
       await docRef.setData({"ativo": true}, merge: true);
@@ -99,6 +99,6 @@ class TurmaInativaListBloc {
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em TurmaInativaListBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em TurmaInativaListBloc  = ${event.runtimeType}');
   }
 }

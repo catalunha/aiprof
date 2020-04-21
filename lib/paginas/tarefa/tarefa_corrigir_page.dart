@@ -745,8 +745,8 @@ class _ImagemUnica extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget url;
     Widget link;
-    // print('urlModificada: $urlModificada');
-    // print('urlOriginal: $urlOriginal');
+    // // print('urlModificada: $urlModificada');
+    // // print('urlOriginal: $urlOriginal');
     link = Center(child: ListTile(subtitle: Text('')));
     if (urlModificada == null) {
       url = Center(child: ListTile(subtitle: Text('Sem imagem nesta resposta.')));

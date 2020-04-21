@@ -108,6 +108,6 @@ class UploaderBloc {
     }
 
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em UploadPageBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em UploadPageBloc  = ${event.runtimeType}');
   }
 }

@@ -136,7 +136,7 @@ class SimulacaoVariavelCRUDBloc {
       if (_state.variavelKey == null) {
         final uuidG = uuid.Uuid();
         variavelUpdate.numero = _state.simulacao.valorGabaritoNumero ?? 1;
-        print(uuidG.v4());
+        // print(uuidG.v4());
         _state.simulacao.variavel = {uuidG.v4(): variavelUpdate};
         _state.simulacao.valorGabaritoNumero = _state.simulacao.valorGabaritoNumero + 1;
       } else {
@@ -158,7 +158,7 @@ class SimulacaoVariavelCRUDBloc {
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print(
+    // print(
         'event.runtimeType em SimulacaoVariavelCRUDBloc  = ${event.runtimeType}');
   }
 }

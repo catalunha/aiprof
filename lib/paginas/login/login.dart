@@ -9,22 +9,22 @@ class EmailPassword {
   String email = '';
   String password = '';
   bool validateEmail() {
-    print("---" + this.email);
+    // print("---" + this.email);
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(this.email);
 
     if (emailValid) {
-      print("email valido: " + this.email);
+      // print("email valido: " + this.email);
       return true;
     } else {
-      print("email invalido: " + this.email);
+      // print("email invalido: " + this.email);
       return false;
     }
   }
 
   bool validatePassword() {
-    print("---" + this.password);
+    // print("---" + this.password);
     if (this.password.length < 6) {
       // _alerta('Informe uma senha valida.');
       return false;

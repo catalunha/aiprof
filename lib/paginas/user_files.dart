@@ -38,7 +38,7 @@ class _UserFilesFirebaseListState extends State<UserFilesFirebaseList> {
               type: _pickingType, fileExtension: _extension);
         }
       } on PlatformException catch (e) {
-        print("Unsupported operation" + e.toString());
+        // print("Unsupported operation" + e.toString());
       }
       if (!mounted) return;
 

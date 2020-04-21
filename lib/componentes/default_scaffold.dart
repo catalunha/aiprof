@@ -179,12 +179,12 @@ class _ImagemUnica extends StatelessWidget {
         backgroundImage: NetworkImage(fotoUrl),
       );
       } on Exception catch (_) {
-        print('Exception');
+        // print('Exception');
         foto = ListTile(
           title: Text('Não consegui abrir a imagem.'),
         );
       } catch (e) {
-        print('catch');
+        // print('catch');
         foto = ListTile(
           title: Text('Não consegui abrir a imagem.'),
         );

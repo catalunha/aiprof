@@ -120,7 +120,7 @@ class TarefaConferirBloc {
           }
           if (valor.contains('.')) {
             try {
-              print('valor: $valor');
+              // print('valor: $valor');
               _state.resposta[event.gabaritoKey].resposta = valor;
               double.parse(valor);
             } catch (e) {
@@ -137,7 +137,7 @@ class TarefaConferirBloc {
         }
         if (!_stateController.isClosed) _stateController.add(_state);
 
-        print('_state.resposta[event.gabaritoKey].resposta: ${_state.resposta[event.gabaritoKey].resposta}');
+        // print('_state.resposta[event.gabaritoKey].resposta: ${_state.resposta[event.gabaritoKey].resposta}');
       }
       if (          gabarito.tipo == 'palavra' ||
           gabarito.tipo == 'texto' ||
@@ -151,18 +151,18 @@ class TarefaConferirBloc {
       }
     }
     if (event is UpdateApagarAnexoImagemArquivoEvent) {
-      // print('apagar');
+      // // print('apagar');
       var gabarito = _state.resposta[event.gabaritoKey];
       if (gabarito.tipo == 'imagem' || gabarito.tipo == 'arquivo') {
         _state.resposta[event.gabaritoKey].respostaUploadID = null;
         _state.resposta[event.gabaritoKey].respostaPath = null;
         _state.resposta[event.gabaritoKey].resposta = null;
       }
-      print(_state.resposta[event.gabaritoKey]);
+      // print(_state.resposta[event.gabaritoKey]);
     }
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em TarefaConferirBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em TarefaConferirBloc  = ${event.runtimeType}');
   }
 }

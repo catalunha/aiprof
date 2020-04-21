@@ -187,18 +187,18 @@ class TarefaModel extends FirestoreModel {
   bool get isAberta {
     if (this.aberta && this.fim.isBefore(DateTime.now())) {
       this.aberta = false;
-      print('==> Tarefa ${this.id}. aberta=${this.aberta} pois fim < now');
+      // print('==> Tarefa ${this.id}. aberta=${this.aberta} pois fim < now');
     }
     if (this.aberta &&
         this.iniciou != null &&
         this.responderAte != null &&
         this.responderAte.isBefore(DateTime.now())) {
       this.aberta = false;
-      print('==> Tarefa ${this.id} Fechada pois responderAte < now');
+      // print('==> Tarefa ${this.id} Fechada pois responderAte < now');
     }
     if (this.aberta && this.tentou != null && this.tentou >= this.tentativa) {
       this.aberta = false;
-      print('==> Tarefa ${this.id} Fechada pois tentou < tentativa');
+      // print('==> Tarefa ${this.id} Fechada pois tentou < tentativa');
     }
     return this.aberta;
   }

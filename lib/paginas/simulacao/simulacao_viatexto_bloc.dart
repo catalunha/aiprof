@@ -163,13 +163,13 @@ class SimulacaoViatextoBloc {
           nome = simulacaoLinha[2];
           tipoValor = simulacaoLinha[3];
           valor = simulacaoLinha[4];
-          print(simulacaoAtual);
-          print(simulacaoNome);
-          print(tipoCadastro);
-          print(valor);
-          print(simulacao);
+          // print(simulacaoAtual);
+          // print(simulacaoNome);
+          // print(tipoCadastro);
+          // print(valor);
+          // print(simulacao);
           if (simulacaoAtual != null && simulacaoAtual != simulacaoNome) {
-            print('simulacao pronta enviando $simulacao');
+            // print('simulacao pronta enviando $simulacao');
             // +++ Gravar a simulacao atual
             await enviarSimulacao(simulacao);
             // --- Gravar a simulacao atual
@@ -177,7 +177,7 @@ class SimulacaoViatextoBloc {
             simulacao = SimulacaoModel();
           }
           if (simulacaoAtual == null) {
-            print('criando simulação');
+            // print('criando simulação');
             simulacaoAtual = simulacaoNome;
             simulacao.nome = simulacaoNome;
             simulacao.valorGabaritoNumero = 0;
@@ -189,7 +189,7 @@ class SimulacaoViatextoBloc {
           }
 
           if (simulacaoAtual == simulacaoNome && tipoCadastro == 'valor') {
-            print('add valor na simulacao');
+            // print('add valor na simulacao');
             Variavel variavelUpdate = Variavel(
               numero: simulacao.valorGabaritoNumero ?? 1,
               nome: nome,
@@ -201,7 +201,7 @@ class SimulacaoViatextoBloc {
             simulacao.variavel.addAll({uuidG.v4(): variavelUpdate});
           }
           if (simulacaoAtual == simulacaoNome && tipoCadastro == 'gabarito') {
-            print('add gabarito na simulacao');
+            // print('add gabarito na simulacao');
             Gabarito gabaritoUpdate = Gabarito(
               numero: simulacao.valorGabaritoNumero ?? 1,
               nome: nome,
@@ -213,7 +213,7 @@ class SimulacaoViatextoBloc {
             simulacao.gabarito.addAll({uuidG.v4(): gabaritoUpdate});
           }
         }
-        print('simulacao pronta enviando $simulacao');
+        // print('simulacao pronta enviando $simulacao');
         // +++ Gravar a simulacao atual
         await enviarSimulacao(simulacao);
         // --- Gravar a simulacao atual
@@ -222,6 +222,6 @@ class SimulacaoViatextoBloc {
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em SimulacaoViatextoBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em SimulacaoViatextoBloc  = ${event.runtimeType}');
   }
 }

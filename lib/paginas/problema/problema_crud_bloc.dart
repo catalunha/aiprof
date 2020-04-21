@@ -158,7 +158,7 @@ class ProblemaCRUDBloc {
         pastaList.sort((a, b) => a.numero.compareTo(b.numero));
         _state.pastaList.clear();
         _state.pastaList = pastaList;
-        // print(_state.pastaList);
+        // // print(_state.pastaList);
         if (!_stateController.isClosed) _stateController.add(_state);
       });
     }
@@ -234,6 +234,6 @@ class ProblemaCRUDBloc {
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em ProblemaCRUDBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em ProblemaCRUDBloc  = ${event.runtimeType}');
   }
 }

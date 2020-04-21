@@ -282,6 +282,6 @@ class AvaliacaoCRUDBloc {
 
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em AvaliacaoCRUDBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em AvaliacaoCRUDBloc  = ${event.runtimeType}');
   }
 }

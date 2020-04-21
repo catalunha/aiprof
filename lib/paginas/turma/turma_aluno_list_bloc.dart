@@ -106,7 +106,7 @@ class TurmaAlunoListBloc {
     }
 
     if (event is AlunoNotaListEvent) {
-      print('Gerando csv com notas deste alunoID: ${event.alunoID}');
+      // print('Gerando csv com notas deste alunoID: ${event.alunoID}');
     }
     if (event is DesativarAlunoEvent) {
       // bool statusAtual;
@@ -147,6 +147,6 @@ class TurmaAlunoListBloc {
     }
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    print('event.runtimeType em TurmaAlunoListBloc  = ${event.runtimeType}');
+    // print('event.runtimeType em TurmaAlunoListBloc  = ${event.runtimeType}');
   }
 }

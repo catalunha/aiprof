@@ -168,7 +168,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
             //       setState(() {
             //         hasTimerStopped = true;
             //       });
-            //       print('terminou clock');
+            //       // print('terminou clock');
             //     },
             //     countDownTimerStyle: TextStyle(
             //         color: Color(0XFFf5a623), fontSize: 17.0, height: 1.2),
@@ -186,7 +186,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
         List<dynamic> routes = List<dynamic>();
 
         routes.addAll(documentSnapshot.data['routes']);
-        // print(routes.runtimeType);
+        // // print(routes.runtimeType);
         routes.addAll([
           // Drawer
           // '/',
@@ -210,7 +210,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
 
         await documentSnapshot.reference.setData({"routes": routes}, merge: true);
       } else {
-        // print('Sem routes ${documentSnapshot.documentID}');
+        // // print('Sem routes ${documentSnapshot.documentID}');
       }
     }
   }
@@ -220,7 +220,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
     var snap = await docRef.get();
     List<dynamic> routes = List<dynamic>();
     routes.addAll(snap.data['routes']);
-    // print(routes.runtimeType);
+    // // print(routes.runtimeType);
     routes.addAll([
       //Drawer
       // '/',
@@ -480,7 +480,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
           'valor07': Gabarito(nome: 'g', numero: 7, nota:0, tipo: 'imagem', valor: 'https://firebasestorage.googleapis.com/v0/b/aiia01.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086', resposta:'https://firebasestorage.googleapis.com/v0/b/aiia01.appspot.com/o/50d5473f-6a8d-4f3a-830b-5b87d02dc57d?alt=media&token=ffc4ab3b-4aab-45fc-8ded-3c8957184086'),
         });
 
-    // print('=>>>>>>>> ${tarefaModel.aberta}');
+    // // print('=>>>>>>>> ${tarefaModel.aberta}');
     await docRef.setData(tarefaModel.toMap(), merge: true);
     // await docRef.setData(tarefaModel.toMap());
   }
@@ -536,7 +536,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
           'valor06': Gabarito(nome: 'f', numero: 5, tipo: 'imagem', valor: 'sim'),
         });
 
-    // print('=>>>>>>>> ${tarefaModel.aberta}');
+    // // print('=>>>>>>>> ${tarefaModel.aberta}');
     await docRef.setData(tarefaModel.toMap(), merge: true);
     // await docRef.setData(tarefaModel.toMap());
   }
@@ -627,7 +627,7 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
   }
 
   Future testarFirebaseCmds() async {
-    // print('+++ testarFirebaseCmds');
+    // // print('+++ testarFirebaseCmds');
     UsuarioModel usuarioModel = UsuarioModel(
       id: 'PMAxu4zKfmaOlYAmF3lgFGmCR1w2',
       foto: UploadFk(uploadID: 'NFnVSDPpbOwQejMu1jXh', url: null),
@@ -640,9 +640,9 @@ class _DesenvolvimentoState extends State<Desenvolvimento> {
     //     .where('routes', arrayContains: '/comunicacao/home')
     //     .getDocuments();
     // for (var item in docRef.documents) {
-    //   print('Doc encontrados: ${item.documentID}');
+    //   // print('Doc encontrados: ${item.documentID}');
     // }
-    // print('--- testarFirebaseCmds');
+    // // print('--- testarFirebaseCmds');
   }
 
   Future incluirPasta({String pastaID, String nome, String professorID}) async {
