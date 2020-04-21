@@ -1,7 +1,8 @@
+import 'package:aiprof/paginas/turma/turma_ativa_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/auth_bloc.dart';
 import 'package:aiprof/componentes/login_required.dart';
-import 'package:aiprof/paginas/login/bemvindo_page.dart';
+// import 'package:aiprof/paginas/login/bemvindo_page.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -19,7 +20,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultLoginRequired(
-      child: BemVindoPage(widget.authBloc),
+      // child: BemVindoPage(widget.authBloc),
+      child: TurmaAtivaListPage(widget.authBloc),
       authBloc: this.authBloc,
     );
   }

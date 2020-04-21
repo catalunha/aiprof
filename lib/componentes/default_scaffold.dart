@@ -23,14 +23,14 @@ class _DefaultDrawerState extends State<DefaultDrawer> {
   _DefaultDrawerState() : authBloc = Bootstrap.instance.authBloc {
     rotas = Map<String, Rota>();
     if (Recursos.instance.plataforma == 'android') {
-      rotas["/"] = Rota("Home", Icons.home);
+      // rotas["/"] = Rota("Home", Icons.home);
       rotas["/turma/ativa/list"] =
           Rota("Turmas", Icons.supervised_user_circle);
       rotas["/pasta/list"] = Rota("Pastas", Icons.folder);
       rotas["/upload"] = Rota("Upload de arquivos", Icons.cloud_upload);
       // rotas["/desenvolvimento"] = Rota("Desenvolvimento", Icons.build);
     } else if (Recursos.instance.plataforma == 'web') {
-      rotas["/"] = Rota("Home", Icons.home);
+      // rotas["/"] = Rota("Home", Icons.home);
       rotas["/turma/ativa/list"] = Rota("Turmas", Icons.assignment);
       rotas["/pasta/list"] = Rota("Pastas", Icons.folder);
     }

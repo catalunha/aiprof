@@ -5,6 +5,34 @@ import 'package:aiprof/auth_bloc.dart';
 import 'package:aiprof/naosuportato/permission_handler.dart'
     if (dart.library.io) 'package:permission_handler/permission_handler.dart';
 
+class EmailPassword {
+  String email = '';
+  String password = '';
+  bool validateEmail() {
+    print("---" + this.email);
+    bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(this.email);
+
+    if (emailValid) {
+      print("email valido: " + this.email);
+      return true;
+    } else {
+      print("email invalido: " + this.email);
+      return false;
+    }
+  }
+
+  bool validatePassword() {
+    print("---" + this.password);
+    if (this.password.length < 6) {
+      // _alerta('Informe uma senha valida.');
+      return false;
+    }
+    return true;
+  }
+}
+
 class LoginPage extends StatefulWidget {
   final AuthBloc authBloc;
 
@@ -17,6 +45,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
+  EmailPassword _emailPassword = new EmailPassword();
+
   // PermissionStatus _status;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AuthBloc authBloc;
@@ -98,6 +128,7 @@ class LoginPageState extends State<LoginPage> {
                         ),
                         child: TextFormField(
                           onSaved: (email) {
+                            this._emailPassword.email = email;
                             authBloc.dispatch(UpdateEmailAuthBlocEvent(email));
                           },
                           decoration: InputDecoration(
@@ -111,7 +142,9 @@ class LoginPageState extends State<LoginPage> {
                         ),
                         child: TextFormField(
                           onSaved: (password) {
-                            authBloc.dispatch(UpdatePasswordAuthBlocEvent(password));
+                            this._emailPassword.password = password;
+                            authBloc.dispatch(
+                                UpdatePasswordAuthBlocEvent(password));
                           },
                           obscureText: true,
                           decoration: InputDecoration(
@@ -129,17 +162,21 @@ class LoginPageState extends State<LoginPage> {
                           vertical: 4,
                         ),
                         child: RaisedButton(
-                          child: Text("Acessar", style: TextStyle(fontSize: 20, color: Colors.black)),
+                          child: Text("Acessar",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.black)),
                           color: Colors.green,
                           onPressed: () {
                             _formKey.currentState.save();
                             authBloc.dispatch(LoginAuthBlocEvent());
-                            // authBloc.perfil.listen((usuarioModel) {
-                            //   if (!usuarioModel.professor) {
-                            //     print('Usuario logout: ${usuarioModel.nome} é professor: ${usuarioModel.professor}');
-                            //     authBloc.dispatch(LogoutAuthBlocEvent());
-                            //   }
-                            // });
+                            if (this._emailPassword.validateEmail() &&
+                                this._emailPassword.validatePassword()) {
+                              // _formKey.currentState.save();
+                              authBloc.dispatch(LoginAuthBlocEvent());
+                            } else {
+                              _alerta(
+                                  "Verifique se o campo de e-mail e senha estão preenchidos corretamente.");
+                            }
                           },
                         ),
                       ),
@@ -153,13 +190,22 @@ class LoginPageState extends State<LoginPage> {
                           vertical: 5,
                         ),
                         child: ListTile(
-                          title: Text('Eita. Esqueci a senha!\nInforme seu email e click...',
+                          title: Text(
+                              'Eita. Esqueci a senha!\nInforme seu email e click aqui.',
                               style: TextStyle(color: Colors.green[600])),
                           trailing: IconButton(
-                            tooltip: 'Um pedido de nova senha será enviado a seu email.',
                             icon: Icon(Icons.vpn_key, color: Colors.green[600]),
                             onPressed: () {
-                              authBloc.dispatch(ResetPassword());
+                              _formKey.currentState.save();
+                              // authBloc.dispatch(ResetPassword());
+                              if (this._emailPassword.validateEmail()) {
+                                authBloc.dispatch(ResetPassword());
+                                _alerta(
+                                    "Um link para redefinição de senha foi enviado para o seu e-mail.");
+                              } else {
+                                _alerta(
+                                    "Para resetar sua senha preencha o campo de email.");
+                              }
                             },
                           ),
                         ),
@@ -176,6 +222,26 @@ class LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _alerta(String msgAlerta) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // backgroundColor: PmsbColors.card,
+          title: Text(msgAlerta),
+          actions: <Widget>[
+            FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+          ],
+        );
+      },
     );
   }
 }
