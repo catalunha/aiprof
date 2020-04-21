@@ -156,6 +156,6 @@ class SimulacaoGabaritoCRUDBloc {
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
     // print(
-        'event.runtimeType em SimulacaoGabaritoCRUDBloc  = ${event.runtimeType}');
+    //     'event.runtimeType em SimulacaoGabaritoCRUDBloc  = ${event.runtimeType}');
   }
 }

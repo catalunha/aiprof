@@ -159,6 +159,6 @@ class SimulacaoVariavelCRUDBloc {
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
     // print(
-        'event.runtimeType em SimulacaoVariavelCRUDBloc  = ${event.runtimeType}');
+    //     'event.runtimeType em SimulacaoVariavelCRUDBloc  = ${event.runtimeType}');
   }
 }

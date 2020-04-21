@@ -129,6 +129,6 @@ class SimulacaoVariavelListBloc {
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
     // print(
-        'event.runtimeType em SimulacaoVariavelListBloc  = ${event.runtimeType}');
+    //     'event.runtimeType em SimulacaoVariavelListBloc  = ${event.runtimeType}');
   }
 }

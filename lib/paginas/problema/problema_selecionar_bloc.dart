@@ -143,6 +143,6 @@ class ProblemaSelecionarBloc {
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
     // print(
-        'event.runtimeType em ProblemaSelecionarBloc  = ${event.runtimeType}');
+    //     'event.runtimeType em ProblemaSelecionarBloc  = ${event.runtimeType}');
   }
 }

@@ -118,7 +118,7 @@ class SimulacaoGabaritoListBloc {
     }
     _validateData();
     if (!_stateController.isClosed) _stateController.add(_state);
-    // print(
+    print(
         'event.runtimeType em SimulacaoGabaritoListBloc  = ${event.runtimeType}');
   }
 }
