@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 
 Store<AppState> _store = Store<AppState>(
   initialState: AppState.initialState(),
-  // actionObservers: [Log<AppState>.printer()],
-  // modelObserver: DefaultModelObserver(),
 );
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,19 +19,15 @@ class MyApp extends StatelessWidget {
   MyApp({Key key})
       : store = _store,
         super(key: key) {
-    // store.dispatch(AuthenticationStatusSyncLoggedAction(
-    //     authenticationStatusLogged: AuthenticationStatusLogged.unInitialized));
     store.dispatch(OnAuthStateChangedSyncLoggedAction());
   }
   @override
   Widget build(BuildContext context) {
-    // Resources.initialize(Theme.of(context).platform);
-
     return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
         theme: ThemeData.dark(),
-        title: 'Bright',
+        title: 'AI Prof',
         navigatorKey: Keys.navigatorStateKey,
         initialRoute: Routes.welcome,
         routes: Routes.routes,
