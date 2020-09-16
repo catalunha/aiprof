@@ -47,7 +47,7 @@ class LoginPageDSState extends State<LoginPageDS> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('Bright - Acessar')),
+          title: Center(child: Text('Ai Prof - Acessar')),
         ),
         body: Padding(
           padding: EdgeInsets.all(16.0),
@@ -57,7 +57,7 @@ class LoginPageDSState extends State<LoginPageDS> {
               children: <Widget>[
                 Text('Informe os dados'),
                 TextFormField(
-                  initialValue: 'catalunha@uft.edu.br',
+                  initialValue: 'catalunha.mj@gmail.com',
                   decoration: InputDecoration(
                     labelText: 'Email:',
                   ),

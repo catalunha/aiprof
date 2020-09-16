@@ -1,3 +1,4 @@
+import 'package:aiprof/conectors/classroom/classroom_list.dart';
 import 'package:aiprof/conectors/home/home_page.dart';
 import 'package:aiprof/conectors/login/login_page.dart';
 import 'package:aiprof/states/app_state.dart';
@@ -24,7 +25,8 @@ class Welcome extends StatelessWidget {
       //debug: this,
       model: ViewModel(),
       builder: (BuildContext context, ViewModel viewModel) =>
-          viewModel.logged ? HomePage() : LoginPage(),
+          // viewModel.logged ? HomePage() : LoginPage(),
+          viewModel.logged ? ClassroomList() : LoginPage(),
     );
   }
 }

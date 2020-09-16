@@ -18,3 +18,11 @@ extension UserOrderExtension on UserOrder {
   String get label => names[this];
 }
 //--- UserOrder
+
+enum ClassroomFilter {
+  isactive,
+  isntactive,
+}
+enum ClassroomOrder {
+  name,
+}
