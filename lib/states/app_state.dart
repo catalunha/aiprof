@@ -1,6 +1,6 @@
-import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/states/classroom_state.dart';
 import 'package:aiprof/states/logged_state.dart';
+import 'package:aiprof/states/student_state.dart';
 import 'package:aiprof/states/user_state.dart';
 import 'package:async_redux/async_redux.dart';
 
@@ -9,12 +9,14 @@ class AppState {
   final LoggedState loggedState;
   final UserState userState;
   final ClassroomState classroomState;
+  final StudentState studentState;
 
   AppState({
     this.wait,
     this.loggedState,
     this.userState,
     this.classroomState,
+    this.studentState,
   });
 
   static AppState initialState() => AppState(
@@ -22,21 +24,25 @@ class AppState {
         loggedState: LoggedState.initialState(),
         userState: UserState.initialState(),
         classroomState: ClassroomState.initialState(),
+        studentState: StudentState.initialState(),
       );
   AppState copyWith({
     Wait wait,
     LoggedState loggedState,
     UserState userState,
     ClassroomState classroomState,
+    StudentState studentState,
   }) =>
       AppState(
         wait: wait ?? this.wait,
         loggedState: loggedState ?? this.loggedState,
         userState: userState ?? this.userState,
         classroomState: classroomState ?? this.classroomState,
+        studentState: studentState ?? this.studentState,
       );
   @override
   int get hashCode =>
+      studentState.hashCode ^
       classroomState.hashCode ^
       loggedState.hashCode ^
       userState.hashCode ^
@@ -46,6 +52,7 @@ class AppState {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AppState &&
+          studentState == other.studentState &&
           classroomState == other.classroomState &&
           userState == other.userState &&
           loggedState == other.loggedState &&

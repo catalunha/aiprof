@@ -26,3 +26,11 @@ enum ClassroomFilter {
 enum ClassroomOrder {
   name,
 }
+
+enum StudentFilter {
+  isactive,
+  isntactive,
+}
+enum StudentOrder {
+  name,
+}
