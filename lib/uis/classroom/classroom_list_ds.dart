@@ -61,9 +61,33 @@ class ClassroomListDS extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.stay_current_landscape),
+                      icon: Icon(Icons.people),
                       onPressed: () async {
                         onStudentList(classroom.id);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.today),
+                      onPressed: () async {
+                        // onStudentList(classroom.id);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.report_problem),
+                      onPressed: () async {
+                        // onStudentList(classroom.id);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.folder),
+                      onPressed: () async {
+                        // onStudentList(classroom.id);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.assignment),
+                      onPressed: () async {
+                        // onStudentList(classroom.id);
                       },
                     ),
                   ],
