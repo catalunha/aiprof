@@ -1,4 +1,5 @@
 // +++ Actions Sync
+import 'package:aiprof/actions/logged_action.dart';
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
@@ -57,14 +58,14 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
     if (state.classroomState.classroomFilter == ClassroomFilter.isactive) {
       collRef = firestore
           .collection(ClassroomModel.collection)
-          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id)
-          .where('isActive', isEqualTo: true);
+          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
+      // .where('isActive', isEqualTo: true);
     } else if (state.classroomState.classroomFilter ==
         ClassroomFilter.isntactive) {
       collRef = firestore
           .collection(ClassroomModel.collection)
-          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id)
-          .where('isActive', isEqualTo: false);
+          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
+      // .where('isActive', isEqualTo: false);
     }
     final docsSnap = await collRef.getDocuments();
 
@@ -72,11 +73,20 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
         .map((docSnap) =>
             ClassroomModel(docSnap.documentID).fromMap(docSnap.data))
         .toList();
-
-    listDocs.sort((a, b) => a.name.compareTo(b.name));
+    listDocs.forEach((element) {
+      print(element.id);
+    });
+    Map<dynamic, ClassroomModel> mapping =
+        Map.fromIterable(listDocs, key: (v) => v.id, value: (v) => v);
+    List<dynamic> ids = state.loggedState.userModelLogged.classroomId;
+    print(ids);
+    final listDocsSorted = [for (dynamic id in ids) mapping[id]];
+    listDocsSorted.forEach((element) {
+      print(element.id);
+    });
     return state.copyWith(
       classroomState: state.classroomState.copyWith(
-        classroomList: listDocs,
+        classroomList: listDocsSorted,
       ),
     );
   }
@@ -123,7 +133,6 @@ class AddDocClassroomCurrentAsyncClassroomAction extends ReduxAction<AppState> {
         'classroomId': FieldValue.arrayUnion([classroomAdded.documentID])
       });
     }
-
     return null;
   }
 
@@ -162,7 +171,24 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
     classroomModel.name = name;
     classroomModel.description = description;
     classroomModel.urlProgram = urlProgram;
+    if (classroomModel.isActive != isActive && isActive) {
+      await firestore
+          .collection(UserModel.collection)
+          .document(state.loggedState.userModelLogged.id)
+          .updateData({
+        'classroomId': FieldValue.arrayUnion([classroomModel.id])
+      });
+    }
+    if (classroomModel.isActive != isActive && !isActive) {
+      await firestore
+          .collection(UserModel.collection)
+          .document(state.loggedState.userModelLogged.id)
+          .updateData({
+        'classroomId': FieldValue.arrayRemove([classroomModel.id])
+      });
+    }
     classroomModel.isActive = isActive;
+
     await firestore
         .collection(ClassroomModel.collection)
         .document(classroomModel.id)
@@ -172,4 +198,43 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
 
   @override
   void after() => dispatch(GetDocsClassroomListAsyncClassroomAction());
+}
+
+class UpdateDocClassroomIdInUserAsyncClassroomAction
+    extends ReduxAction<AppState> {
+  final int oldIndex;
+  final int newIndex;
+
+  UpdateDocClassroomIdInUserAsyncClassroomAction({
+    this.oldIndex,
+    this.newIndex,
+  });
+  @override
+  Future<AppState> reduce() async {
+    print('UpdateDocClassroomCurrentAsyncClassroomAction...');
+    Firestore firestore = Firestore.instance;
+    UserModel userModel = UserModel(state.loggedState.userModelLogged.id)
+        .fromMap(state.loggedState.userModelLogged.toMap());
+    int _newIndex = newIndex;
+    if (newIndex > oldIndex) {
+      _newIndex -= 1;
+    }
+    dynamic classroomOld = userModel.classroomId[oldIndex];
+    userModel.classroomId.removeAt(oldIndex);
+    userModel.classroomId.insert(_newIndex, classroomOld);
+
+    await firestore
+        .collection(UserModel.collection)
+        .document(state.loggedState.userModelLogged.id)
+        .updateData({'classroomId': userModel.classroomId});
+
+    return null;
+  }
+
+  @override
+  void after() {
+    dispatch(GetDocsClassroomListAsyncClassroomAction());
+    dispatch(GetDocsUserModelAsyncLoggedAction(
+        id: state.loggedState.userModelLogged.id));
+  }
 }

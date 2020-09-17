@@ -10,11 +10,13 @@ class ViewModel extends BaseModel<AppState> {
   List<ClassroomModel> classroomList;
   Function(String) onEditClassroomCurrent;
   Function(String) onStudentList;
+  Function(int, int) onChangeClassroomListOrder;
   ViewModel();
   ViewModel.build({
     @required this.classroomList,
     @required this.onEditClassroomCurrent,
     @required this.onStudentList,
+    @required this.onChangeClassroomListOrder,
   }) : super(equals: [
           classroomList,
         ]);
@@ -28,6 +30,12 @@ class ViewModel extends BaseModel<AppState> {
         onStudentList: (String id) {
           dispatch(SetClassroomCurrentSyncClassroomAction(id));
           dispatch(NavigateAction.pushNamed(Routes.studentList));
+        },
+        onChangeClassroomListOrder: (int oldIndex, int newIndex) {
+          dispatch(UpdateDocClassroomIdInUserAsyncClassroomAction(
+            oldIndex: oldIndex,
+            newIndex: newIndex,
+          ));
         },
       );
 }
@@ -44,6 +52,7 @@ class ClassroomList extends StatelessWidget {
         classroomList: viewModel.classroomList,
         onEditClassroomCurrent: viewModel.onEditClassroomCurrent,
         onStudentList: viewModel.onStudentList,
+        onChangeClassroomListOrder: viewModel.onChangeClassroomListOrder,
       ),
     );
   }
