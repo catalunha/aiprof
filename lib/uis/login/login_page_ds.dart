@@ -47,7 +47,7 @@ class LoginPageDSState extends State<LoginPageDS> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('Ai Prof - Acessar')),
+          title: Center(child: Text('AI Prof - Acessar')),
         ),
         body: Padding(
           padding: EdgeInsets.all(16.0),
@@ -67,19 +67,20 @@ class LoginPageDSState extends State<LoginPageDS> {
                   initialValue: 'aiprof',
                   obscureText: true,
                   decoration: InputDecoration(
-                    labelText: 'Password:',
+                    labelText: 'Senha:',
                   ),
                   onSaved: (value) => _password = value,
                 ),
                 ListTile(
-                  title: Center(child: Text('Logar')),
+                  title:
+                      Center(child: Text('Solicitar acesso com email e senha')),
                   trailing: Icon(Icons.verified_user),
                   onTap: () {
                     validateInputsLogin();
                   },
                 ),
                 ListTile(
-                  title: Center(child: Text('Pedir Reset senha via email.')),
+                  title: Center(child: Text('Pedir nova senha por email.')),
                   trailing: Icon(Icons.settings_backup_restore),
                   onTap: () {
                     validateInputsResetPassword();
@@ -92,19 +93,23 @@ class LoginPageDSState extends State<LoginPageDS> {
                 widget.authenticationStatusLogged ==
                         AuthenticationStatusLogged.unAuthenticated
                     ? Center(
-                        child: Text('Verifique Email e a Senha por favor.'))
+                        child:
+                            Text('Obs.: Verifique Email e a Senha por favor.'))
                     : Container(),
                 widget.authenticationStatusLogged ==
                         AuthenticationStatusLogged.unInitialized
-                    ? Center(child: Text('Estamos aguardando vc logar.'))
+                    ? Center(
+                        child: Text(
+                            'Obs.: Estamos aguardando você informar email e senha.'))
                     : Container(),
                 widget.authenticationStatusLogged ==
                         AuthenticationStatusLogged.authenticated
-                    ? Center(child: Text('Acesso liberado.'))
+                    ? Center(child: Text('Obs.: Acesso liberado.'))
                     : Container(),
                 widget.authenticationStatusLogged ==
                         AuthenticationStatusLogged.sendPasswordReset
-                    ? Center(child: Text('Veja seu email para nova senha.'))
+                    ? Center(
+                        child: Text('Obs.: Veja seu email para nova senha.'))
                     : Container(),
               ],
             ),

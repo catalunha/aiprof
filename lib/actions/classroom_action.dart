@@ -112,9 +112,18 @@ class AddDocClassroomCurrentAsyncClassroomAction extends ReduxAction<AppState> {
     classroomModel.urlProgram = urlProgram;
     classroomModel.isActive = true;
 
-    await firestore
+    final classroomAdded = await firestore
         .collection(ClassroomModel.collection)
         .add(classroomModel.toMap());
+    if (classroomAdded.documentID != null) {
+      await firestore
+          .collection(UserModel.collection)
+          .document(state.loggedState.userModelLogged.id)
+          .updateData({
+        'classroomId': FieldValue.arrayUnion([classroomAdded.documentID])
+      });
+    }
+
     return null;
   }
 

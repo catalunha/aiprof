@@ -74,7 +74,7 @@ class ClassroomModel extends FirestoreModel {
   String toString() {
     String _return = '';
     _return = _return + 'I/C: $company - $component';
-    _return = _return + '\nTurma: $name';
+    // _return = _return + '\nTurma: $name';
     _return = _return + '\nuserRef.name: ${userRef.name}';
     _return = _return + '\nid: $id';
     return _return;

@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:aiprof/conectors/components/logout_button.dart';
 import 'package:aiprof/models/classroom_model.dart';
-import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClassroomListDS extends StatelessWidget {
@@ -79,7 +79,7 @@ class ClassroomListDS extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      icon: Icon(Icons.folder),
+                      icon: Icon(Icons.folder_open),
                       onPressed: () async {
                         // onStudentList(classroom.id);
                       },
