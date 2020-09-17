@@ -201,9 +201,6 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
       widget.classroomList.removeAt(oldIndex);
       widget.classroomList.insert(newIndex, todo);
     });
-    // var index = 1;
-    // Map<String, String> todoOrder = Map.fromIterable(widget.classroomList,
-    //     key: (e) => (index++).toString(), value: (e) => e.id);
     widget.onChangeClassroomListOrder(oldIndex, newIndex);
   }
 }

@@ -53,17 +53,12 @@ class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
     print('GetDocsStudentListAsyncStudentAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
-    if (state.studentState.studentFilter == StudentFilter.isactive) {
-      collRef = firestore
-          .collection(UserModel.collection)
-          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id)
-          .where('isActive', isEqualTo: true);
-    } else if (state.studentState.studentFilter == StudentFilter.isntactive) {
-      collRef = firestore
-          .collection(UserModel.collection)
-          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id)
-          .where('isActive', isEqualTo: false);
-    }
+    collRef = firestore
+        .collection(UserModel.collection)
+        .where('isTeacher', isEqualTo: false)
+        .where('classroomId',
+            arrayContains: state.classroomState.classroomCurrent.id);
+
     final docsSnap = await collRef.getDocuments();
 
     final listDocs = docsSnap.documents
@@ -148,3 +143,65 @@ class AddDocStudentCurrentAsyncStudentAction extends ReduxAction<AppState> {
 //   @override
 //   void after() => dispatch(GetDocsStudentListAsyncStudentAction());
 // }
+
+class ImportStudentAsyncStudentAction extends ReduxAction<AppState> {
+  final String studentsToImport;
+
+  ImportStudentAsyncStudentAction({
+    this.studentsToImport,
+  });
+  // @override
+  // Future<AppState> reduce() async {
+  //   print('AddDocStudentCurrentAsyncStudentAction...');
+  //   Firestore firestore = Firestore.instance;
+
+  //   return null;
+  // }
+  @override
+  AppState reduce() {
+    print(studentsToImport);
+    List<List<String>> studentList = List<List<String>>();
+    studentList.clear();
+    String matricula;
+    String email;
+    String nome;
+    if (studentsToImport != null) {
+      // // print('::cadastro::');
+      // // print(studentsToImport);
+      List<String> linhas = studentsToImport.split('\n');
+      // // print('::linhas::');
+      // // print(linhas);
+      for (var linha in linhas) {
+        // // print('::linha::');
+        // // print(linha);
+        if (linha != null) {
+          List<String> campos = linha.trim().split(';');
+          // // print('::campos::');
+          // // print(campos);
+          if (campos != null &&
+              campos.length == 3 &&
+              campos[0] != null &&
+              campos[0].length >= 1 &&
+              campos[1] != null &&
+              campos[1].length >= 3 &&
+              campos[1].contains('@') &&
+              campos[2] != null &&
+              campos[2].length >= 3) {
+            matricula = campos[0].trim();
+            email = campos[1].trim();
+            nome = campos[2].trim();
+            // // print('::matricula::$matricula');
+            // // print('::email::$email');
+            // // print('::nome::$nome');
+            studentList.add([matricula, email, nome]);
+          }
+        }
+      }
+    }
+    print(studentList);
+    return null;
+  }
+
+  @override
+  void after() => dispatch(GetDocsStudentListAsyncStudentAction());
+}

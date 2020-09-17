@@ -4,7 +4,7 @@ class UserModel extends FirestoreModel {
   static final String collection = "user";
   String name;
   String email;
-  bool teacher;
+  bool isTeacher;
   bool isActive;
   // String phone;
   // String nickname;
@@ -23,7 +23,7 @@ class UserModel extends FirestoreModel {
       // this.phone,
       this.email,
       this.isActive,
-      this.teacher,
+      this.isTeacher,
       // this.photoUrl,
       this.classNumber,
       this.folderNumber,
@@ -40,7 +40,7 @@ class UserModel extends FirestoreModel {
     if (map.containsKey('code')) code = map['code'];
     // if (map.containsKey('phone')) phone = map['phone'];
     if (map.containsKey('isActive')) isActive = map['isActive'];
-    if (map.containsKey('teacher')) teacher = map['teacher'];
+    if (map.containsKey('isTeacher')) isTeacher = map['isTeacher'];
     if (map.containsKey('folderNumber')) folderNumber = map['folderNumber'];
     if (map.containsKey('problemNumber')) problemNumber = map['problemNumber'];
     if (map.containsKey('classNumber')) classNumber = map['classNumber'];
@@ -60,7 +60,7 @@ class UserModel extends FirestoreModel {
     // if (phone != null) data['phone'] = this.phone;
     if (email != null) data['email'] = this.email;
     if (isActive != null) data['isActive'] = this.isActive;
-    if (teacher != null) data['teacher'] = this.teacher;
+    if (isTeacher != null) data['isTeacher'] = this.isTeacher;
     if (folderNumber != null) data['folderNumber'] = this.folderNumber;
     if (problemNumber != null) data['problemNumber'] = this.problemNumber;
     // if (photoUrl != null) data['photoUrl'] = this.photoUrl;
