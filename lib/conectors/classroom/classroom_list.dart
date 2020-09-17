@@ -32,7 +32,7 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(NavigateAction.pushNamed(Routes.studentList));
         },
         onChangeClassroomListOrder: (int oldIndex, int newIndex) {
-          dispatch(UpdateDocClassroomIdInUserAsyncClassroomAction(
+          dispatch(UpdateDocclassroomIdInUserAsyncClassroomAction(
             oldIndex: oldIndex,
             newIndex: newIndex,
           ));

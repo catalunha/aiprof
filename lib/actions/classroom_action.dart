@@ -73,17 +73,17 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
         .map((docSnap) =>
             ClassroomModel(docSnap.documentID).fromMap(docSnap.data))
         .toList();
-    listDocs.forEach((element) {
-      print(element.id);
-    });
+    // listDocs.forEach((element) {
+    //   print(element.id);
+    // });
     Map<dynamic, ClassroomModel> mapping =
         Map.fromIterable(listDocs, key: (v) => v.id, value: (v) => v);
     List<dynamic> ids = state.loggedState.userModelLogged.classroomId;
-    print(ids);
+    // print(ids);
     final listDocsSorted = [for (dynamic id in ids) mapping[id]];
-    listDocsSorted.forEach((element) {
-      print(element.id);
-    });
+    // listDocsSorted.forEach((element) {
+    //   print(element.id);
+    // });
     return state.copyWith(
       classroomState: state.classroomState.copyWith(
         classroomList: listDocsSorted,
@@ -200,12 +200,12 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
   void after() => dispatch(GetDocsClassroomListAsyncClassroomAction());
 }
 
-class UpdateDocClassroomIdInUserAsyncClassroomAction
+class UpdateDocclassroomIdInUserAsyncClassroomAction
     extends ReduxAction<AppState> {
   final int oldIndex;
   final int newIndex;
 
-  UpdateDocClassroomIdInUserAsyncClassroomAction({
+  UpdateDocclassroomIdInUserAsyncClassroomAction({
     this.oldIndex,
     this.newIndex,
   });
