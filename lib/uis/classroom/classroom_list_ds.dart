@@ -1,9 +1,11 @@
+import 'package:aiprof/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/conectors/components/logout_button.dart';
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClassroomListDS extends StatefulWidget {
+  final UserModel userLogged;
   final List<ClassroomModel> classroomList;
   final Function(String) onEditClassroomCurrent;
   final Function(String) onStudentList;
@@ -15,6 +17,7 @@ class ClassroomListDS extends StatefulWidget {
     this.onEditClassroomCurrent,
     this.onStudentList,
     this.onChangeClassroomListOrder,
+    this.userLogged,
   }) : super(key: key);
 
   @override
@@ -26,7 +29,8 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Turmas (${widget.classroomList.length})'),
+        title: Text(
+            'Olá ${widget.userLogged.name}. Turmas (${widget.classroomList.length})'),
         actions: [
           LogoutButton(),
         ],
@@ -160,14 +164,14 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
                   widget.onStudentList(classroom.id);
                 },
               ),
+              // IconButton(
+              //   icon: Icon(Icons.today),
+              //   onPressed: () async {
+              //     // onStudentList(classroom.id);
+              //   },
+              // ),
               IconButton(
-                icon: Icon(Icons.today),
-                onPressed: () async {
-                  // onStudentList(classroom.id);
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.report_problem),
+                icon: Icon(Icons.help),
                 onPressed: () async {
                   // onStudentList(classroom.id);
                 },

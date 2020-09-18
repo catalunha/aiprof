@@ -13,7 +13,7 @@ class ViewModel extends BaseModel<AppState> {
   @override
   ViewModel fromStore() => ViewModel.build(
         onAdd: (String studentsToImport) {
-          dispatch(ImportStudentAsyncStudentAction(
+          dispatch(BatchDocImportStudentAsyncStudentAction(
               studentsToImport: studentsToImport));
           dispatch(NavigateAction.pop());
         },

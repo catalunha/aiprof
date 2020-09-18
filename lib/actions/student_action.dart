@@ -4,6 +4,9 @@ import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SetStudentCurrentSyncStudentAction extends ReduxAction<AppState> {
   final String id;
@@ -144,10 +147,10 @@ class AddDocStudentCurrentAsyncStudentAction extends ReduxAction<AppState> {
 //   void after() => dispatch(GetDocsStudentListAsyncStudentAction());
 // }
 
-class ImportStudentAsyncStudentAction extends ReduxAction<AppState> {
+class BatchDocImportStudentAsyncStudentAction extends ReduxAction<AppState> {
   final String studentsToImport;
 
-  ImportStudentAsyncStudentAction({
+  BatchDocImportStudentAsyncStudentAction({
     this.studentsToImport,
   });
   // @override
@@ -158,7 +161,7 @@ class ImportStudentAsyncStudentAction extends ReduxAction<AppState> {
   //   return null;
   // }
   @override
-  AppState reduce() {
+  Future<AppState> reduce() async {
     print(studentsToImport);
     List<List<String>> studentList = List<List<String>>();
     studentList.clear();
@@ -199,9 +202,52 @@ class ImportStudentAsyncStudentAction extends ReduxAction<AppState> {
       }
     }
     print(studentList);
+    Firestore firestore = Firestore.instance;
+
+    var batch = firestore.batch();
+    if (studentList.isNotEmpty) {
+      for (var student in studentList) {
+        // var studentDoc = firestore.collection('student').document();
+        var studentDoc = firestore.collection(UserModel.collection).document();
+        batch.setData(
+            studentDoc,
+            {
+              // 'isUser': false,
+              'isActive': true,
+              'isTeacher': false,
+              'code': student[0],
+              'email': student[1],
+              'name': student[2],
+              'classroomId': FieldValue.arrayUnion(
+                  [state.classroomState.classroomCurrent.id]),
+            },
+            merge: true);
+      }
+    }
+    await batch.commit();
+    // if (studentList.isNotEmpty) {
+    //   for (var student in studentList) {
+    //     try {
+    //       AuthResult userNew = await FirebaseAuth.instance
+    //           .createUserWithEmailAndPassword(
+    //               email: student[1], password: student[0]);
+
+    //       userNew.user.;
+    //       print('userNew: ${userNew.user.uid}');
+    //     } catch (e) {
+    //       if (e.code == 'weak-password') {
+    //         print('The password provided is too weak.');
+    //       } else if (e.code == 'email-already-in-use') {
+    //         print('The account already exists for that email.');
+    //         // throw const UserException("Este estudante já foi cadastrado.");
+    //       }
+    //       print(e.toString());
+    //     }
+    //   }
+    // }
     return null;
   }
+  // @override
+  // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
 
-  @override
-  void after() => dispatch(GetDocsStudentListAsyncStudentAction());
 }
