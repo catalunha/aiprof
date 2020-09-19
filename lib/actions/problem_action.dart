@@ -55,6 +55,7 @@ class GetDocsProblemListAsyncProblemAction extends ReduxAction<AppState> {
     print('GetDocsProblemListAsyncProblemAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
+    // collection old
     if (state.problemState.problemFilter == ProblemFilter.isactive) {
       collRef = firestore.collection(ProblemModel.collection).where(
           'professor.id',
@@ -66,12 +67,36 @@ class GetDocsProblemListAsyncProblemAction extends ReduxAction<AppState> {
           isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: false);
     }
-    final docsSnap = await collRef.getDocuments();
+    final docsSnapOld = await collRef.getDocuments();
 
-    final listDocs = docsSnap.documents
-        .map(
-            (docSnap) => ProblemModel(docSnap.documentID).fromMap(docSnap.data))
+    List<ProblemModel> listDocsOld = docsSnapOld.documents
+        .map((docSnapOld) =>
+            ProblemModel(docSnapOld.documentID).fromMap(docSnapOld.data))
         .toList();
+
+    //collection new
+    if (state.problemState.problemFilter == ProblemFilter.isactive) {
+      collRef = firestore
+          .collection(ProblemModel.collection)
+          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
+      // .where('isActive', isEqualTo: true);
+    } else if (state.problemState.problemFilter == ProblemFilter.isntactive) {
+      collRef = firestore
+          .collection(ProblemModel.collection)
+          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
+      // .where('isActive', isEqualTo: false);
+    }
+    final docsSnapNew = await collRef.getDocuments();
+
+    List<ProblemModel> listDocsNew = docsSnapNew.documents
+        .map((docSnapNew) =>
+            ProblemModel(docSnapNew.documentID).fromMap(docSnapNew.data))
+        .toList();
+
+    List<ProblemModel> listDocsDistinct = [...listDocsOld, ...listDocsNew];
+
+    listDocsDistinct_ResolverFiltro.sort((a, b) => a.name.compareTo(b.name));
+
     // // listDocs.forEach((element) {
     // //   print(element.id);
     // // });

@@ -21,7 +21,7 @@ class ViewModel extends BaseModel<AppState> {
         problemList: state.problemState.problemList,
         onEditProblemCurrent: (String id) {
           dispatch(SetProblemCurrentSyncProblemAction(id));
-          // dispatch(NavigateAction.pushNamed(Routes.problemEdit));
+          dispatch(NavigateAction.pushNamed(Routes.problemEdit));
         },
       );
 }

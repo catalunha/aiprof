@@ -1,5 +1,6 @@
 import 'package:aiprof/conectors/classroom/classroom_list.dart';
 import 'package:aiprof/conectors/classroom/classroom_edit.dart';
+import 'package:aiprof/conectors/problem/problem_edit.dart';
 import 'package:aiprof/conectors/problem/problem_list.dart';
 import 'package:aiprof/conectors/student/student_edit.dart';
 import 'package:aiprof/conectors/student/student_list.dart';
@@ -26,6 +27,7 @@ class Routes {
     studentList: (BuildContext context) => StudentList(),
     studentEdit: (BuildContext context) => StudentEdit(),
     problemList: (BuildContext context) => ProblemList(),
+    problemEdit: (BuildContext context) => ProblemEdit(),
   };
 }
 
