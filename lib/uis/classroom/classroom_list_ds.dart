@@ -9,6 +9,7 @@ class ClassroomListDS extends StatefulWidget {
   final List<ClassroomModel> classroomList;
   final Function(String) onEditClassroomCurrent;
   final Function(String) onStudentList;
+  final Function() onProblemList;
   final Function(int oldIndex, int newIndex) onChangeClassroomListOrder;
 
   const ClassroomListDS({
@@ -18,6 +19,7 @@ class ClassroomListDS extends StatefulWidget {
     this.onStudentList,
     this.onChangeClassroomListOrder,
     this.userLogged,
+    this.onProblemList,
   }) : super(key: key);
 
   @override
@@ -171,9 +173,10 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
               //   },
               // ),
               IconButton(
+                tooltip: 'Lista de Problemas',
                 icon: Icon(Icons.help),
                 onPressed: () async {
-                  // onStudentList(classroom.id);
+                  widget.onProblemList();
                 },
               ),
               IconButton(

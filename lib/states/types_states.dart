@@ -34,3 +34,11 @@ enum StudentFilter {
 enum StudentOrder {
   name,
 }
+
+enum ProblemFilter {
+  isactive,
+  isntactive,
+}
+enum ProblemOrder {
+  name,
+}

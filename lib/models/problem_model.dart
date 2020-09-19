@@ -20,6 +20,17 @@ class ProblemModel extends FirestoreModel {
     this.userRef,
   }) : super(id);
 
+  ProblemModel.clone(ProblemModel origin)
+      : this(
+          origin.id,
+          isActive: origin.isActive,
+          area: origin.area,
+          name: origin.name,
+          description: origin.description,
+          url: origin.url,
+          userRef: origin.userRef,
+        );
+
   @override
   ProblemModel fromMap(Map<String, dynamic> map) {
     if (map.containsKey('isActive')) isActive = map['isActive'];
@@ -32,7 +43,6 @@ class ProblemModel extends FirestoreModel {
     if (map.containsKey('description')) description = map['description'];
     if (map.containsKey('descricao')) description = map['descricao'];
     if (map.containsKey('url')) url = map['url'];
-    userRef = null;
     if (map.containsKey('userRef') && map['userRef'] != null)
       userRef = UserModel(map['userRef']['id']).fromMap(map['userRef']);
     if (map.containsKey('professor') && map['professor'] != null)
@@ -57,7 +67,7 @@ class ProblemModel extends FirestoreModel {
     return data;
   }
 
-  Map<String, dynamic> toMapref() {
+  Map<String, dynamic> toMapRef() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (id != null) data['id'] = this.id;
     if (name != null) data['name'] = this.name;

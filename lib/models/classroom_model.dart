@@ -11,7 +11,7 @@ class ClassroomModel extends FirestoreModel {
   String urlProgram;
   UserModel userRef;
   // dynamic number;
-  dynamic questionNumber;
+  // dynamic questionNumber;
 
   ClassroomModel(
     String id, {
@@ -23,7 +23,7 @@ class ClassroomModel extends FirestoreModel {
     this.description,
     this.urlProgram,
     this.userRef,
-    this.questionNumber,
+    // this.questionNumber,
   }) : super(id);
 
   @override
@@ -38,8 +38,8 @@ class ClassroomModel extends FirestoreModel {
     userRef = map.containsKey('userRef') && map['userRef'] != null
         ? UserModel(map['userRef']['id']).fromMap(map['userRef'])
         : null;
-    if (map.containsKey('questionNumber'))
-      questionNumber = map['questionNumber'];
+    // if (map.containsKey('questionNumber'))
+    //   questionNumber = map['questionNumber'];
     return this;
   }
 
@@ -57,11 +57,11 @@ class ClassroomModel extends FirestoreModel {
     if (this.userRef != null) {
       data['userRef'] = this.userRef.toMapRef();
     }
-    if (questionNumber != null) data['questionNumber'] = this.questionNumber;
+    // if (questionNumber != null) data['questionNumber'] = this.questionNumber;
     return data;
   }
 
-  Map<String, dynamic> toMapref() {
+  Map<String, dynamic> toMapRef() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (id != null) data['id'] = this.id;
     if (company != null) data['company'] = this.company;
