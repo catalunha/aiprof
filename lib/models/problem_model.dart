@@ -33,21 +33,21 @@ class ProblemModel extends FirestoreModel {
 
   @override
   ProblemModel fromMap(Map<String, dynamic> map) {
-    if (map.containsKey('isActive')) isActive = map['isActive'];
     if (map.containsKey('ativo')) isActive = map['ativo'];
-    if (map.containsKey('area')) area = map['area'];
+    if (map.containsKey('isActive')) isActive = map['isActive'];
     if (map.containsKey('pasta') && map['pasta'] != null)
       area = map['pasta']['nome'];
-    if (map.containsKey('name')) name = map['name'];
+    if (map.containsKey('area')) area = map['area'];
     if (map.containsKey('nome')) name = map['nome'];
-    if (map.containsKey('description')) description = map['description'];
+    if (map.containsKey('name')) name = map['name'];
     if (map.containsKey('descricao')) description = map['descricao'];
+    if (map.containsKey('description')) description = map['description'];
     if (map.containsKey('url')) url = map['url'];
-    if (map.containsKey('userRef') && map['userRef'] != null)
-      userRef = UserModel(map['userRef']['id']).fromMap(map['userRef']);
     if (map.containsKey('professor') && map['professor'] != null)
       userRef = UserModel(map['professor']['id'])
           .fromMap({'name': map['professor']['nome']});
+    if (map.containsKey('userRef') && map['userRef'] != null)
+      userRef = UserModel(map['userRef']['id']).fromMap(map['userRef']);
     return this;
   }
 
@@ -77,8 +77,8 @@ class ProblemModel extends FirestoreModel {
   @override
   String toString() {
     String _return = '';
-    _return = _return + '\nProblema: $name';
     _return = _return + '\nArea: $area';
+    _return = _return + '\nDescrição: $description';
     _return = _return + '\nuserRef.name: ${userRef.name}';
     _return = _return + '\nid: $id';
     return _return;

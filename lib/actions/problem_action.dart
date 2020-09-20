@@ -55,7 +55,7 @@ class GetDocsProblemListAsyncProblemAction extends ReduxAction<AppState> {
     print('GetDocsProblemListAsyncProblemAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
-    // collection old
+    //+++ collection old
     if (state.problemState.problemFilter == ProblemFilter.isactive) {
       collRef = firestore.collection(ProblemModel.collection).where(
           'professor.id',
@@ -73,8 +73,9 @@ class GetDocsProblemListAsyncProblemAction extends ReduxAction<AppState> {
         .map((docSnapOld) =>
             ProblemModel(docSnapOld.documentID).fromMap(docSnapOld.data))
         .toList();
+    //--- collection old
 
-    //collection new
+    //+++ collection new
     if (state.problemState.problemFilter == ProblemFilter.isactive) {
       collRef = firestore
           .collection(ProblemModel.collection)
@@ -92,10 +93,14 @@ class GetDocsProblemListAsyncProblemAction extends ReduxAction<AppState> {
         .map((docSnapNew) =>
             ProblemModel(docSnapNew.documentID).fromMap(docSnapNew.data))
         .toList();
+    //--- collection new
 
+    for (ProblemModel item in listDocsOld) {
+      listDocsNew.removeWhere((e) => e.id == item.id);
+    }
     List<ProblemModel> listDocsDistinct = [...listDocsOld, ...listDocsNew];
 
-    listDocsDistinct_ResolverFiltro.sort((a, b) => a.name.compareTo(b.name));
+    listDocsDistinct.sort((a, b) => a.name.compareTo(b.name));
 
     // // listDocs.forEach((element) {
     // //   print(element.id);
@@ -110,7 +115,7 @@ class GetDocsProblemListAsyncProblemAction extends ReduxAction<AppState> {
     // // });
     return state.copyWith(
       problemState: state.problemState.copyWith(
-        problemList: listDocs,
+        problemList: listDocsDistinct,
       ),
     );
   }
