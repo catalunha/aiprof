@@ -1,16 +1,19 @@
 # aiprof
 
-A new Flutter application.
+Avaliador Individual de Conhecimento 
+TIK
+## Detalhes
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* User
+* classroom
+* know
+    arvore de situações
+* situation
+    * simulation
+* test
+    * question
+        situation1 com simulation2
+    * student
+        que é um user
+* task
+    é juntar uma questão a uma estudante

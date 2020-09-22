@@ -13,7 +13,7 @@ class UserModel extends FirestoreModel {
   // List<dynamic> route;
   // int classNumber;
   // int folderNumber;
-  // int problemNumber;
+  // int situationNumber;
   List<dynamic> classroomId;
 
   UserModel(String id,
@@ -27,7 +27,7 @@ class UserModel extends FirestoreModel {
       // this.photoUrl,
       // this.classNumber,
       // this.folderNumber,
-      // this.problemNumber,
+      // this.situationNumber,
       // this.route,
       this.classroomId})
       : super(id);
@@ -42,7 +42,7 @@ class UserModel extends FirestoreModel {
     if (map.containsKey('isActive')) isActive = map['isActive'];
     if (map.containsKey('isTeacher')) isTeacher = map['isTeacher'];
     // if (map.containsKey('folderNumber')) folderNumber = map['folderNumber'];
-    // if (map.containsKey('problemNumber')) problemNumber = map['problemNumber'];
+    // if (map.containsKey('situationNumber')) situationNumber = map['situationNumber'];
     // if (map.containsKey('classNumber')) classNumber = map['classNumber'];
     // if (map.containsKey('photoUrl')) photoUrl = map['photoUrl'];
     // if (map.containsKey('route')) route = map['route'];
@@ -62,7 +62,7 @@ class UserModel extends FirestoreModel {
     if (isActive != null) data['isActive'] = this.isActive;
     if (isTeacher != null) data['isTeacher'] = this.isTeacher;
     // if (folderNumber != null) data['folderNumber'] = this.folderNumber;
-    // if (problemNumber != null) data['problemNumber'] = this.problemNumber;
+    // if (situationNumber != null) data['situationNumber'] = this.situationNumber;
     // if (photoUrl != null) data['photoUrl'] = this.photoUrl;
     // if (classNumber != null) data['classNumber'] = this.classNumber;
     if (classroomId != null) data['classroomId'] = this.classroomId;

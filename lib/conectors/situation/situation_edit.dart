@@ -1,6 +1,6 @@
-import 'package:aiprof/actions/problem_action.dart';
+import 'package:aiprof/actions/situation_action.dart';
 import 'package:aiprof/states/app_state.dart';
-import 'package:aiprof/uis/problem/problem_edit_ds.dart';
+import 'package:aiprof/uis/situation/situation_edit_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
@@ -33,19 +33,19 @@ class ViewModel extends BaseModel<AppState> {
         ]);
   @override
   ViewModel fromStore() => ViewModel.build(
-        isAddOrUpdate: state.problemState.problemCurrent.id == null,
-        area: state.problemState.problemCurrent.area,
-        name: state.problemState.problemCurrent.name,
-        description: state.problemState.problemCurrent.description,
-        url: state.problemState.problemCurrent.url,
-        isActive: state.problemState.problemCurrent?.isActive ?? false,
+        isAddOrUpdate: state.situationState.situationCurrent.id == null,
+        area: state.situationState.situationCurrent.area,
+        name: state.situationState.situationCurrent.name,
+        description: state.situationState.situationCurrent.description,
+        url: state.situationState.situationCurrent.url,
+        isActive: state.situationState.situationCurrent?.isActive ?? false,
         onAdd: (
           String area,
           String name,
           String description,
           String url,
         ) {
-          dispatch(AddDocProblemCurrentAsyncProblemAction(
+          dispatch(AddDocSituationCurrentAsyncSituationAction(
             area: area,
             name: name,
             description: description,
@@ -60,7 +60,7 @@ class ViewModel extends BaseModel<AppState> {
           String url,
           bool isActive,
         ) {
-          dispatch(UpdateDocProblemCurrentAsyncProblemAction(
+          dispatch(UpdateDocSituationCurrentAsyncSituationAction(
             area: area,
             name: name,
             description: description,
@@ -72,13 +72,13 @@ class ViewModel extends BaseModel<AppState> {
       );
 }
 
-class ProblemEdit extends StatelessWidget {
+class SituationEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       model: ViewModel(),
-      builder: (context, viewModel) => ProblemEditDS(
+      builder: (context, viewModel) => SituationEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         area: viewModel.area,
         name: viewModel.name,

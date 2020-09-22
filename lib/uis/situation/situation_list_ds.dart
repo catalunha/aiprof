@@ -1,63 +1,64 @@
-import 'package:aiprof/models/problem_model.dart';
+import 'package:aiprof/models/situation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/conectors/components/logout_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProblemListDS extends StatefulWidget {
-  final List<ProblemModel> problemList;
-  final Function(String) onEditProblemCurrent;
+class SituationListDS extends StatefulWidget {
+  final List<SituationModel> situationList;
+  final Function(String) onEditSituationCurrent;
 
-  const ProblemListDS({
+  const SituationListDS({
     Key key,
-    this.problemList,
-    this.onEditProblemCurrent,
+    this.situationList,
+    this.onEditSituationCurrent,
   }) : super(key: key);
 
   @override
-  _ProblemListDSState createState() => _ProblemListDSState();
+  _SituationListDSState createState() => _SituationListDSState();
 }
 
-class _ProblemListDSState extends State<ProblemListDS> {
+class _SituationListDSState extends State<SituationListDS> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Problemas (${widget.problemList.length})'),
+        title: Text('Situações (${widget.situationList.length})'),
         actions: [
           LogoutButton(),
         ],
       ),
       body: ListView.builder(
-        itemCount: widget.problemList.length,
+        itemCount: widget.situationList.length,
         itemBuilder: (context, index) {
-          final problem = widget.problemList[index];
+          final situation = widget.situationList[index];
           return Card(
-            color:
-                !problem.isActive ? Colors.brown : Theme.of(context).cardColor,
+            color: !situation.isActive
+                ? Colors.brown
+                : Theme.of(context).cardColor,
             child: Wrap(
               alignment: WrapAlignment.spaceEvenly,
               children: [
                 Container(
                   width: 500,
                   child: ListTile(
-                    title: Text('${problem.name}'),
-                    subtitle: Text('${problem.toString()}'),
+                    title: Text('${situation.name}'),
+                    subtitle: Text('${situation.toString()}'),
                   ),
                 ),
                 IconButton(
-                  tooltip: 'Editar este problema',
+                  tooltip: 'Editar esta situação',
                   icon: Icon(Icons.edit),
                   onPressed: () async {
-                    widget.onEditProblemCurrent(problem.id);
+                    widget.onEditSituationCurrent(situation.id);
                   },
                 ),
                 IconButton(
-                  tooltip: 'URL para o problema',
+                  tooltip: 'URL para a situação',
                   icon: Icon(Icons.link),
                   onPressed: () async {
-                    if (problem?.url != null) {
-                      if (await canLaunch(problem.url)) {
-                        await launch(problem.url);
+                    if (situation?.url != null) {
+                      if (await canLaunch(situation.url)) {
+                        await launch(situation.url);
                       }
                     }
                   },
@@ -70,7 +71,7 @@ class _ProblemListDSState extends State<ProblemListDS> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          widget.onEditProblemCurrent(null);
+          widget.onEditSituationCurrent(null);
         },
       ),
     );

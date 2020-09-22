@@ -1,6 +1,6 @@
 import 'package:aiprof/states/classroom_state.dart';
 import 'package:aiprof/states/logged_state.dart';
-import 'package:aiprof/states/problem_state.dart';
+import 'package:aiprof/states/situation_state.dart';
 import 'package:aiprof/states/student_state.dart';
 import 'package:aiprof/states/user_state.dart';
 import 'package:async_redux/async_redux.dart';
@@ -11,7 +11,7 @@ class AppState {
   final UserState userState;
   final ClassroomState classroomState;
   final StudentState studentState;
-  final ProblemState problemState;
+  final SituationState situationState;
 
   AppState({
     this.wait,
@@ -19,7 +19,7 @@ class AppState {
     this.userState,
     this.classroomState,
     this.studentState,
-    this.problemState,
+    this.situationState,
   });
 
   static AppState initialState() => AppState(
@@ -28,7 +28,7 @@ class AppState {
         userState: UserState.initialState(),
         classroomState: ClassroomState.initialState(),
         studentState: StudentState.initialState(),
-        problemState: ProblemState.initialState(),
+        situationState: SituationState.initialState(),
       );
   AppState copyWith({
     Wait wait,
@@ -36,7 +36,7 @@ class AppState {
     UserState userState,
     ClassroomState classroomState,
     StudentState studentState,
-    ProblemState problemState,
+    SituationState situationState,
   }) =>
       AppState(
         wait: wait ?? this.wait,
@@ -44,11 +44,11 @@ class AppState {
         userState: userState ?? this.userState,
         classroomState: classroomState ?? this.classroomState,
         studentState: studentState ?? this.studentState,
-        problemState: problemState ?? this.problemState,
+        situationState: situationState ?? this.situationState,
       );
   @override
   int get hashCode =>
-      problemState.hashCode ^
+      situationState.hashCode ^
       studentState.hashCode ^
       classroomState.hashCode ^
       loggedState.hashCode ^
@@ -59,7 +59,7 @@ class AppState {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AppState &&
-          problemState == other.problemState &&
+          situationState == other.situationState &&
           studentState == other.studentState &&
           classroomState == other.classroomState &&
           userState == other.userState &&

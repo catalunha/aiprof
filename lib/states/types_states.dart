@@ -35,10 +35,10 @@ enum StudentOrder {
   name,
 }
 
-enum ProblemFilter {
+enum SituationFilter {
   isactive,
   isntactive,
 }
-enum ProblemOrder {
+enum SituationOrder {
   name,
 }

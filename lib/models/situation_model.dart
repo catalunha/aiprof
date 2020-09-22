@@ -1,7 +1,7 @@
 import 'package:aiprof/models/firestore_model.dart';
 import 'package:aiprof/models/user_model.dart';
 
-class ProblemModel extends FirestoreModel {
+class SituationModel extends FirestoreModel {
   static final String collection = "Problema";
   bool isActive;
   String area;
@@ -10,7 +10,7 @@ class ProblemModel extends FirestoreModel {
   String url;
   UserModel userRef;
 
-  ProblemModel(
+  SituationModel(
     String id, {
     this.isActive,
     this.area,
@@ -20,7 +20,7 @@ class ProblemModel extends FirestoreModel {
     this.userRef,
   }) : super(id);
 
-  ProblemModel.clone(ProblemModel origin)
+  SituationModel.clone(SituationModel origin)
       : this(
           origin.id,
           isActive: origin.isActive,
@@ -32,7 +32,7 @@ class ProblemModel extends FirestoreModel {
         );
 
   @override
-  ProblemModel fromMap(Map<String, dynamic> map) {
+  SituationModel fromMap(Map<String, dynamic> map) {
     if (map.containsKey('ativo')) isActive = map['ativo'];
     if (map.containsKey('isActive')) isActive = map['isActive'];
     if (map.containsKey('pasta') && map['pasta'] != null)

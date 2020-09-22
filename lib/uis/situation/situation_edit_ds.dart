@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ProblemEditDS extends StatefulWidget {
+class SituationEditDS extends StatefulWidget {
   final String area;
   final String name;
   final String description;
@@ -10,7 +10,7 @@ class ProblemEditDS extends StatefulWidget {
   final Function(String, String, String, String) onAdd;
   final Function(String, String, String, String, bool) onUpdate;
 
-  const ProblemEditDS({
+  const SituationEditDS({
     Key key,
     this.area,
     this.name,
@@ -22,10 +22,10 @@ class ProblemEditDS extends StatefulWidget {
     this.onUpdate,
   }) : super(key: key);
   @override
-  _ProblemEditDSState createState() => _ProblemEditDSState();
+  _SituationEditDSState createState() => _SituationEditDSState();
 }
 
-class _ProblemEditDSState extends State<ProblemEditDS> {
+class _SituationEditDSState extends State<SituationEditDS> {
   final formKey = GlobalKey<FormState>();
   String _area;
   String _name;
@@ -54,7 +54,7 @@ class _ProblemEditDSState extends State<ProblemEditDS> {
     return Scaffold(
       appBar: AppBar(
         title:
-            Text(widget.isAddOrUpdate ? 'Criar problema' : 'Editar problema'),
+            Text(widget.isAddOrUpdate ? 'Criar situação' : 'Editar situação'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -90,7 +90,7 @@ class _ProblemEditDSState extends State<ProblemEditDS> {
           TextFormField(
             initialValue: widget.name,
             decoration: InputDecoration(
-              labelText: 'Nome do problema *',
+              labelText: 'Nome da situação *',
             ),
             onSaved: (newValue) => _name = newValue,
             validator: (value) {
@@ -103,7 +103,7 @@ class _ProblemEditDSState extends State<ProblemEditDS> {
           TextFormField(
             initialValue: widget.url,
             decoration: InputDecoration(
-              labelText: 'Link para problema *',
+              labelText: 'Link para situação *',
             ),
             onSaved: (newValue) => _url = newValue,
             validator: (value) {
@@ -133,8 +133,8 @@ class _ProblemEditDSState extends State<ProblemEditDS> {
               : SwitchListTile(
                   value: _isActive,
                   title: _isActive
-                      ? Text('Problema ativo')
-                      : Text('Desativar problema'),
+                      ? Text('Situação ativo')
+                      : Text('Desativar situação'),
                   onChanged: (value) {
                     setState(() {
                       _isActive = value;

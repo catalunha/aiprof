@@ -1,5 +1,5 @@
 import 'package:aiprof/actions/classroom_action.dart';
-import 'package:aiprof/actions/problem_action.dart';
+import 'package:aiprof/actions/situation_action.dart';
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/routes.dart';
@@ -13,7 +13,7 @@ class ViewModel extends BaseModel<AppState> {
   List<ClassroomModel> classroomList;
   Function(String) onEditClassroomCurrent;
   Function(String) onStudentList;
-  Function() onProblemList;
+  Function() onSituationList;
   Function(int, int) onChangeClassroomListOrder;
   ViewModel();
   ViewModel.build({
@@ -21,7 +21,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.classroomList,
     @required this.onEditClassroomCurrent,
     @required this.onStudentList,
-    @required this.onProblemList,
+    @required this.onSituationList,
     @required this.onChangeClassroomListOrder,
   }) : super(equals: [
           userLogged,
@@ -39,8 +39,8 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(SetClassroomCurrentSyncClassroomAction(id));
           dispatch(NavigateAction.pushNamed(Routes.studentList));
         },
-        onProblemList: () {
-          dispatch(NavigateAction.pushNamed(Routes.problemList));
+        onSituationList: () {
+          dispatch(NavigateAction.pushNamed(Routes.situationList));
         },
         onChangeClassroomListOrder: (int oldIndex, int newIndex) {
           dispatch(UpdateDocclassroomIdInUserAsyncClassroomAction(
@@ -64,7 +64,7 @@ class ClassroomList extends StatelessWidget {
         classroomList: viewModel.classroomList,
         onEditClassroomCurrent: viewModel.onEditClassroomCurrent,
         onStudentList: viewModel.onStudentList,
-        onProblemList: viewModel.onProblemList,
+        onSituationList: viewModel.onSituationList,
         onChangeClassroomListOrder: viewModel.onChangeClassroomListOrder,
       ),
     );
