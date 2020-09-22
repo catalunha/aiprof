@@ -71,6 +71,7 @@ class SituationModel extends FirestoreModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (id != null) data['id'] = this.id;
     if (name != null) data['name'] = this.name;
+    if (url != null) data['url'] = this.url;
     return data;
   }
 

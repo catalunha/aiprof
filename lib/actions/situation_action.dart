@@ -62,7 +62,7 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
           isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: true);
     } else if (state.situationState.situationFilter ==
-        SituationFilter.isntactive) {
+        SituationFilter.isNotactive) {
       collRef = firestore.collection(SituationModel.collection).where(
           'professor.id',
           isEqualTo: state.loggedState.userModelLogged.id);
@@ -83,7 +83,7 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: true);
     } else if (state.situationState.situationFilter ==
-        SituationFilter.isntactive) {
+        SituationFilter.isNotactive) {
       collRef = firestore
           .collection(SituationModel.collection)
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);

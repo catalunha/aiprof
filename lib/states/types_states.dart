@@ -21,7 +21,7 @@ extension UserOrderExtension on UserOrder {
 
 enum ClassroomFilter {
   isactive,
-  isntactive,
+  isNotactive,
 }
 enum ClassroomOrder {
   name,
@@ -29,7 +29,7 @@ enum ClassroomOrder {
 
 enum StudentFilter {
   isactive,
-  isntactive,
+  isNotactive,
 }
 enum StudentOrder {
   name,
@@ -37,8 +37,16 @@ enum StudentOrder {
 
 enum SituationFilter {
   isactive,
-  isntactive,
+  isNotactive,
 }
 enum SituationOrder {
+  name,
+}
+
+enum KnowFilter {
+  isactive,
+  isNotactive,
+}
+enum KnowOrder {
   name,
 }

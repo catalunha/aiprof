@@ -61,7 +61,7 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: true);
     } else if (state.classroomState.classroomFilter ==
-        ClassroomFilter.isntactive) {
+        ClassroomFilter.isNotactive) {
       collRef = firestore
           .collection(ClassroomModel.collection)
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
