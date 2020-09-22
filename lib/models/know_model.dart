@@ -7,15 +7,23 @@ class KnowModel extends FirestoreModel {
   UserModel userRef;
   String name;
   String description;
-  Map<String, Folder> folder;
+  Map<String, Folder> folderMap;
 
   KnowModel(
     String id, {
     this.userRef,
     this.name,
     this.description,
+    this.folderMap,
   }) : super(id);
-
+  KnowModel.clone(KnowModel origin)
+      : this(
+          origin.id,
+          userRef: origin.userRef,
+          name: origin.name,
+          description: origin.description,
+          folderMap: origin.folderMap,
+        );
   @override
   KnowModel fromMap(Map<String, dynamic> map) {
     if (map.containsKey('name')) name = map['name'];
@@ -23,10 +31,10 @@ class KnowModel extends FirestoreModel {
     userRef = map.containsKey('userRef') && map['userRef'] != null
         ? UserModel(map['userRef']['id']).fromMap(map['userRef'])
         : null;
-    if (map["itemMap"] is Map) {
-      folder = Map<String, Folder>();
-      map["folder"].forEach((k, v) {
-        folder[k] = Folder(k).fromMap(v);
+    if (map["folderMap"] is Map) {
+      folderMap = Map<String, Folder>();
+      map["folderMap"].forEach((k, v) {
+        folderMap[k] = Folder(k).fromMap(v);
       });
     }
     return this;
@@ -41,12 +49,12 @@ class KnowModel extends FirestoreModel {
     if (this.userRef != null) {
       data['userRef'] = this.userRef.toMapRef();
     }
-    if (folder != null) {
+    if (folderMap != null) {
       Map<String, dynamic> dataFromField = Map<String, dynamic>();
-      folder.forEach((k, v) {
+      folderMap.forEach((k, v) {
         dataFromField[k] = v.toMap();
       });
-      data['folder'] = dataFromField;
+      data['folderMap'] = dataFromField;
     }
     return data;
   }
@@ -61,7 +69,8 @@ class KnowModel extends FirestoreModel {
   @override
   String toString() {
     String _return = '';
-    _return = _return + 'Nome da pasta: $name';
+    _return = _return + 'Descrição: $description';
+    _return = _return + '\nfolder: ${folderMap.length}';
     _return = _return + '\nid: $id';
     return _return;
   }
@@ -72,14 +81,14 @@ class Folder {
   String name;
   String description;
   String idParent;
-  Map<String, SituationModel> situationRef;
+  Map<String, SituationModel> situationRefMap;
 
   Folder(
     this.id, {
     this.name,
     this.description,
     this.idParent,
-    this.situationRef,
+    this.situationRefMap,
   });
 
   Folder fromMap(Map<String, dynamic> map) {
@@ -87,10 +96,10 @@ class Folder {
       if (map.containsKey('name')) this.name = map['name'];
       if (map.containsKey('description')) this.description = map['description'];
       if (map.containsKey('idParent')) this.idParent = map['idParent'];
-      if (map["situationRef"] is Map) {
-        this.situationRef = Map<String, SituationModel>();
-        map["situationRef"].forEach((k, v) {
-          this.situationRef[k] = SituationModel(k).fromMap(v);
+      if (map["situationRefMap"] is Map) {
+        this.situationRefMap = Map<String, SituationModel>();
+        map["situationRefMap"].forEach((k, v) {
+          this.situationRefMap[k] = SituationModel(k).fromMap(v);
         });
       }
     }
@@ -102,12 +111,12 @@ class Folder {
     if (this.name != null) data['name'] = this.name;
     if (this.description != null) data['description'] = this.description;
     if (this.idParent != null) data['idParent'] = this.idParent;
-    if (this.situationRef != null) {
+    if (this.situationRefMap != null) {
       Map<String, dynamic> dataFromField = Map<String, dynamic>();
-      this.situationRef.forEach((k, v) {
+      this.situationRefMap.forEach((k, v) {
         dataFromField[k] = v.toMapRef();
       });
-      data['situationRef'] = dataFromField;
+      data['situationRefMap'] = dataFromField;
     }
     return data;
   }

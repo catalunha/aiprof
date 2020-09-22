@@ -14,6 +14,7 @@ class ViewModel extends BaseModel<AppState> {
   Function(String) onEditClassroomCurrent;
   Function(String) onStudentList;
   Function() onSituationList;
+  Function() onKnowList;
   Function(int, int) onChangeClassroomListOrder;
   ViewModel();
   ViewModel.build({
@@ -22,6 +23,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.onEditClassroomCurrent,
     @required this.onStudentList,
     @required this.onSituationList,
+    @required this.onKnowList,
     @required this.onChangeClassroomListOrder,
   }) : super(equals: [
           userLogged,
@@ -41,6 +43,9 @@ class ViewModel extends BaseModel<AppState> {
         },
         onSituationList: () {
           dispatch(NavigateAction.pushNamed(Routes.situationList));
+        },
+        onKnowList: () {
+          dispatch(NavigateAction.pushNamed(Routes.knowList));
         },
         onChangeClassroomListOrder: (int oldIndex, int newIndex) {
           dispatch(UpdateDocclassroomIdInUserAsyncClassroomAction(
@@ -64,6 +69,7 @@ class ClassroomList extends StatelessWidget {
         classroomList: viewModel.classroomList,
         onEditClassroomCurrent: viewModel.onEditClassroomCurrent,
         onStudentList: viewModel.onStudentList,
+        onKnowList: viewModel.onKnowList,
         onSituationList: viewModel.onSituationList,
         onChangeClassroomListOrder: viewModel.onChangeClassroomListOrder,
       ),
