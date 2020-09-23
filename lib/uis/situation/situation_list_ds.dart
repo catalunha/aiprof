@@ -1,16 +1,17 @@
 import 'package:aiprof/models/situation_model.dart';
 import 'package:flutter/material.dart';
-import 'package:aiprof/conectors/components/logout_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SituationListDS extends StatefulWidget {
   final List<SituationModel> situationList;
   final Function(String) onEditSituationCurrent;
+  final Function(String) onSimulationList;
 
   const SituationListDS({
     Key key,
     this.situationList,
     this.onEditSituationCurrent,
+    this.onSimulationList,
   }) : super(key: key);
 
   @override
@@ -61,6 +62,13 @@ class _SituationListDSState extends State<SituationListDS> {
                         await launch(situation.url);
                       }
                     }
+                  },
+                ),
+                IconButton(
+                  tooltip: 'Lista de simulações',
+                  icon: Icon(Icons.format_list_numbered),
+                  onPressed: () async {
+                    widget.onSimulationList(situation.id);
                   },
                 ),
               ],

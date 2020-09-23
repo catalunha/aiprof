@@ -9,10 +9,12 @@ import 'package:flutter/material.dart';
 class ViewModel extends BaseModel<AppState> {
   List<SituationModel> situationList;
   Function(String) onEditSituationCurrent;
+  Function(String) onSimulationList;
   ViewModel();
   ViewModel.build({
     @required this.situationList,
     @required this.onEditSituationCurrent,
+    @required this.onSimulationList,
   }) : super(equals: [
           situationList,
         ]);
@@ -22,6 +24,10 @@ class ViewModel extends BaseModel<AppState> {
         onEditSituationCurrent: (String id) {
           dispatch(SetSituationCurrentSyncSituationAction(id));
           dispatch(NavigateAction.pushNamed(Routes.situationEdit));
+        },
+        onSimulationList: (String id) {
+          dispatch(SetSituationCurrentSyncSituationAction(id));
+          dispatch(NavigateAction.pushNamed(Routes.simulationList));
         },
       );
 }
@@ -37,6 +43,7 @@ class SituationList extends StatelessWidget {
       builder: (context, viewModel) => SituationListDS(
         situationList: viewModel.situationList,
         onEditSituationCurrent: viewModel.onEditSituationCurrent,
+        onSimulationList: viewModel.onSimulationList,
       ),
     );
   }

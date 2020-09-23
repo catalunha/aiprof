@@ -4,6 +4,7 @@ import 'package:aiprof/conectors/know/folder_edit.dart';
 import 'package:aiprof/conectors/know/folder_list.dart';
 import 'package:aiprof/conectors/know/know_edit.dart';
 import 'package:aiprof/conectors/know/know_list.dart';
+import 'package:aiprof/conectors/simulation/simulation_list.dart';
 import 'package:aiprof/conectors/situation/situation_edit.dart';
 import 'package:aiprof/conectors/situation/situation_list.dart';
 import 'package:aiprof/conectors/student/student_edit.dart';
@@ -25,6 +26,8 @@ class Routes {
   static final knowEdit = '/knowEdit';
   static final folderList = '/folderList';
   static final folderEdit = '/folderEdit';
+  static final simulationList = '/simulationList';
+  static final simulationEdit = '/simulationEdit';
 
   static final routes = {
     welcome: (BuildContext context) => UserExceptionDialog<AppState>(
@@ -40,6 +43,7 @@ class Routes {
     knowEdit: (BuildContext context) => KnowEdit(),
     folderList: (BuildContext context) => FolderList(),
     folderEdit: (BuildContext context) => FolderEdit(),
+    simulationList: (BuildContext context) => SimulationList(),
   };
 }
 

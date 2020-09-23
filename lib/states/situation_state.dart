@@ -1,32 +1,28 @@
-import 'package:aiprof/models/simulation_model.dart';
 import 'package:meta/meta.dart';
+import 'package:aiprof/models/situation_model.dart';
 import 'package:aiprof/states/types_states.dart';
 
 @immutable
-class SimulationState {
-  final SimulationFilter situationFilter;
-  final List<SimulationModel> situationList;
-  final SimulationModel situationCurrent;
-  final Input inputCurrent;
-  final Output outputCurrent;
-  SimulationState({
+class SituationState {
+  final SituationFilter situationFilter;
+  final List<SituationModel> situationList;
+  final SituationModel situationCurrent;
+  SituationState({
     this.situationFilter,
     this.situationList,
     this.situationCurrent,
-    this.inputCurrent,
-    this.outputCurrent,
   });
-  factory SimulationState.initialState() => SimulationState(
-        situationFilter: SimulationFilter.isactive,
-        situationList: <SimulationModel>[],
+  factory SituationState.initialState() => SituationState(
+        situationFilter: SituationFilter.isactive,
+        situationList: <SituationModel>[],
         situationCurrent: null,
       );
-  SimulationState copyWith({
-    SimulationFilter situationFilter,
-    List<SimulationModel> situationList,
-    SimulationModel situationCurrent,
+  SituationState copyWith({
+    SituationFilter situationFilter,
+    List<SituationModel> situationList,
+    SituationModel situationCurrent,
   }) =>
-      SimulationState(
+      SituationState(
         situationFilter: situationFilter ?? this.situationFilter,
         situationList: situationList ?? this.situationList,
         situationCurrent: situationCurrent ?? this.situationCurrent,
@@ -39,7 +35,7 @@ class SimulationState {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SimulationState &&
+      other is SituationState &&
           situationFilter == other.situationFilter &&
           situationList == other.situationList &&
           situationCurrent == other.situationCurrent &&

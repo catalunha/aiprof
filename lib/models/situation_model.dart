@@ -3,12 +3,12 @@ import 'package:aiprof/models/user_model.dart';
 
 class SituationModel extends FirestoreModel {
   static final String collection = "Problema";
+  UserModel userRef;
   bool isActive;
   String area;
   String name;
   String description;
   String url;
-  UserModel userRef;
 
   SituationModel(
     String id, {

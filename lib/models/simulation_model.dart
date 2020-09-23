@@ -7,14 +7,16 @@ class SimulationModel extends FirestoreModel {
   UserModel userRef;
   SituationModel situationRef;
   String name;
+  String description;
   Map<String, Input> input = Map<String, Input>();
   Map<String, Output> output = Map<String, Output>();
 
-  SimulationModel({
-    String id,
+  SimulationModel(
+    String id, {
     this.userRef,
     this.situationRef,
     this.name,
+    this.description,
     this.input,
     this.output,
   }) : super(id);
@@ -29,6 +31,7 @@ class SimulationModel extends FirestoreModel {
       situationRef = SituationModel(map['problema']['id'])
           .fromMap({'name': map['problema']['nome']});
     if (map.containsKey('nome')) name = map['nome'];
+    if (map.containsKey('description')) description = map['description'];
     if (map["variavel"] is Map) {
       input = Map<String, Input>();
       for (var item in map["variavel"].entries) {
@@ -49,6 +52,7 @@ class SimulationModel extends FirestoreModel {
       situationRef = SituationModel(map['situationRef']['id'])
           .fromMap(map['situationRef']);
     if (map.containsKey('name')) name = map['name'];
+    if (map.containsKey('description')) description = map['description'];
     if (map["input"] is Map) {
       input = Map<String, Input>();
       for (var item in map["input"].entries) {
@@ -75,6 +79,7 @@ class SimulationModel extends FirestoreModel {
     }
 
     if (name != null) data['name'] = this.name;
+    if (description != null) data['description'] = this.description;
 
     if (input != null && input is Map) {
       data["input"] = Map<String, dynamic>();

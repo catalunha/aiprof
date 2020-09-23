@@ -1,6 +1,7 @@
 import 'package:aiprof/states/classroom_state.dart';
 import 'package:aiprof/states/know_state.dart';
 import 'package:aiprof/states/logged_state.dart';
+import 'package:aiprof/states/simulation_state.dart';
 import 'package:aiprof/states/situation_state.dart';
 import 'package:aiprof/states/student_state.dart';
 import 'package:aiprof/states/user_state.dart';
@@ -14,6 +15,7 @@ class AppState {
   final StudentState studentState;
   final SituationState situationState;
   final KnowState knowState;
+  final SimulationState simulationState;
 
   AppState({
     this.wait,
@@ -23,6 +25,7 @@ class AppState {
     this.studentState,
     this.situationState,
     this.knowState,
+    this.simulationState,
   });
 
   static AppState initialState() => AppState(
@@ -33,6 +36,7 @@ class AppState {
         studentState: StudentState.initialState(),
         situationState: SituationState.initialState(),
         knowState: KnowState.initialState(),
+        simulationState: SimulationState.initialState(),
       );
   AppState copyWith({
     Wait wait,
@@ -42,6 +46,7 @@ class AppState {
     StudentState studentState,
     SituationState situationState,
     KnowState knowState,
+    SimulationState simulationState,
   }) =>
       AppState(
         wait: wait ?? this.wait,
@@ -51,9 +56,11 @@ class AppState {
         studentState: studentState ?? this.studentState,
         situationState: situationState ?? this.situationState,
         knowState: knowState ?? this.knowState,
+        simulationState: simulationState ?? this.simulationState,
       );
   @override
   int get hashCode =>
+      simulationState.hashCode ^
       knowState.hashCode ^
       situationState.hashCode ^
       studentState.hashCode ^
