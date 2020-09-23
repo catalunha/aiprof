@@ -4,6 +4,7 @@ import 'package:aiprof/conectors/know/folder_edit.dart';
 import 'package:aiprof/conectors/know/folder_list.dart';
 import 'package:aiprof/conectors/know/know_edit.dart';
 import 'package:aiprof/conectors/know/know_list.dart';
+import 'package:aiprof/conectors/simulation/simulation_edit.dart';
 import 'package:aiprof/conectors/simulation/simulation_list.dart';
 import 'package:aiprof/conectors/situation/situation_edit.dart';
 import 'package:aiprof/conectors/situation/situation_list.dart';
@@ -44,6 +45,7 @@ class Routes {
     folderList: (BuildContext context) => FolderList(),
     folderEdit: (BuildContext context) => FolderEdit(),
     simulationList: (BuildContext context) => SimulationList(),
+    simulationEdit: (BuildContext context) => SimulationEdit(),
   };
 }
 

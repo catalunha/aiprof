@@ -106,11 +106,9 @@ class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
 class AddDocSimulationCurrentAsyncSimulationAction
     extends ReduxAction<AppState> {
   final String name;
-  final String description;
 
   AddDocSimulationCurrentAsyncSimulationAction({
     this.name,
-    this.description,
   });
   @override
   Future<AppState> reduce() async {
@@ -123,7 +121,6 @@ class AddDocSimulationCurrentAsyncSimulationAction
         .fromMap(state.loggedState.userModelLogged.toMapRef());
 
     simulationModel.name = name;
-    simulationModel.description = description;
 
     await firestore
         .collection(SimulationModel.collection)
@@ -140,11 +137,9 @@ class AddDocSimulationCurrentAsyncSimulationAction
 class UpdateDocSimulationCurrentAsyncSimulationAction
     extends ReduxAction<AppState> {
   final String name;
-  final String description;
 
   UpdateDocSimulationCurrentAsyncSimulationAction({
     this.name,
-    this.description,
   });
   @override
   Future<AppState> reduce() async {
@@ -155,7 +150,6 @@ class UpdateDocSimulationCurrentAsyncSimulationAction
             .fromMap(state.simulationState.simulationCurrent.toMap());
 
     simulationModel.name = name;
-    simulationModel.description = description;
 
     await firestore
         .collection(SimulationModel.collection)
