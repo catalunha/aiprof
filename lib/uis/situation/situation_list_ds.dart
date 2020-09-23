@@ -24,7 +24,7 @@ class _SituationListDSState extends State<SituationListDS> {
       appBar: AppBar(
         title: Text('Situações (${widget.situationList.length})'),
         actions: [
-          LogoutButton(),
+          // LogoutButton(),
         ],
       ),
       body: ListView.builder(

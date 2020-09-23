@@ -33,10 +33,9 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Olá ${widget.userLogged.name}. Turmas (${widget.classroomList.length})'),
+        title: Text('Turmas (${widget.classroomList.length})'),
         actions: [
-          LogoutButton(),
+          // LogoutButton(),
         ],
       ),
       body: Column(
@@ -174,19 +173,19 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
               //     // onStudentList(classroom.id);
               //   },
               // ),
-              IconButton(
-                tooltip: 'Lista de Situaçãos',
-                icon: Icon(Icons.help),
-                onPressed: () async {
-                  widget.onSituationList();
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.folder_open),
-                onPressed: () async {
-                  widget.onKnowList();
-                },
-              ),
+              // IconButton(
+              //   tooltip: 'Lista de Situaçãos',
+              //   icon: Icon(Icons.help),
+              //   onPressed: () async {
+              //     widget.onSituationList();
+              //   },
+              // ),
+              // IconButton(
+              //   icon: Icon(Icons.folder_open),
+              //   onPressed: () async {
+              //     widget.onKnowList();
+              //   },
+              // ),
               IconButton(
                 icon: Icon(Icons.assignment),
                 onPressed: () async {

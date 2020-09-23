@@ -23,7 +23,7 @@ class _StudentListDSState extends State<StudentListDS> {
       appBar: AppBar(
         title: Text('Estudantes (${widget.studentList.length})'),
         actions: [
-          LogoutButton(),
+          // LogoutButton(),
         ],
       ),
       body: ListView.builder(

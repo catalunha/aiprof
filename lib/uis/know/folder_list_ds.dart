@@ -31,8 +31,7 @@ class _FolderListDSState extends State<FolderListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Árvore de situações (${widget.folderMap?.length}) ${widget.knowModel.name}'),
+        title: Text('Pasta de situações para ${widget.knowModel.name}'),
         actions: [
           // widget.knowModel.setorRef != null
           //     ? IconButton(

@@ -50,3 +50,11 @@ enum KnowFilter {
 enum KnowOrder {
   name,
 }
+
+enum SimulationFilter {
+  isactive,
+  isNotactive,
+}
+enum SimulationOrder {
+  name,
+}

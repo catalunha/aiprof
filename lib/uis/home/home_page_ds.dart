@@ -22,11 +22,19 @@ class HomePageDS extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            leading: Icon(
-              Icons.people,
-            ),
-            title: Text('Lista de estudantes'),
-            // onTap: () => Navigator.pushNamed(context, Routes.studentList),
+            leading: Icon(Icons.people),
+            title: Text('Turmas ou Classes'),
+            onTap: () => Navigator.pushNamed(context, Routes.classroomList),
+          ),
+          ListTile(
+            leading: Icon(Icons.check),
+            title: Text('Situações ou Problemas'),
+            onTap: () => Navigator.pushNamed(context, Routes.situationList),
+          ),
+          ListTile(
+            leading: Icon(Icons.line_style),
+            title: Text('Conhecimentos ou Componentes'),
+            onTap: () => Navigator.pushNamed(context, Routes.knowList),
           ),
         ],
       ),

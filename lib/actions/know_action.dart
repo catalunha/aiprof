@@ -227,29 +227,30 @@ class UpdateFolderSyncKnowAction extends ReduxAction<AppState> {
   //   // }
   // }
 
-  KnowModel removeRecursiveFolder(Folder folder, KnowModel knowModel) {
-    print('folderId0:${folder.id}');
-    if (folder.idParent == null) {
-      print('folderId1:${folder.id}');
-      knowModel.folderMap.remove(folder.id);
-      return removeRecursiveFolder(Folder(null), knowModel);
-    } else {
-      print('folderId2:${folder.id}');
-      Folder _folder = Folder(null);
-      knowModel.folderMap.forEach((key, value) {
-        if (value.idParent == folder.id) {
-          _folder = value;
-        }
-      });
-      return removeRecursiveFolder(_folder, knowModel);
-    }
-    //     if (state.knowState.knowCurrent.folderMap[folderId].idParent != null) {
-    //   return removeRecursiveFolder(
-    //       state.knowState.knowCurrent.folderMap[folderId].idParent);
-    // } else {
-    //   state.knowState.knowCurrent.folderMap.remove(folderId);
-    // }
-  }
+  // KnowModel removeRecursiveFolder(Folder folder, KnowModel knowModel) {
+  //   print('folderId0:${folder.id}');
+  //   if (folder.idParent == null) {
+  //     print('folderId2:${folder.id}');
+  //     Folder _folder = Folder(null);
+  //     knowModel.folderMap.forEach((key, value) {
+  //       if (value.idParent == folder.id) {
+  //         _folder = value;
+  //       }
+  //     });
+  //     removeRecursiveFolder(_folder, knowModel);
+  //   }
+
+  //           print('folderId1:${folder.id}');
+  //     knowModel.folderMap.remove(folder.id);
+  //     return removeRecursiveFolder(Folder(null), knowModel);
+
+  //   //     if (state.knowState.knowCurrent.folderMap[folderId].idParent != null) {
+  //   //   return removeRecursiveFolder(
+  //   //       state.knowState.knowCurrent.folderMap[folderId].idParent);
+  //   // } else {
+  //   //   state.knowState.knowCurrent.folderMap.remove(folderId);
+  //   // }
+  // }
 
   @override
   AppState reduce() {
@@ -260,9 +261,25 @@ class UpdateFolderSyncKnowAction extends ReduxAction<AppState> {
     KnowModel knowModel = KnowModel(state.knowState.knowCurrent.id)
         .fromMap(state.knowState.knowCurrent.toMap());
     if (isRemove) {
-      knowModel = removeRecursiveFolder(folder, knowModel);
-      // knowModel.folderMap.removeWhere((k, v) => v.idParent == folder.id);
-      // knowModel.folderMap.remove(folder.id);
+      List<String> removeParent = [folder.id];
+      List<String> removeChild = [];
+      bool goBack;
+      do {
+        goBack = false;
+        for (var folder in knowModel.folderMap.entries) {
+          if (removeParent.contains(folder.value.idParent)) {
+            removeChild.add(folder.key);
+            goBack = true;
+          }
+        }
+        knowModel.folderMap
+            .removeWhere((key, value) => removeParent.contains(key));
+        knowModel.folderMap
+            .removeWhere((key, value) => removeChild.contains(key));
+        removeParent.clear();
+        removeParent.addAll(removeChild);
+        removeChild.clear();
+      } while (goBack);
     } else {
       folder.name = name;
       folder.description = description;
