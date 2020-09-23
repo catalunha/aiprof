@@ -1,7 +1,10 @@
+import 'package:aiprof/models/simulation_model.dart';
 import 'package:flutter/material.dart';
 
 class SimulationEditDS extends StatefulWidget {
   final String name;
+  final Map<String, Input> input;
+  final Map<String, Output> output;
   final bool isAddOrUpdate;
   final Function(String) onAdd;
   final Function(String) onUpdate;
@@ -9,6 +12,8 @@ class SimulationEditDS extends StatefulWidget {
   const SimulationEditDS({
     Key key,
     this.name,
+    this.input,
+    this.output,
     this.isAddOrUpdate,
     this.onAdd,
     this.onUpdate,
@@ -72,6 +77,8 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
               return null;
             },
           ),
+          Text('input:${widget.input.length}'),
+          Text('output:${widget.output.length}'),
           Container(
             height: 50,
           ),
