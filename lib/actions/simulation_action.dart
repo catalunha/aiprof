@@ -1,11 +1,12 @@
-// +++ Actions Sync
-import 'package:aiprof/actions/logged_action.dart';
 import 'package:aiprof/models/simulation_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart' as uuid;
+
+// +++ Actions Sync
 
 class SetSimulationCurrentSyncSimulationAction extends ReduxAction<AppState> {
   final String id;
@@ -47,6 +48,7 @@ class SetSimulationFilterSyncSimulationAction extends ReduxAction<AppState> {
 
   void after() => dispatch(GetDocsSimulationListAsyncSimulationAction());
 }
+// --- Actions Sync
 
 // +++ Actions Async
 class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
@@ -169,3 +171,104 @@ class UpdateDocSimulationCurrentAsyncSimulationAction
   @override
   void after() => dispatch(GetDocsSimulationListAsyncSimulationAction());
 }
+
+// +++ Actions Sync for Input
+
+class SetInputCurrentSyncSimulationAction extends ReduxAction<AppState> {
+  final String id;
+
+  SetInputCurrentSyncSimulationAction(this.id);
+
+  @override
+  AppState reduce() {
+    Input _input;
+    if (id == null) {
+      _input = Input(null);
+    } else {
+      _input = Input(state.simulationState.simulationCurrent.input[id].id)
+          .fromMap(state.simulationState.simulationCurrent.input[id].toMap());
+    }
+    return state.copyWith(
+      simulationState: state.simulationState.copyWith(
+        inputCurrent: _input,
+      ),
+    );
+  }
+}
+
+class AddInputSyncSimulationAction extends ReduxAction<AppState> {
+  final String name;
+  final String type;
+  final String value;
+
+  AddInputSyncSimulationAction({
+    this.name,
+    this.type,
+    this.value,
+  });
+  @override
+  AppState reduce() {
+    print('AddInputSyncSimulationAction...');
+    Input _input;
+    _input = state.simulationState.inputCurrent;
+    _input.id = uuid.Uuid().v4();
+    _input.name = name;
+    _input.type = type;
+    _input.value = value;
+    SimulationModel simulationModel =
+        SimulationModel(state.simulationState.simulationCurrent.id)
+            .fromMap(state.simulationState.simulationCurrent.toMap());
+
+    if (simulationModel.input == null) {
+      simulationModel.input = Map<String, Input>();
+    }
+
+    simulationModel.input[_input.id] = _input;
+
+    return state.copyWith(
+      simulationState: state.simulationState.copyWith(
+        simulationCurrent: simulationModel,
+      ),
+    );
+  }
+}
+
+class UpdateInputSyncSimulationAction extends ReduxAction<AppState> {
+  final String name;
+  final String type;
+  final String value;
+  final bool isRemove;
+
+  UpdateInputSyncSimulationAction({
+    this.name,
+    this.type,
+    this.value,
+    this.isRemove,
+  });
+  @override
+  AppState reduce() {
+    print('UpdateInputSyncSimulationAction...');
+    Input _input;
+    _input = state.simulationState.inputCurrent;
+
+    SimulationModel simulationModel =
+        SimulationModel(state.simulationState.simulationCurrent.id)
+            .fromMap(state.simulationState.simulationCurrent.toMap());
+    if (isRemove) {
+      simulationModel.input.remove(_input.id);
+    } else {
+      _input.name = name;
+      _input.type = type;
+      _input.value = value;
+      simulationModel.input[_input.id] = _input;
+    }
+
+    return state.copyWith(
+      simulationState: state.simulationState.copyWith(
+        simulationCurrent: simulationModel,
+      ),
+    );
+  }
+}
+
+// --- Actions Sync for Input

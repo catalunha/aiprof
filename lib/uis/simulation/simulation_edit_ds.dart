@@ -9,6 +9,7 @@ class SimulationEditDS extends StatefulWidget {
   final bool isAddOrUpdate;
   final Function(String) onAdd;
   final Function(String, bool) onUpdate;
+  final Function(String) onEditInput;
 
   const SimulationEditDS({
     Key key,
@@ -18,6 +19,7 @@ class SimulationEditDS extends StatefulWidget {
     this.isAddOrUpdate,
     this.onAdd,
     this.onUpdate,
+    this.onEditInput,
   }) : super(key: key);
   @override
   _SimulationEditDSState createState() => _SimulationEditDSState();
@@ -83,7 +85,10 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
           ),
           Row(children: [
             Text('Entradas para a simulação (${widget.input.length})'),
-            IconButton(icon: Icon(Icons.plus_one), onPressed: null),
+            IconButton(
+              icon: Icon(Icons.plus_one),
+              onPressed: () => widget.onEditInput(null),
+            ),
           ]),
           ...inputBuilder(context, widget.input),
           Text('Saídas da simulação (${widget.output.length})'),
@@ -135,12 +140,16 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
       itemList.add(Row(
         children: [
           icone,
-          IconButton(icon: Icon(Icons.edit), onPressed: null),
+          Container(
+            width: 10,
+          ),
           Text('${input.name}'),
           Text(' = '),
           Text('${input.value}'),
-          IconButton(icon: Icon(Icons.delete), onPressed: null),
-          Text('id: ${input.id.substring(0, 5)}'),
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => widget.onEditInput(input.id)),
+          // Text(' id: ${input.id.substring(0, 5)}'),
         ],
       ));
     }
@@ -159,7 +168,7 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
         icone = Icon(Icons.text_fields);
       } else if (output.type == 'url' || output.type == 'urlimagem') {
         icone = IconButton(
-          tooltip: 'Um link ao um site ou arquivo',
+          tooltip: 'Um link ou URL ao um site ou arquivo',
           icon: Icon(Icons.link),
           onPressed: () async {
             if (output.value != null) {

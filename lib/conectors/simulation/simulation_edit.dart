@@ -1,5 +1,6 @@
 import 'package:aiprof/actions/simulation_action.dart';
 import 'package:aiprof/models/simulation_model.dart';
+import 'package:aiprof/routes.dart';
 import 'package:aiprof/uis/simulation/simulation_edit_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/states/app_state.dart';
@@ -12,6 +13,8 @@ class ViewModel extends BaseModel<AppState> {
   bool isAddOrUpdate;
   Function(String) onAdd;
   Function(String, bool) onUpdate;
+  Function(String) onEditInput;
+
   ViewModel();
   ViewModel.build({
     @required this.name,
@@ -20,6 +23,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.isAddOrUpdate,
     @required this.onAdd,
     @required this.onUpdate,
+    @required this.onEditInput,
   }) : super(equals: [
           name,
           input,
@@ -61,6 +65,10 @@ class ViewModel extends BaseModel<AppState> {
               name: name, isDelete: isDelete));
           dispatch(NavigateAction.pop());
         },
+        onEditInput: (String id) {
+          dispatch(SetInputCurrentSyncSimulationAction(id));
+          dispatch(NavigateAction.pushNamed(Routes.inputEdit));
+        },
       );
 }
 
@@ -77,6 +85,7 @@ class SimulationEdit extends StatelessWidget {
         output: viewModel.output,
         onAdd: viewModel.onAdd,
         onUpdate: viewModel.onUpdate,
+        onEditInput: viewModel.onEditInput,
       ),
     );
   }
