@@ -10,6 +10,7 @@ class SimulationEditDS extends StatefulWidget {
   final Function(String) onAdd;
   final Function(String, bool) onUpdate;
   final Function(String) onEditInput;
+  final Function(String) onEditOutput;
 
   const SimulationEditDS({
     Key key,
@@ -20,6 +21,7 @@ class SimulationEditDS extends StatefulWidget {
     this.onAdd,
     this.onUpdate,
     this.onEditInput,
+    this.onEditOutput,
   }) : super(key: key);
   @override
   _SimulationEditDSState createState() => _SimulationEditDSState();
@@ -91,7 +93,13 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
             ),
           ]),
           ...inputBuilder(context, widget.input),
-          Text('Saídas da simulação (${widget.output.length})'),
+          Row(children: [
+            Text('Saídas da simulação (${widget.output.length})'),
+            IconButton(
+              icon: Icon(Icons.plus_one),
+              onPressed: () => widget.onEditOutput(null),
+            ),
+          ]),
           ...outputBuilder(context, widget.output),
           widget.isAddOrUpdate
               ? Container()
@@ -99,7 +107,7 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
                   value: _isDelete,
                   title: _isDelete
                       ? Text('Simulação será removida.')
-                      : Text('Remover ?'),
+                      : Text('Remover esta simulação?'),
                   onChanged: (value) {
                     setState(() {
                       _isDelete = value;
@@ -139,17 +147,16 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
       }
       itemList.add(Row(
         children: [
-          icone,
-          Container(
-            width: 10,
-          ),
-          Text('${input.name}'),
-          Text(' = '),
-          Text('${input.value}'),
           IconButton(
               icon: Icon(Icons.edit),
               onPressed: () => widget.onEditInput(input.id)),
-          // Text(' id: ${input.id.substring(0, 5)}'),
+          Text('${input.name}'),
+          Text(' = '),
+          Text('${input.value}'),
+          Container(
+            width: 10,
+          ),
+          icone,
         ],
       ));
     }
@@ -195,13 +202,16 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
       }
       itemList.add(Row(
         children: [
-          icone,
-          IconButton(icon: Icon(Icons.edit), onPressed: null),
+          IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () => widget.onEditOutput(output.id)),
           Text('${output.name}'),
           Text(' = '),
           Text('${output.value}'),
-          IconButton(icon: Icon(Icons.delete), onPressed: null),
-          Text('id: ${output.id.substring(0, 5)}'),
+          Container(
+            width: 10,
+          ),
+          icone,
         ],
       ));
     }

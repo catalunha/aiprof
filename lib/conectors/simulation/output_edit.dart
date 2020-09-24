@@ -1,5 +1,5 @@
 import 'package:aiprof/actions/simulation_action.dart';
-import 'package:aiprof/uis/simulation/input_edit_ds.dart';
+import 'package:aiprof/uis/simulation/output_edit_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:async_redux/async_redux.dart';
@@ -28,30 +28,30 @@ class ViewModel extends BaseModel<AppState> {
 
   @override
   ViewModel fromStore() => ViewModel.build(
-        isAddOrUpdate: state.simulationState.inputCurrent.id == null,
-        name: state.simulationState.inputCurrent.name,
-        type: state.simulationState.inputCurrent.type,
-        value: state.simulationState.inputCurrent.value,
+        isAddOrUpdate: state.simulationState.outputCurrent.id == null,
+        name: state.simulationState.outputCurrent.name,
+        type: state.simulationState.outputCurrent.type,
+        value: state.simulationState.outputCurrent.value,
         onAdd: (String name, String type, String value) {
-          dispatch(AddInputSyncSimulationAction(
+          dispatch(AddOutputSyncSimulationAction(
               name: name, type: type, value: value));
           dispatch(NavigateAction.pop());
         },
         onUpdate: (String name, String type, String value, bool isRemove) {
-          dispatch(UpdateInputSyncSimulationAction(
+          dispatch(UpdateOutputSyncSimulationAction(
               name: name, type: type, value: value, isRemove: isRemove));
           dispatch(NavigateAction.pop());
         },
       );
 }
 
-class InputEdit extends StatelessWidget {
+class OutputEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       model: ViewModel(),
-      builder: (context, viewModel) => InputEditDS(
+      builder: (context, viewModel) => OutputEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         name: viewModel.name,
         type: viewModel.type,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class InputEditDS extends StatefulWidget {
+class OutputEditDS extends StatefulWidget {
   final String name;
   final String type;
   final String value;
@@ -8,7 +8,7 @@ class InputEditDS extends StatefulWidget {
   final Function(String, String, String) onAdd;
   final Function(String, String, String, bool) onUpdate;
 
-  const InputEditDS({
+  const OutputEditDS({
     Key key,
     this.name,
     this.type,
@@ -18,10 +18,10 @@ class InputEditDS extends StatefulWidget {
     this.onUpdate,
   }) : super(key: key);
   @override
-  _InputEditDSState createState() => _InputEditDSState();
+  _OutputEditDSState createState() => _OutputEditDSState();
 }
 
-class _InputEditDSState extends State<InputEditDS> {
+class _OutputEditDSState extends State<OutputEditDS> {
   final formKey = GlobalKey<FormState>();
   String _name;
   String _type;
@@ -31,11 +31,7 @@ class _InputEditDSState extends State<InputEditDS> {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       widget.isAddOrUpdate
-          ? widget.onAdd(
-              _name,
-              _type,
-              _value,
-            )
+          ? widget.onAdd(_name, _type, _value)
           : widget.onUpdate(_name, _type, _value, _isDelete);
     } else {
       setState(() {});
@@ -52,7 +48,7 @@ class _InputEditDSState extends State<InputEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate ? 'Criar entrada' : 'Editar entrada'),
+        title: Text(widget.isAddOrUpdate ? 'Criar saída' : 'Editar saída'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -75,7 +71,7 @@ class _InputEditDSState extends State<InputEditDS> {
           TextFormField(
             initialValue: widget.name,
             decoration: InputDecoration(
-              labelText: 'Nome da entrada *',
+              labelText: 'Nome da saída *',
             ),
             onSaved: (newValue) => _name = newValue,
             validator: (value) {
@@ -88,7 +84,7 @@ class _InputEditDSState extends State<InputEditDS> {
           Container(
             height: 10,
           ),
-          Text('Tipo da entrada *'),
+          Text('Tipo da saída * $_type'),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -162,29 +158,29 @@ class _InputEditDSState extends State<InputEditDS> {
                     onPressed: () {},
                   ),
                 ]),
-            // Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: <Widget>[
-            //       Radio(
-            //         value: 'file',
-            //         groupValue: _type,
-            //         onChanged: (radioValue) {
-            //           setState(() {
-            //             _type = radioValue;
-            //           });
-            //         },
-            //       ),
-            //       IconButton(
-            //         tooltip: 'Upload de arquivo ou imagem',
-            //         icon: Icon(Icons.description),
-            //         onPressed: () {},
-            //       ),
-            //     ]),
+            Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Radio(
+                    value: 'arquivo',
+                    groupValue: _type,
+                    onChanged: (radioValue) {
+                      setState(() {
+                        _type = radioValue;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    tooltip: 'Upload de arquivo ou imagem',
+                    icon: Icon(Icons.description),
+                    onPressed: () {},
+                  ),
+                ]),
           ]),
           TextFormField(
             initialValue: widget.value,
             decoration: InputDecoration(
-              labelText: 'Valor da entrada *',
+              labelText: 'Valor da saída *',
             ),
             onSaved: (newValue) => _value = newValue,
             validator: (value) {

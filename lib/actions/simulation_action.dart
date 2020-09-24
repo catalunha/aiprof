@@ -272,3 +272,104 @@ class UpdateInputSyncSimulationAction extends ReduxAction<AppState> {
 }
 
 // --- Actions Sync for Input
+
+// +++ Actions Sync for Output
+
+class SetOutputCurrentSyncSimulationAction extends ReduxAction<AppState> {
+  final String id;
+
+  SetOutputCurrentSyncSimulationAction(this.id);
+
+  @override
+  AppState reduce() {
+    Output _output;
+    if (id == null) {
+      _output = Output(null);
+    } else {
+      _output = Output(state.simulationState.simulationCurrent.output[id].id)
+          .fromMap(state.simulationState.simulationCurrent.output[id].toMap());
+    }
+    return state.copyWith(
+      simulationState: state.simulationState.copyWith(
+        outputCurrent: _output,
+      ),
+    );
+  }
+}
+
+class AddOutputSyncSimulationAction extends ReduxAction<AppState> {
+  final String name;
+  final String type;
+  final String value;
+
+  AddOutputSyncSimulationAction({
+    this.name,
+    this.type,
+    this.value,
+  });
+  @override
+  AppState reduce() {
+    print('AddOutputSyncSimulationAction...');
+    Output _output;
+    _output = state.simulationState.outputCurrent;
+    _output.id = uuid.Uuid().v4();
+    _output.name = name;
+    _output.type = type;
+    _output.value = value;
+    SimulationModel simulationModel =
+        SimulationModel(state.simulationState.simulationCurrent.id)
+            .fromMap(state.simulationState.simulationCurrent.toMap());
+
+    if (simulationModel.output == null) {
+      simulationModel.output = Map<String, Output>();
+    }
+
+    simulationModel.output[_output.id] = _output;
+
+    return state.copyWith(
+      simulationState: state.simulationState.copyWith(
+        simulationCurrent: simulationModel,
+      ),
+    );
+  }
+}
+
+class UpdateOutputSyncSimulationAction extends ReduxAction<AppState> {
+  final String name;
+  final String type;
+  final String value;
+  final bool isRemove;
+
+  UpdateOutputSyncSimulationAction({
+    this.name,
+    this.type,
+    this.value,
+    this.isRemove,
+  });
+  @override
+  AppState reduce() {
+    print('UpdateOutputSyncSimulationAction...');
+    Output _output;
+    _output = state.simulationState.outputCurrent;
+
+    SimulationModel simulationModel =
+        SimulationModel(state.simulationState.simulationCurrent.id)
+            .fromMap(state.simulationState.simulationCurrent.toMap());
+    if (isRemove) {
+      simulationModel.output.remove(_output.id);
+    } else {
+      _output.name = name;
+      _output.type = type;
+      _output.value = value;
+      simulationModel.output[_output.id] = _output;
+    }
+
+    return state.copyWith(
+      simulationState: state.simulationState.copyWith(
+        simulationCurrent: simulationModel,
+      ),
+    );
+  }
+}
+
+// --- Actions Sync for Output

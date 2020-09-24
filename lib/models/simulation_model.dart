@@ -90,6 +90,30 @@ class SimulationModel extends FirestoreModel {
     }
     return data;
   }
+
+  String toString() {
+    String _return = '';
+    _return = _return + '\n ** Entradas ** ';
+    List<Input> _inputList = [];
+    for (var item in input.entries) {
+      _inputList.add(Input(item.key).fromMap(item.value.toMap()));
+    }
+    _inputList.sort((a, b) => a.name.compareTo(b.name));
+    for (var item in _inputList) {
+      _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+    }
+    _return = _return + '\n ** Saídas ** ';
+    List<Output> _outputList = [];
+    for (var item in output.entries) {
+      _outputList.add(Output(item.key).fromMap(item.value.toMap()));
+    }
+    _outputList.sort((a, b) => a.name.compareTo(b.name));
+    for (var item in _outputList) {
+      _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+    }
+
+    return _return;
+  }
 }
 
 /// type: number | word | text | url

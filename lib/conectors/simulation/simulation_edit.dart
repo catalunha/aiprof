@@ -14,6 +14,7 @@ class ViewModel extends BaseModel<AppState> {
   Function(String) onAdd;
   Function(String, bool) onUpdate;
   Function(String) onEditInput;
+  Function(String) onEditOutput;
 
   ViewModel();
   ViewModel.build({
@@ -24,6 +25,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.onAdd,
     @required this.onUpdate,
     @required this.onEditInput,
+    @required this.onEditOutput,
   }) : super(equals: [
           name,
           input,
@@ -69,6 +71,10 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(SetInputCurrentSyncSimulationAction(id));
           dispatch(NavigateAction.pushNamed(Routes.inputEdit));
         },
+        onEditOutput: (String id) {
+          dispatch(SetOutputCurrentSyncSimulationAction(id));
+          dispatch(NavigateAction.pushNamed(Routes.outputEdit));
+        },
       );
 }
 
@@ -86,6 +92,7 @@ class SimulationEdit extends StatelessWidget {
         onAdd: viewModel.onAdd,
         onUpdate: viewModel.onUpdate,
         onEditInput: viewModel.onEditInput,
+        onEditOutput: viewModel.onEditOutput,
       ),
     );
   }
