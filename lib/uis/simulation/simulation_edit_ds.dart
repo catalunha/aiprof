@@ -185,9 +185,7 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
             }
           },
         );
-      } else if (output.type == 'file' ||
-          output.type == 'arquivo' ||
-          output.type == 'imagem') {
+      } else if (output.type == 'arquivo' || output.type == 'imagem') {
         icone = IconButton(
           tooltip: 'Upload de arquivo ou imagem',
           icon: Icon(Icons.description),

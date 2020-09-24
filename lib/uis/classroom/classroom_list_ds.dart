@@ -9,8 +9,9 @@ class ClassroomListDS extends StatefulWidget {
   final List<ClassroomModel> classroomList;
   final Function(String) onEditClassroomCurrent;
   final Function(String) onStudentList;
-  final Function() onSituationList;
-  final Function() onKnowList;
+  final Function(String) onExameList;
+  // final Function() onSituationList;
+  // final Function() onKnowList;
   final Function(int oldIndex, int newIndex) onChangeClassroomListOrder;
 
   const ClassroomListDS({
@@ -18,10 +19,11 @@ class ClassroomListDS extends StatefulWidget {
     this.classroomList,
     this.onEditClassroomCurrent,
     this.onStudentList,
+    this.onExameList,
     this.onChangeClassroomListOrder,
     this.userLogged,
-    this.onSituationList,
-    this.onKnowList,
+    // this.onSituationList,
+    // this.onKnowList,
   }) : super(key: key);
 
   @override
@@ -162,17 +164,19 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
                 },
               ),
               IconButton(
+                tooltip: 'Listar estudantes',
                 icon: Icon(Icons.people),
                 onPressed: () async {
                   widget.onStudentList(classroom.id);
                 },
               ),
-              // IconButton(
-              //   icon: Icon(Icons.today),
-              //   onPressed: () async {
-              //     // onStudentList(classroom.id);
-              //   },
-              // ),
+              IconButton(
+                tooltip: 'Listar avaliações',
+                icon: Icon(Icons.assignment),
+                onPressed: () async {
+                  widget.onExameList(classroom.id);
+                },
+              ),
               // IconButton(
               //   tooltip: 'Lista de Situaçãos',
               //   icon: Icon(Icons.help),
@@ -186,12 +190,12 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
               //     widget.onKnowList();
               //   },
               // ),
-              IconButton(
-                icon: Icon(Icons.assignment),
-                onPressed: () async {
-                  // onStudentList(classroom.id);
-                },
-              ),
+              // IconButton(
+              //   icon: Icon(Icons.assignment),
+              //   onPressed: () async {
+              //     // onStudentList(classroom.id);
+              //   },
+              // ),
             ],
           ),
         ),

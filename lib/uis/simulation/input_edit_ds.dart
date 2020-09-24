@@ -162,24 +162,6 @@ class _InputEditDSState extends State<InputEditDS> {
                     onPressed: () {},
                   ),
                 ]),
-            // Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: <Widget>[
-            //       Radio(
-            //         value: 'file',
-            //         groupValue: _type,
-            //         onChanged: (radioValue) {
-            //           setState(() {
-            //             _type = radioValue;
-            //           });
-            //         },
-            //       ),
-            //       IconButton(
-            //         tooltip: 'Upload de arquivo ou imagem',
-            //         icon: Icon(Icons.description),
-            //         onPressed: () {},
-            //       ),
-            //     ]),
           ]),
           TextFormField(
             initialValue: widget.value,

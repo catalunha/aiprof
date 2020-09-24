@@ -1,5 +1,7 @@
 import 'package:aiprof/conectors/classroom/classroom_list.dart';
 import 'package:aiprof/conectors/classroom/classroom_edit.dart';
+import 'package:aiprof/conectors/exame/exame_edit.dart';
+import 'package:aiprof/conectors/exame/exame_list.dart';
 import 'package:aiprof/conectors/know/folder_edit.dart';
 import 'package:aiprof/conectors/know/folder_list.dart';
 import 'package:aiprof/conectors/know/know_edit.dart';
@@ -33,6 +35,11 @@ class Routes {
   static final simulationEdit = '/simulationEdit';
   static final inputEdit = '/inputEdit';
   static final outputEdit = '/outputEdit';
+  static final exameList = '/exameList';
+  static final exameEdit = '/exameEdit';
+  static final questionList = '/questionList';
+  static final questionEdit = '/questionEdit';
+  static final studentSelect = '/studentSelect';
 
   static final routes = {
     welcome: (BuildContext context) => UserExceptionDialog<AppState>(
@@ -52,6 +59,8 @@ class Routes {
     simulationEdit: (BuildContext context) => SimulationEdit(),
     inputEdit: (BuildContext context) => InputEdit(),
     outputEdit: (BuildContext context) => OutputEdit(),
+    exameList: (BuildContext context) => ExameList(),
+    exameEdit: (BuildContext context) => ExameEdit(),
   };
 }
 

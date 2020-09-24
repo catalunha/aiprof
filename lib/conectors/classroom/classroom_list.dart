@@ -13,8 +13,9 @@ class ViewModel extends BaseModel<AppState> {
   List<ClassroomModel> classroomList;
   Function(String) onEditClassroomCurrent;
   Function(String) onStudentList;
-  Function() onSituationList;
-  Function() onKnowList;
+  Function(String) onExameList;
+  // Function() onSituationList;
+  // Function() onKnowList;
   Function(int, int) onChangeClassroomListOrder;
   ViewModel();
   ViewModel.build({
@@ -22,8 +23,9 @@ class ViewModel extends BaseModel<AppState> {
     @required this.classroomList,
     @required this.onEditClassroomCurrent,
     @required this.onStudentList,
-    @required this.onSituationList,
-    @required this.onKnowList,
+    @required this.onExameList,
+    // @required this.onSituationList,
+    // @required this.onKnowList,
     @required this.onChangeClassroomListOrder,
   }) : super(equals: [
           userLogged,
@@ -41,12 +43,16 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(SetClassroomCurrentSyncClassroomAction(id));
           dispatch(NavigateAction.pushNamed(Routes.studentList));
         },
-        onSituationList: () {
-          dispatch(NavigateAction.pushNamed(Routes.situationList));
+        onExameList: (String id) {
+          dispatch(SetClassroomCurrentSyncClassroomAction(id));
+          dispatch(NavigateAction.pushNamed(Routes.exameList));
         },
-        onKnowList: () {
-          dispatch(NavigateAction.pushNamed(Routes.knowList));
-        },
+        // onSituationList: () {
+        //   dispatch(NavigateAction.pushNamed(Routes.situationList));
+        // },
+        // onKnowList: () {
+        //   dispatch(NavigateAction.pushNamed(Routes.knowList));
+        // },
         onChangeClassroomListOrder: (int oldIndex, int newIndex) {
           dispatch(UpdateDocclassroomIdInUserAsyncClassroomAction(
             oldIndex: oldIndex,
@@ -69,8 +75,9 @@ class ClassroomList extends StatelessWidget {
         classroomList: viewModel.classroomList,
         onEditClassroomCurrent: viewModel.onEditClassroomCurrent,
         onStudentList: viewModel.onStudentList,
-        onKnowList: viewModel.onKnowList,
-        onSituationList: viewModel.onSituationList,
+        onExameList: viewModel.onExameList,
+        // onKnowList: viewModel.onKnowList,
+        // onSituationList: viewModel.onSituationList,
         onChangeClassroomListOrder: viewModel.onChangeClassroomListOrder,
       ),
     );

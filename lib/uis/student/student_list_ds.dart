@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:aiprof/models/user_model.dart';
-import 'package:aiprof/conectors/components/logout_button.dart';
 
 class StudentListDS extends StatefulWidget {
   final List<UserModel> studentList;

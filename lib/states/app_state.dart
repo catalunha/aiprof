@@ -1,4 +1,5 @@
 import 'package:aiprof/states/classroom_state.dart';
+import 'package:aiprof/states/exame_state.dart';
 import 'package:aiprof/states/know_state.dart';
 import 'package:aiprof/states/logged_state.dart';
 import 'package:aiprof/states/simulation_state.dart';
@@ -16,6 +17,7 @@ class AppState {
   final SituationState situationState;
   final KnowState knowState;
   final SimulationState simulationState;
+  final ExameState exameState;
 
   AppState({
     this.wait,
@@ -26,6 +28,7 @@ class AppState {
     this.situationState,
     this.knowState,
     this.simulationState,
+    this.exameState,
   });
 
   static AppState initialState() => AppState(
@@ -37,6 +40,7 @@ class AppState {
         situationState: SituationState.initialState(),
         knowState: KnowState.initialState(),
         simulationState: SimulationState.initialState(),
+        exameState: ExameState.initialState(),
       );
   AppState copyWith({
     Wait wait,
@@ -47,6 +51,7 @@ class AppState {
     SituationState situationState,
     KnowState knowState,
     SimulationState simulationState,
+    ExameState exameState,
   }) =>
       AppState(
         wait: wait ?? this.wait,
@@ -57,9 +62,11 @@ class AppState {
         situationState: situationState ?? this.situationState,
         knowState: knowState ?? this.knowState,
         simulationState: simulationState ?? this.simulationState,
+        exameState: exameState ?? this.exameState,
       );
   @override
   int get hashCode =>
+      exameState.hashCode ^
       simulationState.hashCode ^
       knowState.hashCode ^
       situationState.hashCode ^
@@ -73,6 +80,7 @@ class AppState {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AppState &&
+          exameState == other.exameState &&
           knowState == other.knowState &&
           situationState == other.situationState &&
           studentState == other.studentState &&

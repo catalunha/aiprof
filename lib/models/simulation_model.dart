@@ -116,7 +116,7 @@ class SimulationModel extends FirestoreModel {
   }
 }
 
-/// type: number | word | text | url
+/// type: numero | palavra | texto | url | arquivo
 class Input {
   String id;
   String name;
@@ -151,7 +151,7 @@ class Input {
   }
 }
 
-/// type: number | word | text | url | file
+/// type: numero | palavra | texto | url | arquivo
 class Output {
   String id;
   String name;

@@ -3,13 +3,13 @@ import 'package:aiprof/models/user_model.dart';
 
 class ClassroomModel extends FirestoreModel {
   static final String collection = "classroom";
-  bool isActive;
+  UserModel userRef;
   String company;
   String component;
   String name;
   String description;
   String urlProgram;
-  UserModel userRef;
+  bool isActive;
   // dynamic number;
   // dynamic questionNumber;
 
