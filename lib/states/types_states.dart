@@ -58,3 +58,21 @@ enum SimulationFilter {
 enum SimulationOrder {
   name,
 }
+enum SimulationType {
+  number,
+  word,
+  text,
+  url,
+  file,
+}
+
+extension SimulationTypeExtension on SimulationType {
+  static const names = {
+    SimulationType.number: 'Número',
+    SimulationType.word: 'Palavra',
+    SimulationType.text: 'Texto',
+    SimulationType.url: 'URL ou Link',
+    SimulationType.file: 'Upload de Arquivo',
+  };
+  String get label => names[this];
+}

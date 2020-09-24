@@ -32,13 +32,13 @@ class SimulationModel extends FirestoreModel {
     if (map["variavel"] is Map) {
       input = Map<String, Input>();
       for (var item in map["variavel"].entries) {
-        input[item.key] = Input.fromMap(item.value);
+        input[item.key] = Input(item.key).fromMap(item.value);
       }
     }
     if (map["gabarito"] is Map) {
       output = Map<String, Output>();
       for (var item in map["gabarito"].entries) {
-        output[item.key] = Output.fromMap(item.value);
+        output[item.key] = Output(item.key).fromMap(item.value);
       }
     }
 
@@ -52,13 +52,13 @@ class SimulationModel extends FirestoreModel {
     if (map["input"] is Map) {
       input = Map<String, Input>();
       for (var item in map["input"].entries) {
-        input[item.key] = Input.fromMap(item.value);
+        input[item.key] = Input(item.key).fromMap(item.value);
       }
     }
     if (map["output"] is Map) {
       output = Map<String, Output>();
       for (var item in map["output"].entries) {
-        output[item.key] = Output.fromMap(item.value);
+        output[item.key] = Output(item.key).fromMap(item.value);
       }
     }
     return this;
@@ -92,19 +92,21 @@ class SimulationModel extends FirestoreModel {
   }
 }
 
-/// type: number | word | text | url | urlimage
+/// type: number | word | text | url
 class Input {
+  String id;
   String name;
   String type;
   String value;
 
-  Input({
+  Input(
+    this.id, {
     this.name,
     this.type,
     this.value,
   });
 
-  Input.fromMap(Map<dynamic, dynamic> map) {
+  Input fromMap(Map<dynamic, dynamic> map) {
     // old fields
     if (map.containsKey('nome')) name = map['nome'];
     if (map.containsKey('tipo')) type = map['tipo'];
@@ -113,6 +115,7 @@ class Input {
     if (map.containsKey('name')) name = map['name'];
     if (map.containsKey('type')) type = map['type'];
     if (map.containsKey('value')) value = map['value'];
+    return this;
   }
 
   Map<dynamic, dynamic> toMap() {
@@ -126,13 +129,15 @@ class Input {
 
 /// type: number | word | text | url | file
 class Output {
+  String id;
   String name;
   String type;
   String value;
   String answer;
   int score;
 
-  Output({
+  Output(
+    this.id, {
     this.name,
     this.type,
     this.value,
@@ -140,7 +145,7 @@ class Output {
     this.score,
   });
 
-  Output.fromMap(Map<dynamic, dynamic> map) {
+  Output fromMap(Map<dynamic, dynamic> map) {
     // old fields
     if (map.containsKey('nome')) name = map['nome'];
     if (map.containsKey('tipo')) type = map['tipo'];
@@ -153,6 +158,7 @@ class Output {
     if (map.containsKey('value')) value = map['value'];
     if (map.containsKey('answer')) answer = map['answer'];
     if (map.containsKey('score')) score = map['score'];
+    return this;
   }
 
   Map<dynamic, dynamic> toMap() {

@@ -1,13 +1,14 @@
 import 'package:aiprof/models/simulation_model.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SimulationEditDS extends StatefulWidget {
   final String name;
-  final Map<String, Input> input;
-  final Map<String, Output> output;
+  final List<Input> input;
+  final List<Output> output;
   final bool isAddOrUpdate;
   final Function(String) onAdd;
-  final Function(String) onUpdate;
+  final Function(String, bool) onUpdate;
 
   const SimulationEditDS({
     Key key,
@@ -25,10 +26,13 @@ class SimulationEditDS extends StatefulWidget {
 class _SimulationEditDSState extends State<SimulationEditDS> {
   final formKey = GlobalKey<FormState>();
   String _name;
+  bool _isDelete = false;
   void validateData() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      widget.isAddOrUpdate ? widget.onAdd(_name) : widget.onUpdate(_name);
+      widget.isAddOrUpdate
+          ? widget.onAdd(_name)
+          : widget.onUpdate(_name, _isDelete);
     } else {
       setState(() {});
     }
@@ -77,13 +81,121 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
               return null;
             },
           ),
-          Text('input:${widget.input.length}'),
-          Text('output:${widget.output.length}'),
+          Row(children: [
+            Text('Entradas para a simulação (${widget.input.length})'),
+            IconButton(icon: Icon(Icons.plus_one), onPressed: null),
+          ]),
+          ...inputBuilder(context, widget.input),
+          Text('Saídas da simulação (${widget.output.length})'),
+          ...outputBuilder(context, widget.output),
+          widget.isAddOrUpdate
+              ? Container()
+              : SwitchListTile(
+                  value: _isDelete,
+                  title: _isDelete
+                      ? Text('Simulação será removida.')
+                      : Text('Remover ?'),
+                  onChanged: (value) {
+                    setState(() {
+                      _isDelete = value;
+                    });
+                  },
+                ),
           Container(
             height: 50,
           ),
         ],
       ),
     );
+  }
+
+  List<Widget> inputBuilder(BuildContext context, List<Input> inputList) {
+    List<Widget> itemList = [];
+    for (Input input in inputList) {
+      Widget icone = Icon(Icons.question_answer);
+      if (input.type == 'numero') {
+        icone = Icon(Icons.looks_one);
+      } else if (input.type == 'palavra') {
+        icone = Icon(Icons.text_format);
+      } else if (input.type == 'texto') {
+        icone = Icon(Icons.text_fields);
+      } else if (input.type == 'url') {
+        icone = IconButton(
+          tooltip: 'Um link ao um site ou arquivo',
+          icon: Icon(Icons.link),
+          onPressed: () async {
+            if (input.value != null) {
+              if (await canLaunch(input.value)) {
+                await launch(input.value);
+              }
+            }
+          },
+        );
+      }
+      itemList.add(Row(
+        children: [
+          icone,
+          IconButton(icon: Icon(Icons.edit), onPressed: null),
+          Text('${input.name}'),
+          Text(' = '),
+          Text('${input.value}'),
+          IconButton(icon: Icon(Icons.delete), onPressed: null),
+          Text('id: ${input.id.substring(0, 5)}'),
+        ],
+      ));
+    }
+    return itemList;
+  }
+
+  List<Widget> outputBuilder(BuildContext context, List<Output> outputList) {
+    List<Widget> itemList = [];
+    for (Output output in outputList) {
+      Widget icone = Icon(Icons.question_answer);
+      if (output.type == 'numero') {
+        icone = Icon(Icons.looks_one);
+      } else if (output.type == 'palavra') {
+        icone = Icon(Icons.text_format);
+      } else if (output.type == 'texto') {
+        icone = Icon(Icons.text_fields);
+      } else if (output.type == 'url' || output.type == 'urlimagem') {
+        icone = IconButton(
+          tooltip: 'Um link ao um site ou arquivo',
+          icon: Icon(Icons.link),
+          onPressed: () async {
+            if (output.value != null) {
+              if (await canLaunch(output.value)) {
+                await launch(output.value);
+              }
+            }
+          },
+        );
+      } else if (output.type == 'file' ||
+          output.type == 'arquivo' ||
+          output.type == 'imagem') {
+        icone = IconButton(
+          tooltip: 'Upload de arquivo ou imagem',
+          icon: Icon(Icons.description),
+          onPressed: () async {
+            if (output.value != null) {
+              if (await canLaunch(output.value)) {
+                await launch(output.value);
+              }
+            }
+          },
+        );
+      }
+      itemList.add(Row(
+        children: [
+          icone,
+          IconButton(icon: Icon(Icons.edit), onPressed: null),
+          Text('${output.name}'),
+          Text(' = '),
+          Text('${output.value}'),
+          IconButton(icon: Icon(Icons.delete), onPressed: null),
+          Text('id: ${output.id.substring(0, 5)}'),
+        ],
+      ));
+    }
+    return itemList;
   }
 }

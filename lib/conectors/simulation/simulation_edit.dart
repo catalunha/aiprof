@@ -7,11 +7,11 @@ import 'package:async_redux/async_redux.dart';
 
 class ViewModel extends BaseModel<AppState> {
   String name;
-  Map<String, Input> input = Map<String, Input>();
-  Map<String, Output> output = Map<String, Output>();
+  List<Input> input = [];
+  List<Output> output = [];
   bool isAddOrUpdate;
   Function(String) onAdd;
-  Function(String) onUpdate;
+  Function(String, bool) onUpdate;
   ViewModel();
   ViewModel.build({
     @required this.name,
@@ -26,26 +26,39 @@ class ViewModel extends BaseModel<AppState> {
           output,
           isAddOrUpdate,
         ]);
+  List<Input> _input(Map<String, Input> input) {
+    List<Input> _input = [];
+    for (var item in input.entries) {
+      _input.add(Input(item.key).fromMap(item.value.toMap()));
+    }
+    _input.sort((a, b) => a.name.compareTo(b.name));
+    return _input;
+  }
+
+  List<Output> _output(Map<String, Output> output) {
+    List<Output> _output = [];
+    for (var item in output.entries) {
+      _output.add(Output(item.key).fromMap(item.value.toMap()));
+    }
+    _output.sort((a, b) => a.name.compareTo(b.name));
+    return _output;
+  }
+
   @override
   ViewModel fromStore() => ViewModel.build(
         isAddOrUpdate: state.simulationState.simulationCurrent.id == null,
         name: state.simulationState.simulationCurrent.name,
-        input: state.simulationState.simulationCurrent.input,
-        output: state.simulationState.simulationCurrent.output,
+        input: _input(state.simulationState.simulationCurrent.input),
+        output: _output(state.simulationState.simulationCurrent.output),
         onAdd: (
           String name,
         ) {
-          dispatch(AddDocSimulationCurrentAsyncSimulationAction(
-            name: name,
-          ));
+          dispatch(AddDocSimulationCurrentAsyncSimulationAction(name: name));
           dispatch(NavigateAction.pop());
         },
-        onUpdate: (
-          String name,
-        ) {
+        onUpdate: (String name, bool isDelete) {
           dispatch(UpdateDocSimulationCurrentAsyncSimulationAction(
-            name: name,
-          ));
+              name: name, isDelete: isDelete));
           dispatch(NavigateAction.pop());
         },
       );

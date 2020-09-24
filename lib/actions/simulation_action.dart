@@ -137,9 +137,11 @@ class AddDocSimulationCurrentAsyncSimulationAction
 class UpdateDocSimulationCurrentAsyncSimulationAction
     extends ReduxAction<AppState> {
   final String name;
+  final bool isDelete;
 
   UpdateDocSimulationCurrentAsyncSimulationAction({
     this.name,
+    this.isDelete,
   });
   @override
   Future<AppState> reduce() async {
@@ -149,12 +151,18 @@ class UpdateDocSimulationCurrentAsyncSimulationAction
         SimulationModel(state.simulationState.simulationCurrent.id)
             .fromMap(state.simulationState.simulationCurrent.toMap());
 
-    simulationModel.name = name;
-
-    await firestore
-        .collection(SimulationModel.collection)
-        .document(simulationModel.id)
-        .updateData(simulationModel.toMap());
+    if (isDelete) {
+      await firestore
+          .collection(SimulationModel.collection)
+          .document(simulationModel.id)
+          .delete();
+    } else {
+      simulationModel.name = name;
+      await firestore
+          .collection(SimulationModel.collection)
+          .document(simulationModel.id)
+          .updateData(simulationModel.toMap());
+    }
     return null;
   }
 
