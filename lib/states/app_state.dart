@@ -2,6 +2,7 @@ import 'package:aiprof/states/classroom_state.dart';
 import 'package:aiprof/states/exame_state.dart';
 import 'package:aiprof/states/know_state.dart';
 import 'package:aiprof/states/logged_state.dart';
+import 'package:aiprof/states/question_state.dart';
 import 'package:aiprof/states/simulation_state.dart';
 import 'package:aiprof/states/situation_state.dart';
 import 'package:aiprof/states/student_state.dart';
@@ -18,6 +19,7 @@ class AppState {
   final KnowState knowState;
   final SimulationState simulationState;
   final ExameState exameState;
+  final QuestionState questionState;
 
   AppState({
     this.wait,
@@ -29,6 +31,7 @@ class AppState {
     this.knowState,
     this.simulationState,
     this.exameState,
+    this.questionState,
   });
 
   static AppState initialState() => AppState(
@@ -41,6 +44,7 @@ class AppState {
         knowState: KnowState.initialState(),
         simulationState: SimulationState.initialState(),
         exameState: ExameState.initialState(),
+        questionState: QuestionState.initialState(),
       );
   AppState copyWith({
     Wait wait,
@@ -52,6 +56,7 @@ class AppState {
     KnowState knowState,
     SimulationState simulationState,
     ExameState exameState,
+    QuestionState questionState,
   }) =>
       AppState(
         wait: wait ?? this.wait,
@@ -63,9 +68,11 @@ class AppState {
         knowState: knowState ?? this.knowState,
         simulationState: simulationState ?? this.simulationState,
         exameState: exameState ?? this.exameState,
+        questionState: questionState ?? this.questionState,
       );
   @override
   int get hashCode =>
+      questionState.hashCode ^
       exameState.hashCode ^
       simulationState.hashCode ^
       knowState.hashCode ^
@@ -80,6 +87,7 @@ class AppState {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AppState &&
+          questionState == other.questionState &&
           exameState == other.exameState &&
           knowState == other.knowState &&
           situationState == other.situationState &&

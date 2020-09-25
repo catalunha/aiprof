@@ -91,6 +91,13 @@ class SimulationModel extends FirestoreModel {
     return data;
   }
 
+  Map<String, dynamic> toMapRef() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (id != null) data['id'] = this.id;
+    if (name != null) data['name'] = this.name;
+    return data;
+  }
+
   String toString() {
     String _return = '';
     _return = _return + '\n ** Entradas ** ';

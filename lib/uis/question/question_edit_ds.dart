@@ -1,46 +1,49 @@
+import 'package:aiprof/models/simulation_model.dart';
+import 'package:aiprof/models/situation_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class ExameEditDS extends StatefulWidget {
+class QuestionEditDS extends StatefulWidget {
   final String name;
   final String description;
   final dynamic start;
   final dynamic end;
-  final int scoreExame;
+  final int scoreQuestion;
   final int attempt;
   final int time;
   final int error;
-  final int scoreQuestion;
-  final bool isDelivered;
+  final SituationModel situationRef;
+  final SimulationModel simulationRef;
   final bool isAddOrUpdate;
-  final Function(String, String, dynamic, dynamic, int, int, int, int, int)
-      onAdd;
-  final Function(
-          String, String, dynamic, dynamic, int, int, int, int, int, bool, bool)
+  final Function() onSituationSelect;
+
+  final Function(String, String, dynamic, dynamic, int, int, int, int) onAdd;
+  final Function(String, String, dynamic, dynamic, int, int, int, int, bool)
       onUpdate;
 
-  const ExameEditDS({
+  const QuestionEditDS({
     Key key,
     this.name,
     this.description,
     this.start,
     this.end,
-    this.scoreExame,
+    this.scoreQuestion,
     this.attempt,
     this.time,
     this.error,
-    this.scoreQuestion,
-    this.isDelivered,
     this.isAddOrUpdate,
     this.onAdd,
     this.onUpdate,
+    this.situationRef,
+    this.simulationRef,
+    this.onSituationSelect,
   }) : super(key: key);
   @override
-  _ExameEditDSState createState() => _ExameEditDSState();
+  _QuestionEditDSState createState() => _QuestionEditDSState();
 }
 
-class _ExameEditDSState extends State<ExameEditDS> {
+class _QuestionEditDSState extends State<QuestionEditDS> {
   final formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
 
@@ -48,21 +51,27 @@ class _ExameEditDSState extends State<ExameEditDS> {
   String _description;
   dynamic _start;
   dynamic _end;
-  int _scoreExame;
+  int _scoreQuestion;
   int _attempt;
   int _time;
   int _error;
-  int _scoreQuestion;
-  bool _isDelivered;
   bool _isDelete = false;
   void validateData() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       widget.isAddOrUpdate
-          ? widget.onAdd(_name, _description, _start, _end, _scoreExame,
-              _attempt, _time, _error, _scoreQuestion)
-          : widget.onUpdate(_name, _description, _start, _end, _scoreExame,
-              _attempt, _time, _error, _scoreQuestion, _isDelivered, _isDelete);
+          ? widget.onAdd(
+              _name,
+              _description,
+              _start,
+              _end,
+              _scoreQuestion,
+              _attempt,
+              _time,
+              _error,
+            )
+          : widget.onUpdate(_name, _description, _start, _end, _scoreQuestion,
+              _attempt, _time, _error, _isDelete);
     } else {
       setState(() {});
     }
@@ -71,7 +80,6 @@ class _ExameEditDSState extends State<ExameEditDS> {
   @override
   void initState() {
     super.initState();
-    _isDelivered = widget.isDelivered;
     _start = widget.start != null ? widget.start : DateTime.now();
     _end = widget.end != null ? widget.end : DateTime.now();
   }
@@ -80,8 +88,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(widget.isAddOrUpdate ? 'Criar Avaliação' : 'Editar Avaliação'),
+        title: Text(widget.isAddOrUpdate ? 'Criar Questão' : 'Editar Questão'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -146,6 +153,13 @@ class _ExameEditDSState extends State<ExameEditDS> {
             //   return null;
             // },
           ),
+          ListTile(
+            title: Text('Situação ou Problema selecionado:'),
+            subtitle: Text(
+                '${widget.situationRef?.name}\n${widget.simulationRef?.id}'),
+            trailing: Icon(Icons.search),
+            onTap: () => widget.onSituationSelect(),
+          ),
           Text('Inicio do desenvolvimento:'),
           SizedBox(
             height: 100,
@@ -175,15 +189,16 @@ class _ExameEditDSState extends State<ExameEditDS> {
             ),
           ),
           TextFormField(
-            initialValue:
-                widget.scoreExame == null ? '1' : widget.scoreExame.toString(),
+            initialValue: widget.scoreQuestion == null
+                ? '1'
+                : widget.scoreQuestion.toString(),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
-              labelText: 'Nota ou peso da avaliação (>=1):',
+              labelText: 'Nota ou peso da questão (>=1):',
             ),
-            onSaved: (newValue) => _scoreExame = int.parse(newValue),
+            onSaved: (newValue) => _scoreQuestion = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {
                 return 'Informe o que se pede.';
@@ -240,47 +255,16 @@ class _ExameEditDSState extends State<ExameEditDS> {
               return null;
             },
           ),
-          TextFormField(
-            initialValue: widget.scoreQuestion == null
-                ? '1'
-                : widget.scoreQuestion.toString(),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            keyboardType: TextInputType.number,
-            maxLines: null,
-            decoration: InputDecoration(
-              labelText: 'Nota ou peso das questões (>=1):',
-            ),
-            onSaved: (newValue) => _scoreQuestion = int.parse(newValue),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Informe o que se pede.';
-              }
-              return null;
-            },
-          ),
           widget.isAddOrUpdate
               ? Container()
               : SwitchListTile(
                   value: _isDelete,
                   title: _isDelete
-                      ? Text('Avaliação será apagada.')
-                      : Text('Apagar avaliação ?'),
+                      ? Text('Questão será apagada.')
+                      : Text('Apagar questão ?'),
                   onChanged: (value) {
                     setState(() {
                       _isDelete = value;
-                    });
-                  },
-                ),
-          widget.isAddOrUpdate
-              ? Container()
-              : SwitchListTile(
-                  value: _isDelivered,
-                  title: _isDelivered
-                      ? Text('Avaliação será distribuída.')
-                      : Text('Distribuir avaliação ?'),
-                  onChanged: (value) {
-                    setState(() {
-                      _isDelivered = value;
                     });
                   },
                 ),

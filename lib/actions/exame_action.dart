@@ -115,7 +115,7 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.time = time;
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
-    exameModel.isDelivery = false;
+    exameModel.isDelivered = false;
     exameModel.isProcess = false;
     await firestore.collection(ExameModel.collection).add(exameModel.toMap());
 
@@ -136,7 +136,7 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
   final int time;
   final int error;
   final int scoreQuestion;
-  final bool isDelivery;
+  final bool isDelivered;
   final bool isDelete;
   UpdateDocExameCurrentAsyncExameAction({
     this.name,
@@ -148,7 +148,7 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     this.time,
     this.error,
     this.scoreQuestion,
-    this.isDelivery,
+    this.isDelivered,
     this.isDelete,
   });
   @override
@@ -166,7 +166,7 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.time = time;
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
-    exameModel.isDelivery = isDelivery;
+    exameModel.isDelivered = isDelivered;
 
     if (isDelete) {
       await firestore

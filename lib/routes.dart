@@ -4,8 +4,12 @@ import 'package:aiprof/conectors/exame/exame_edit.dart';
 import 'package:aiprof/conectors/exame/exame_list.dart';
 import 'package:aiprof/conectors/know/folder_edit.dart';
 import 'package:aiprof/conectors/know/folder_list.dart';
+import 'package:aiprof/conectors/know/folder_select_toquestion.dart';
 import 'package:aiprof/conectors/know/know_edit.dart';
 import 'package:aiprof/conectors/know/know_list.dart';
+import 'package:aiprof/conectors/know/know_select_toquestion.dart';
+import 'package:aiprof/conectors/question/question_edit.dart';
+import 'package:aiprof/conectors/question/question_list.dart';
 import 'package:aiprof/conectors/simulation/input_edit.dart';
 import 'package:aiprof/conectors/simulation/output_edit.dart';
 import 'package:aiprof/conectors/simulation/simulation_edit.dart';
@@ -39,7 +43,9 @@ class Routes {
   static final exameEdit = '/exameEdit';
   static final questionList = '/questionList';
   static final questionEdit = '/questionEdit';
-  static final studentSelect = '/studentSelect';
+  static final knowSelectToQuestion = '/knowSelectToQuestion';
+  static final folderSelectToQuestion = '/folderSelectToQuestion';
+  static final questionStudentSelect = '/questionStudentSelect';
 
   static final routes = {
     welcome: (BuildContext context) => UserExceptionDialog<AppState>(
@@ -61,6 +67,11 @@ class Routes {
     outputEdit: (BuildContext context) => OutputEdit(),
     exameList: (BuildContext context) => ExameList(),
     exameEdit: (BuildContext context) => ExameEdit(),
+    questionList: (BuildContext context) => QuestionList(),
+    questionEdit: (BuildContext context) => QuestionEdit(),
+    knowSelectToQuestion: (BuildContext context) => KnowSelectToQuestion(),
+    folderSelectToQuestion: (BuildContext context) =>
+        FolderSelectToQuestionList(),
   };
 }
 

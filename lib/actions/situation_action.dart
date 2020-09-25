@@ -1,9 +1,13 @@
+import 'package:aiprof/actions/simulation_action.dart';
+import 'package:aiprof/models/question_model.dart';
+import 'package:aiprof/models/simulation_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
+import 'dart:math';
 
 // +++ Actions Sync
 class SetSituationCurrentSyncSituationAction extends ReduxAction<AppState> {
@@ -46,6 +50,43 @@ class SetSituationFilterSyncSituationAction extends ReduxAction<AppState> {
   }
 
   void after() => dispatch(GetDocsSituationListAsyncSituationAction());
+}
+
+class SetSituationInQuestionCurrentSyncSituationAction
+    extends ReduxAction<AppState> {
+  final SituationModel situationRef;
+
+  SetSituationInQuestionCurrentSyncSituationAction(this.situationRef);
+
+  @override
+  AppState reduce() {
+    print('id2:${situationRef?.id}');
+    if (situationRef.id != null) {
+      QuestionModel questionCurrent =
+          QuestionModel(state.questionState.questionCurrent.id)
+              .fromMap(state.questionState.questionCurrent.toMap());
+      questionCurrent.situationRef = situationRef;
+      // //Coletando simulação
+      // dispatch(GetDocsSimulationListAsyncSimulationAction());
+      // // QuestionModel questionCurrent =
+      // //     QuestionModel(state.questionState.questionCurrent.id)
+      // //         .fromMap(state.questionState.questionCurrent.toMap());
+      // Random random = new Random();
+      // int simulationLenght = state.simulationState.simulationList.length;
+      // int randomNumber = random.nextInt(simulationLenght);
+      // SimulationModel simulationModelTemp =
+      //     state.simulationState.simulationList[randomNumber];
+      // questionCurrent.simulationRef = simulationModelTemp;
+
+      return state.copyWith(
+        questionState: state.questionState.copyWith(
+          questionCurrent: questionCurrent,
+        ),
+      );
+    } else {
+      return null;
+    }
+  }
 }
 
 // +++ Actions Async

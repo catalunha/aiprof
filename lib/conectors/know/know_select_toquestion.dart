@@ -1,0 +1,43 @@
+import 'package:aiprof/actions/know_action.dart';
+import 'package:aiprof/routes.dart';
+import 'package:aiprof/uis/know/know_list_ds.dart';
+import 'package:aiprof/uis/know/know_select_toquestion_ds.dart';
+import 'package:flutter/material.dart';
+import 'package:async_redux/async_redux.dart';
+import 'package:aiprof/models/know_model.dart';
+import 'package:aiprof/states/app_state.dart';
+
+class ViewModel extends BaseModel<AppState> {
+  List<KnowModel> knowList;
+  Function(String) onFolderList;
+  ViewModel();
+  ViewModel.build({
+    @required this.knowList,
+    @required this.onFolderList,
+  }) : super(equals: [
+          knowList,
+        ]);
+  @override
+  ViewModel fromStore() => ViewModel.build(
+        knowList: state.knowState.knowList,
+        onFolderList: (String id) {
+          dispatch(SetKnowCurrentSyncKnowAction(id));
+          dispatch(NavigateAction.pushNamed(Routes.folderSelectToQuestion));
+        },
+      );
+}
+
+class KnowSelectToQuestion extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, ViewModel>(
+      //debug: this,
+      model: ViewModel(),
+      onInit: (store) => store.dispatch(GetDocsKnowListAsyncKnowAction()),
+      builder: (context, viewModel) => KnowSelectToQuestionDS(
+        knowList: viewModel.knowList,
+        onFolderList: viewModel.onFolderList,
+      ),
+    );
+  }
+}

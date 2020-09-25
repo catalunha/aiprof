@@ -84,3 +84,10 @@ enum ExameFilter {
 enum ExameOrder {
   name,
 }
+enum QuestionFilter {
+  isactive,
+  isNotactive,
+}
+enum QuestionOrder {
+  name,
+}
