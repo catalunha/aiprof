@@ -18,6 +18,7 @@ import 'package:aiprof/conectors/situation/situation_edit.dart';
 import 'package:aiprof/conectors/situation/situation_list.dart';
 import 'package:aiprof/conectors/student/student_edit.dart';
 import 'package:aiprof/conectors/student/student_list.dart';
+import 'package:aiprof/conectors/student/student_select_toexame.dart';
 import 'package:aiprof/conectors/welcome.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:async_redux/async_redux.dart';
@@ -72,6 +73,7 @@ class Routes {
     knowSelectToQuestion: (BuildContext context) => KnowSelectToQuestion(),
     folderSelectToQuestion: (BuildContext context) =>
         FolderSelectToQuestionList(),
+    questionStudentSelect: (BuildContext context) => StudentSelectToExame(),
   };
 }
 

@@ -4,9 +4,6 @@ import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class SetStudentCurrentSyncStudentAction extends ReduxAction<AppState> {
   final String id;

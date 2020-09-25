@@ -125,6 +125,7 @@ class QuestionModel extends FirestoreModel {
     _return = _return + '\nattempt: $attempt';
     _return = _return + '\ntime: $time';
     _return = _return + '\nerror: $error';
+    _return = _return + '\nisDelivered: $isDelivered';
     _return = _return + '\nsituationRef.name: ${situationRef?.name}';
     // _return = _return + '\nsimulationRef.name: ${simulationRef.id}';
     _return = _return + '\nid: $id';

@@ -11,8 +11,7 @@ class ExameModel extends FirestoreModel {
   dynamic start;
   dynamic end;
   int scoreExame;
-  List<String> questionOrder;
-  //herdar na question
+  //herdar na questio
   int attempt;
   int time;
   int error;
@@ -20,8 +19,8 @@ class ExameModel extends FirestoreModel {
   // function
   bool isDelivered;
   bool isProcess;
-  Map<String, bool> student;
-  Map<String, bool> question;
+  Map<String, bool> studentMap;
+  Map<String, bool> questionMap;
 
   ExameModel(
     String id, {
@@ -29,15 +28,14 @@ class ExameModel extends FirestoreModel {
     this.start,
     this.end,
     this.scoreExame,
-    this.questionOrder,
     this.attempt,
     this.time,
     this.error,
     this.scoreQuestion,
     this.isDelivered,
     this.isProcess,
-    this.student,
-    this.question,
+    this.studentMap,
+    this.questionMap,
     this.userRef,
     this.name,
     this.description,
@@ -61,8 +59,7 @@ class ExameModel extends FirestoreModel {
         ? DateTime.fromMillisecondsSinceEpoch(map['end'].millisecondsSinceEpoch)
         : null;
     if (map.containsKey('scoreExame')) scoreExame = map['scoreExame'];
-    if (map.containsKey('questionOrder')) questionOrder = map['questionOrder'];
-    // herdar nas questions
+    // herdar nas questionMaps
     if (map.containsKey('attempt')) attempt = map['attempt'];
     if (map.containsKey('time')) time = map['time'];
     if (map.containsKey('error')) error = map['error'];
@@ -70,16 +67,16 @@ class ExameModel extends FirestoreModel {
     // functions
     if (map.containsKey('isDelivered')) isDelivered = map['isDelivered'];
     if (map.containsKey('isProcess')) isProcess = map['isProcess'];
-    if (map["student"] is Map) {
-      student = Map<String, bool>();
-      for (var item in map["student"].entries) {
-        student[item.key] = item.value;
+    if (map["studentMap"] is Map) {
+      studentMap = Map<String, bool>();
+      for (var item in map["studentMap"].entries) {
+        studentMap[item.key] = item.value;
       }
     }
-    if (map["question"] is Map) {
-      question = Map<String, bool>();
-      for (var item in map["question"].entries) {
-        question[item.key] = item.value;
+    if (map["questionMap"] is Map) {
+      questionMap = Map<String, bool>();
+      for (var item in map["questionMap"].entries) {
+        questionMap[item.key] = item.value;
       }
     }
     return this;
@@ -99,8 +96,7 @@ class ExameModel extends FirestoreModel {
     data['start'] = this.start;
     data['end'] = this.end;
     if (scoreExame != null) data['scoreExame'] = this.scoreExame;
-    if (questionOrder != null) data['questionOrder'] = this.questionOrder;
-    // herdar question
+    // herdar questionMap
     if (attempt != null) data['attempt'] = this.attempt;
     if (time != null) data['time'] = this.time;
     if (error != null) data['error'] = this.error;
@@ -108,16 +104,16 @@ class ExameModel extends FirestoreModel {
     //function
     if (isDelivered != null) data['isDelivered'] = this.isDelivered;
     if (isProcess != null) data['isProcess'] = this.isProcess;
-    if (student != null && student is Map) {
-      data["student"] = Map<String, dynamic>();
-      for (var item in student.entries) {
-        data["student"][item.key] = item.value;
+    if (studentMap != null && studentMap is Map) {
+      data["studentMap"] = Map<String, dynamic>();
+      for (var item in studentMap.entries) {
+        data["studentMap"][item.key] = item.value;
       }
     }
-    if (question != null && question is Map) {
-      data["question"] = Map<String, dynamic>();
-      for (var item in question.entries) {
-        data["question"][item.key] = item.value;
+    if (questionMap != null && questionMap is Map) {
+      data["questionMap"] = Map<String, dynamic>();
+      for (var item in questionMap.entries) {
+        data["questionMap"][item.key] = item.value;
       }
     }
     return data;
@@ -135,7 +131,9 @@ class ExameModel extends FirestoreModel {
     String _return = '';
     _return = _return + '\nDescrição: $description';
     _return = _return + '\nuserRef.name: ${userRef.name}';
-    _return = _return + '\classroomRef.name: ${classroomRef.name}';
+    _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
+    _return = _return + '\nstudentMap.name: ${studentMap?.length}';
+    _return = _return + '\nquestionMap.name: ${questionMap?.length}';
     _return = _return + '\nid: $id';
     return _return;
   }

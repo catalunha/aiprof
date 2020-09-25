@@ -185,3 +185,94 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
   @override
   void after() => dispatch(GetDocsExameListAsyncExameAction());
 }
+
+class UpdateDocSetStudentInExameCurrentAsyncExameAction
+    extends ReduxAction<AppState> {
+  final UserModel studentModel;
+  final bool isAddOrRemove;
+  UpdateDocSetStudentInExameCurrentAsyncExameAction({
+    this.studentModel,
+    this.isAddOrRemove,
+  });
+  @override
+  Future<AppState> reduce() async {
+    Firestore firestore = Firestore.instance;
+
+    ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
+        .fromMap(state.exameState.exameCurrent.toMap());
+
+    if (exameModel.studentMap == null)
+      exameModel.studentMap = Map<String, bool>();
+    if (isAddOrRemove) {
+      if (!exameModel.studentMap.containsKey(studentModel.id)) {
+        exameModel.studentMap.addAll({studentModel.id: false});
+      }
+    } else {
+      exameModel.studentMap.remove(studentModel.id);
+    }
+    await firestore
+        .collection(ExameModel.collection)
+        .document(exameModel.id)
+        .updateData(exameModel.toMap());
+    return state.copyWith(
+      exameState: state.exameState.copyWith(
+        exameCurrent: exameModel,
+      ),
+    );
+  }
+
+  @override
+  void before() => dispatch(WaitAction.add(this));
+  @override
+  void after() {
+    dispatch(GetDocsExameListAsyncExameAction());
+    dispatch(WaitAction.remove(this));
+  }
+}
+
+class BatchDocsSetStudentListInExameCurrentAsyncExameAction
+    extends ReduxAction<AppState> {
+  final bool isAddOrRemove;
+
+  BatchDocsSetStudentListInExameCurrentAsyncExameAction({
+    this.isAddOrRemove,
+  });
+  @override
+  Future<AppState> reduce() async {
+    print('BatchedDocsWorkerListOnBoardAsyncWorkerAction...');
+    Firestore firestore = Firestore.instance;
+    ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
+        .fromMap(state.exameState.exameCurrent.toMap());
+    if (exameModel.studentMap == null)
+      exameModel.studentMap = Map<String, bool>();
+    for (UserModel student in state.studentState.studentList) {
+      if (isAddOrRemove) {
+        if (!exameModel.studentMap.containsKey(student.id)) {
+          exameModel.studentMap.addAll({student.id: false});
+        }
+      } else {
+        if (exameModel.studentMap.containsKey(student.id) &&
+            exameModel.studentMap[student.id] == false) {
+          exameModel.studentMap.remove(student.id);
+        }
+      }
+    }
+    await firestore
+        .collection(ExameModel.collection)
+        .document(exameModel.id)
+        .updateData(exameModel.toMap());
+    return state.copyWith(
+      exameState: state.exameState.copyWith(
+        exameCurrent: exameModel,
+      ),
+    );
+  }
+
+  @override
+  void before() => dispatch(WaitAction.add(this));
+  @override
+  void after() {
+    dispatch(GetDocsExameListAsyncExameAction());
+    dispatch(WaitAction.remove(this));
+  }
+}

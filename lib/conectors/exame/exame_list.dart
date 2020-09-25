@@ -33,7 +33,7 @@ class ViewModel extends BaseModel<AppState> {
         },
         onStudentList: (String id) {
           dispatch(SetExameCurrentSyncExameAction(id));
-          // dispatch(NavigateAction.pushNamed(Routes.studentSelect));
+          dispatch(NavigateAction.pushNamed(Routes.questionStudentSelect));
         },
       );
 }
