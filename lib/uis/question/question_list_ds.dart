@@ -39,19 +39,18 @@ class _QuestionListDSState extends State<QuestionListDS> {
                 Container(
                   width: 500,
                   child: ListTile(
+                    selected: question.isDelivered ? true : false,
                     title: Text('${question.name}'),
                     subtitle: Text('${question.toString()}'),
                   ),
                 ),
-                question.isDelivered
-                    ? Container()
-                    : IconButton(
-                        tooltip: 'Editar esta questão',
-                        icon: Icon(Icons.edit),
-                        onPressed: () async {
-                          widget.onEditQuestionCurrent(question.id);
-                        },
-                      ),
+                IconButton(
+                  tooltip: 'Editar esta questão',
+                  icon: Icon(Icons.edit),
+                  onPressed: () async {
+                    widget.onEditQuestionCurrent(question.id);
+                  },
+                ),
                 IconButton(
                   tooltip: 'URL para a situação',
                   icon: Icon(Icons.local_library),
