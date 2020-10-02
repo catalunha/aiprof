@@ -1,19 +1,17 @@
-import 'package:aiprof/actions/simulation_action.dart';
 import 'package:aiprof/models/question_model.dart';
-import 'package:aiprof/models/simulation_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
-import 'dart:math';
 
 // +++ Actions Sync
-class SetSituationCurrentSyncSituationAction extends ReduxAction<AppState> {
+class SetSituationCurrentLocalSyncSituationAction
+    extends ReduxAction<AppState> {
   final String id;
 
-  SetSituationCurrentSyncSituationAction(this.id);
+  SetSituationCurrentLocalSyncSituationAction(this.id);
 
   @override
   AppState reduce() {
@@ -23,7 +21,40 @@ class SetSituationCurrentSyncSituationAction extends ReduxAction<AppState> {
     } else {
       SituationModel situationModelTemp = state.situationState.situationList
           .firstWhere((element) => element.id == id);
-      situationModel = SituationModel.clone(situationModelTemp);
+      // situationModel = SituationModel.clone(situationModelTemp);
+      situationModel = SituationModel(situationModelTemp.id)
+          .fromMap(situationModelTemp.toMap());
+    }
+    return state.copyWith(
+      situationState: state.situationState.copyWith(
+        situationCurrent: situationModel,
+      ),
+    );
+  }
+}
+
+class SetSituationCurrentSyncSituationAction extends ReduxAction<AppState> {
+  final String id;
+
+  SetSituationCurrentSyncSituationAction(this.id);
+
+  @override
+  Future<AppState> reduce() async {
+    SituationModel situationModel;
+    if (id == null) {
+      situationModel = SituationModel(null);
+    } else {
+      Firestore firestore = Firestore.instance;
+      //+++ old doc
+      DocumentSnapshot docRef = await firestore
+          .collection(SituationModel.collection)
+          .document(id)
+          .get();
+      situationModel = SituationModel(docRef.documentID).fromMap(docRef.data);
+
+      // SituationModel situationModelTemp = state.situationState.situationList
+      //     .firstWhere((element) => element.id == id);
+      // // situationModel = SituationModel.clone(situationModelTemp);
       // situationModel = SituationModel(situationModelTemp.id)
       //     .fromMap(situationModelTemp.toMap());
     }
@@ -96,26 +127,26 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
     print('GetDocsSituationListAsyncSituationAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
-    //+++ collection old
-    if (state.situationState.situationFilter == SituationFilter.isactive) {
-      collRef = firestore.collection(SituationModel.collection).where(
-          'professor.id',
-          isEqualTo: state.loggedState.userModelLogged.id);
-      // .where('isActive', isEqualTo: true);
-    } else if (state.situationState.situationFilter ==
-        SituationFilter.isNotactive) {
-      collRef = firestore.collection(SituationModel.collection).where(
-          'professor.id',
-          isEqualTo: state.loggedState.userModelLogged.id);
-      // .where('isActive', isEqualTo: false);
-    }
-    final docsSnapOld = await collRef.getDocuments();
+    // //+++ collection old
+    // if (state.situationState.situationFilter == SituationFilter.isactive) {
+    //   collRef = firestore.collection(SituationModel.collection).where(
+    //       'professor.id',
+    //       isEqualTo: state.loggedState.userModelLogged.id);
+    //   // .where('isActive', isEqualTo: true);
+    // } else if (state.situationState.situationFilter ==
+    //     SituationFilter.isNotactive) {
+    //   collRef = firestore.collection(SituationModel.collection).where(
+    //       'professor.id',
+    //       isEqualTo: state.loggedState.userModelLogged.id);
+    //   // .where('isActive', isEqualTo: false);
+    // }
+    // final docsSnapOld = await collRef.getDocuments();
 
-    List<SituationModel> listDocsOld = docsSnapOld.documents
-        .map((docSnapOld) =>
-            SituationModel(docSnapOld.documentID).fromMap(docSnapOld.data))
-        .toList();
-    //--- collection old
+    // List<SituationModel> listDocsOld = docsSnapOld.documents
+    //     .map((docSnapOld) =>
+    //         SituationModel(docSnapOld.documentID).fromMap(docSnapOld.data))
+    //     .toList();
+    // //--- collection old
 
     //+++ collection new
     if (state.situationState.situationFilter == SituationFilter.isactive) {
@@ -138,12 +169,12 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
         .toList();
     //--- collection new
 
-    for (SituationModel item in listDocsOld) {
-      listDocsNew.removeWhere((e) => e.id == item.id);
-    }
-    List<SituationModel> listDocsDistinct = [...listDocsOld, ...listDocsNew];
+    // for (SituationModel item in listDocsOld) {
+    //   listDocsNew.removeWhere((e) => e.id == item.id);
+    // }
+    // List<SituationModel> listDocsDistinct = [...listDocsOld, ...listDocsNew];
 
-    listDocsDistinct.sort((a, b) => a.name.compareTo(b.name));
+    listDocsNew.sort((a, b) => a.name.compareTo(b.name));
 
     // // listDocs.forEach((element) {
     // //   print(element.id);
@@ -158,7 +189,7 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
     // // });
     return state.copyWith(
       situationState: state.situationState.copyWith(
-        situationList: listDocsDistinct,
+        situationList: listDocsNew,
       ),
     );
   }

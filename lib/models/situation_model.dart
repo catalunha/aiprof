@@ -1,14 +1,16 @@
 import 'package:aiprof/models/firestore_model.dart';
+import 'package:aiprof/models/simulation_model.dart';
 import 'package:aiprof/models/user_model.dart';
 
 class SituationModel extends FirestoreModel {
-  static final String collection = "Problema";
+  static final String collection = "situation";
   UserModel userRef;
   String area;
   String name;
   String description;
   String url;
   bool isActive;
+  Map<String, SimulationModel> simulationModel;
 
   SituationModel(
     String id, {
@@ -18,6 +20,7 @@ class SituationModel extends FirestoreModel {
     this.description,
     this.url,
     this.userRef,
+    this.simulationModel,
   }) : super(id);
 
   SituationModel.clone(SituationModel origin)
@@ -29,6 +32,7 @@ class SituationModel extends FirestoreModel {
           description: origin.description,
           url: origin.url,
           userRef: origin.userRef,
+          simulationModel: origin.simulationModel,
         );
 
   @override
@@ -48,6 +52,13 @@ class SituationModel extends FirestoreModel {
           .fromMap({'name': map['professor']['nome']});
     if (map.containsKey('userRef') && map['userRef'] != null)
       userRef = UserModel(map['userRef']['id']).fromMap(map['userRef']);
+    if (map["simulationModel"] is Map) {
+      simulationModel = Map<String, SimulationModel>();
+      for (var item in map["simulationModel"].entries) {
+        simulationModel[item.key] =
+            SimulationModel(item.key).fromMap(item.value);
+      }
+    }
     return this;
   }
 
@@ -63,6 +74,12 @@ class SituationModel extends FirestoreModel {
     if (url != null) data['url'] = this.url;
     if (this.userRef != null) {
       data['userRef'] = this.userRef.toMapRef();
+    }
+    if (simulationModel != null && simulationModel is Map) {
+      data["simulationModel"] = Map<String, dynamic>();
+      for (var item in simulationModel.entries) {
+        data["simulationModel"][item.key] = item.value.toMap();
+      }
     }
     return data;
   }
@@ -81,6 +98,7 @@ class SituationModel extends FirestoreModel {
     _return = _return + '\nArea: $area';
     _return = _return + '\nDescrição: $description';
     _return = _return + '\nuserRef.name: ${userRef.name}';
+    _return = _return + '\nsimulationModel: ${simulationModel?.length}';
     _return = _return + '\nid: $id';
     return _return;
   }

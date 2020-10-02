@@ -26,7 +26,7 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(NavigateAction.pushNamed(Routes.situationEdit));
         },
         onSimulationList: (String id) {
-          dispatch(SetSituationCurrentSyncSituationAction(id));
+          dispatch(SetSituationCurrentLocalSyncSituationAction(id));
           dispatch(NavigateAction.pushNamed(Routes.simulationList));
         },
       );

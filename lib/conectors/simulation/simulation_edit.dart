@@ -34,19 +34,23 @@ class ViewModel extends BaseModel<AppState> {
         ]);
   List<Input> _input(Map<String, Input> input) {
     List<Input> _input = [];
-    for (var item in input.entries) {
-      _input.add(Input(item.key).fromMap(item.value.toMap()));
+    if (input != null) {
+      for (var item in input.entries) {
+        _input.add(Input(item.key).fromMap(item.value.toMap()));
+      }
+      _input.sort((a, b) => a.name.compareTo(b.name));
     }
-    _input.sort((a, b) => a.name.compareTo(b.name));
     return _input;
   }
 
   List<Output> _output(Map<String, Output> output) {
     List<Output> _output = [];
-    for (var item in output.entries) {
-      _output.add(Output(item.key).fromMap(item.value.toMap()));
+    if (output != null) {
+      for (var item in output.entries) {
+        _output.add(Output(item.key).fromMap(item.value.toMap()));
+      }
+      _output.sort((a, b) => a.name.compareTo(b.name));
     }
-    _output.sort((a, b) => a.name.compareTo(b.name));
     return _output;
   }
 

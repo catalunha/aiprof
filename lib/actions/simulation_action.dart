@@ -1,5 +1,6 @@
+import 'package:aiprof/actions/situation_action.dart';
 import 'package:aiprof/models/simulation_model.dart';
-import 'package:aiprof/models/user_model.dart';
+import 'package:aiprof/models/situation_model.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
 import 'package:async_redux/async_redux.dart';
@@ -7,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart' as uuid;
 
 // +++ Actions Sync
-
 class SetSimulationCurrentSyncSimulationAction extends ReduxAction<AppState> {
   final String id;
 
@@ -19,10 +19,12 @@ class SetSimulationCurrentSyncSimulationAction extends ReduxAction<AppState> {
     if (id == null) {
       simulationModel = SimulationModel(null);
     } else {
-      SimulationModel simulationModelTemp = state.simulationState.simulationList
-          .firstWhere((element) => element.id == id);
-      simulationModel = SimulationModel(simulationModelTemp.id)
-          .fromMap(simulationModelTemp.toMap());
+      // SimulationModel simulationModelTemp = state.simulationState.simulationList
+      //     .firstWhere((element) => element.id == id);
+      // simulationModel = SimulationModel(simulationModelTemp.id)
+      //     .fromMap(simulationModelTemp.toMap());
+      simulationModel = SimulationModel(id).fromMap(
+          state.situationState.situationCurrent.simulationModel[id].toMap());
     }
     return state.copyWith(
       simulationState: state.simulationState.copyWith(
@@ -31,6 +33,29 @@ class SetSimulationCurrentSyncSimulationAction extends ReduxAction<AppState> {
     );
   }
 }
+// class SetSimulationCurrentSyncSimulationAction extends ReduxAction<AppState> {
+//   final String id;
+
+//   SetSimulationCurrentSyncSimulationAction(this.id);
+
+//   @override
+//   AppState reduce() {
+//     SimulationModel simulationModel;
+//     if (id == null) {
+//       simulationModel = SimulationModel(null);
+//     } else {
+//       SimulationModel simulationModelTemp = state.simulationState.simulationList
+//           .firstWhere((element) => element.id == id);
+//       simulationModel = SimulationModel(simulationModelTemp.id)
+//           .fromMap(simulationModelTemp.toMap());
+//     }
+//     return state.copyWith(
+//       simulationState: state.simulationState.copyWith(
+//         simulationCurrent: simulationModel,
+//       ),
+//     );
+//   }
+// }
 
 class SetSimulationFilterSyncSimulationAction extends ReduxAction<AppState> {
   final SimulationFilter simulationFilter;
@@ -48,62 +73,96 @@ class SetSimulationFilterSyncSimulationAction extends ReduxAction<AppState> {
 
   void after() => dispatch(GetDocsSimulationListAsyncSimulationAction());
 }
+
 // --- Actions Sync
 
 // +++ Actions Async
 class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
-    print('GetDocsSimulationListAsyncSimulationAction...');
     Firestore firestore = Firestore.instance;
-    Query collRef;
     //+++ old doc
-    collRef = firestore
-        .collection(SimulationModel.collection)
-        .where('professor.id', isEqualTo: state.loggedState.userModelLogged.id)
-        .where('problema.id',
-            isEqualTo: state.situationState.situationCurrent.id);
-
-    final docsSnapOld = await collRef.getDocuments();
-
-    final listDocsOld = docsSnapOld.documents
-        .map((docSnap) =>
-            SimulationModel(docSnap.documentID).fromMap(docSnap.data))
-        .toList();
-    //--- old doc
-    //+++ new doc
-    collRef = firestore
-        .collection(SimulationModel.collection)
-        .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id)
-        .where('situationRef.id',
-            isEqualTo: state.situationState.situationCurrent.id);
-    final docsSnapNew = await collRef.getDocuments();
-
-    final listDocsNew = docsSnapNew.documents
-        .map((docSnap) =>
-            SimulationModel(docSnap.documentID).fromMap(docSnap.data))
-        .toList();
-    //--- new doc
-
-    // Map<dynamic, SimulationModel> mapping =
-    //     Map.fromIterable(listDocs, key: (v) => v.id, value: (v) => v);
-    // List<dynamic> ids = state.loggedState.userModelLogged.classroomId;
-    // final listDocsSorted = [for (dynamic id in ids) mapping[id]];
-
-    for (SimulationModel item in listDocsOld) {
-      listDocsNew.removeWhere((e) => e.id == item.id);
-    }
-    List<SimulationModel> listDocsDistinct = [...listDocsOld, ...listDocsNew];
-
-    listDocsDistinct.sort((a, b) => a.name.compareTo(b.name));
+    DocumentSnapshot docRef = await firestore
+        .collection(SituationModel.collection)
+        .document(state.situationState.situationCurrent.id)
+        .get();
+    SituationModel situationModel =
+        SituationModel(docRef.documentID).fromMap(docRef.data);
+    //+++ Atualiza lista de situations pois uma situação foi alterar e a lista nao precisa ser relida.
+    int index = state.situationState.situationList
+        .indexWhere((element) => element.id == situationModel.id);
+    List<SituationModel> situationList = [];
+    situationList.addAll(state.situationState.situationList);
+    situationList[index] = situationModel;
+    //---
+    List<SimulationModel> simulationList = [];
+    simulationList
+        .addAll(situationModel.simulationModel?.values?.toList() ?? []);
 
     return state.copyWith(
+      situationState: state.situationState.copyWith(
+        situationCurrent: situationModel,
+        situationList: situationList,
+      ),
       simulationState: state.simulationState.copyWith(
-        simulationList: listDocsDistinct,
+        simulationList: simulationList,
       ),
     );
   }
 }
+// class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
+//   @override
+//   Future<AppState> reduce() async {
+//     print('GetDocsSimulationListAsyncSimulationAction...');
+//     Firestore firestore = Firestore.instance;
+//     Query collRef;
+//     //+++ old doc
+//     collRef = firestore
+//         .collection(SimulationModel.collection)
+//         .where('professor.id', isEqualTo: state.loggedState.userModelLogged.id)
+//         .where('problema.id',
+//             isEqualTo: state.situationState.situationCurrent.id);
+
+//     final docsSnapOld = await collRef.getDocuments();
+
+//     final listDocsOld = docsSnapOld.documents
+//         .map((docSnap) =>
+//             SimulationModel(docSnap.documentID).fromMap(docSnap.data))
+//         .toList();
+//     //--- old doc
+//     //+++ new doc
+//     collRef = firestore
+//         .collection(SimulationModel.collection)
+//         .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id)
+//         .where('situationRef.id',
+//             isEqualTo: state.situationState.situationCurrent.id);
+//     final docsSnapNew = await collRef.getDocuments();
+
+//     final listDocsNew = docsSnapNew.documents
+//         .map((docSnap) =>
+//             SimulationModel(docSnap.documentID).fromMap(docSnap.data))
+//         .toList();
+//     //--- new doc
+
+//     // Map<dynamic, SimulationModel> mapping =
+//     //     Map.fromIterable(listDocs, key: (v) => v.id, value: (v) => v);
+//     // List<dynamic> ids = state.loggedState.userModelLogged.classroomId;
+//     // final listDocsSorted = [for (dynamic id in ids) mapping[id]];
+
+//     for (SimulationModel item in listDocsOld) {
+//       listDocsNew.removeWhere((e) => e.id == item.id);
+//     }
+//     List<SimulationModel> listDocsDistinct = [...listDocsOld, ...listDocsNew];
+
+//     listDocsDistinct.sort((a, b) => a.name.compareTo(b.name));
+
+//     return state.copyWith(
+//       simulationState: state.simulationState.copyWith(
+//         simulationList: listDocsDistinct,
+//       ),
+//     );
+//   }
+// }
 
 class AddDocSimulationCurrentAsyncSimulationAction
     extends ReduxAction<AppState> {
@@ -116,25 +175,64 @@ class AddDocSimulationCurrentAsyncSimulationAction
   Future<AppState> reduce() async {
     print('AddDocSimulationCurrentAsyncSimulationAction...');
     Firestore firestore = Firestore.instance;
+    SituationModel situationModel =
+        SituationModel(state.situationState.situationCurrent.id)
+            .fromMap(state.situationState.situationCurrent.toMap());
     SimulationModel simulationModel =
         SimulationModel(state.simulationState.simulationCurrent.id)
             .fromMap(state.simulationState.simulationCurrent.toMap());
-    simulationModel.userRef = UserModel(state.loggedState.userModelLogged.id)
-        .fromMap(state.loggedState.userModelLogged.toMapRef());
-
+    if (situationModel.simulationModel == null) {
+      situationModel.simulationModel = Map<String, SimulationModel>();
+    }
     simulationModel.name = name;
 
+    situationModel.simulationModel[uuid.Uuid().v4()] = simulationModel;
     await firestore
-        .collection(SimulationModel.collection)
-        .add(simulationModel.toMap());
+        .collection(SituationModel.collection)
+        .document(situationModel.id)
+        .updateData(situationModel.toMap());
     return null;
   }
 
   // @override
   // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
   @override
-  void after() => dispatch(GetDocsSimulationListAsyncSimulationAction());
+  void after() {
+    // dispatch(GetDocsSituationListAsyncSituationAction());
+    dispatch(GetDocsSimulationListAsyncSimulationAction());
+  }
 }
+
+// class AddDocSimulationCurrentAsyncSimulationAction
+//     extends ReduxAction<AppState> {
+//   final String name;
+
+//   AddDocSimulationCurrentAsyncSimulationAction({
+//     this.name,
+//   });
+//   @override
+//   Future<AppState> reduce() async {
+//     print('AddDocSimulationCurrentAsyncSimulationAction...');
+//     Firestore firestore = Firestore.instance;
+//     SimulationModel simulationModel =
+//         SimulationModel(state.simulationState.simulationCurrent.id)
+//             .fromMap(state.simulationState.simulationCurrent.toMap());
+//     // simulationModel.userRef = UserModel(state.loggedState.userModelLogged.id)
+//     //     .fromMap(state.loggedState.userModelLogged.toMapRef());
+
+//     simulationModel.name = name;
+
+//     await firestore
+//         .collection(SimulationModel.collection)
+//         .add(simulationModel.toMap());
+//     return null;
+//   }
+
+//   // @override
+//   // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
+//   @override
+//   void after() => dispatch(GetDocsSimulationListAsyncSimulationAction());
+// }
 
 class UpdateDocSimulationCurrentAsyncSimulationAction
     extends ReduxAction<AppState> {
@@ -149,28 +247,67 @@ class UpdateDocSimulationCurrentAsyncSimulationAction
   Future<AppState> reduce() async {
     print('UpdateDocSimulationCurrentAsyncSimulationAction...');
     Firestore firestore = Firestore.instance;
+    SituationModel situationModel =
+        SituationModel(state.situationState.situationCurrent.id)
+            .fromMap(state.situationState.situationCurrent.toMap());
     SimulationModel simulationModel =
         SimulationModel(state.simulationState.simulationCurrent.id)
             .fromMap(state.simulationState.simulationCurrent.toMap());
-
     if (isDelete) {
-      await firestore
-          .collection(SimulationModel.collection)
-          .document(simulationModel.id)
-          .delete();
+      situationModel.simulationModel.remove(simulationModel.id);
     } else {
       simulationModel.name = name;
-      await firestore
-          .collection(SimulationModel.collection)
-          .document(simulationModel.id)
-          .updateData(simulationModel.toMap());
+      situationModel.simulationModel[simulationModel.id] = simulationModel;
     }
+    await firestore
+        .collection(SituationModel.collection)
+        .document(situationModel.id)
+        .updateData(situationModel.toMap());
     return null;
   }
 
   @override
-  void after() => dispatch(GetDocsSimulationListAsyncSimulationAction());
+  void after() {
+    // dispatch(GetDocsSituationListAsyncSituationAction());
+    dispatch(GetDocsSimulationListAsyncSimulationAction());
+  }
 }
+
+// class UpdateDocSimulationCurrentAsyncSimulationAction
+//     extends ReduxAction<AppState> {
+//   final String name;
+//   final bool isDelete;
+
+//   UpdateDocSimulationCurrentAsyncSimulationAction({
+//     this.name,
+//     this.isDelete,
+//   });
+//   @override
+//   Future<AppState> reduce() async {
+//     print('UpdateDocSimulationCurrentAsyncSimulationAction...');
+//     Firestore firestore = Firestore.instance;
+//     SimulationModel simulationModel =
+//         SimulationModel(state.simulationState.simulationCurrent.id)
+//             .fromMap(state.simulationState.simulationCurrent.toMap());
+
+//     if (isDelete) {
+//       await firestore
+//           .collection(SimulationModel.collection)
+//           .document(simulationModel.id)
+//           .delete();
+//     } else {
+//       simulationModel.name = name;
+//       await firestore
+//           .collection(SimulationModel.collection)
+//           .document(simulationModel.id)
+//           .updateData(simulationModel.toMap());
+//     }
+//     return null;
+//   }
+
+//   @override
+//   void after() => dispatch(GetDocsSimulationListAsyncSimulationAction());
+// }
 
 // +++ Actions Sync for Input
 
