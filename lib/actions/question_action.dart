@@ -1,3 +1,4 @@
+import 'package:aiprof/actions/exame_action.dart';
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/exame_model.dart';
 import 'package:aiprof/models/question_model.dart';
@@ -129,10 +130,14 @@ class AddDocQuestionCurrentAsyncQuestionAction extends ReduxAction<AppState> {
     questionModel.time = time;
     questionModel.error = error;
     questionModel.isDelivered = false;
+
     await firestore
         .collection(QuestionModel.collection)
         .add(questionModel.toMap());
-
+    dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
+      questionId: questionModel.id,
+      isAddOrRemove: true,
+    ));
     return null;
   }
 
@@ -184,6 +189,10 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
           .collection(QuestionModel.collection)
           .document(questionModel.id)
           .delete();
+      dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
+        questionId: questionModel.id,
+        isAddOrRemove: false,
+      ));
     } else {
       await firestore
           .collection(QuestionModel.collection)

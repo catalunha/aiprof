@@ -17,7 +17,6 @@ class ViewModel extends BaseModel<AppState> {
   int error;
   int scoreQuestion;
   SituationModel situationRef;
-  SimulationModel simulationRef;
   bool isAddOrUpdate;
   Function() onSituationSelect;
   Function(String, String, dynamic, dynamic, int, int, int, int) onAdd;
@@ -33,7 +32,6 @@ class ViewModel extends BaseModel<AppState> {
     @required this.error,
     @required this.scoreQuestion,
     @required this.situationRef,
-    @required this.simulationRef,
     @required this.isAddOrUpdate,
     @required this.onSituationSelect,
     @required this.onAdd,
@@ -48,7 +46,6 @@ class ViewModel extends BaseModel<AppState> {
           error,
           scoreQuestion,
           situationRef,
-          simulationRef,
           isAddOrUpdate,
         ]);
   @override
@@ -63,7 +60,6 @@ class ViewModel extends BaseModel<AppState> {
       error: state.questionState.questionCurrent.error,
       scoreQuestion: state.questionState.questionCurrent.scoreQuestion,
       situationRef: state.questionState.questionCurrent.situationRef,
-      simulationRef: state.questionState.questionCurrent.simulationRef,
       onAdd: (
         String name,
         String description,
@@ -132,7 +128,6 @@ class QuestionEdit extends StatelessWidget {
         error: viewModel.error,
         scoreQuestion: viewModel.scoreQuestion,
         situationRef: viewModel.situationRef,
-        simulationRef: viewModel.simulationRef,
         onSituationSelect: viewModel.onSituationSelect,
         onAdd: viewModel.onAdd,
         onUpdate: viewModel.onUpdate,

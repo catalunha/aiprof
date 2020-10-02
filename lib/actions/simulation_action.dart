@@ -98,6 +98,7 @@ class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
     List<SimulationModel> simulationList = [];
     simulationList
         .addAll(situationModel.simulationModel?.values?.toList() ?? []);
+    simulationList.sort((a, b) => a.name.compareTo(b.name));
 
     return state.copyWith(
       situationState: state.situationState.copyWith(

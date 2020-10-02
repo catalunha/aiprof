@@ -14,7 +14,6 @@ class QuestionEditDS extends StatefulWidget {
   final int time;
   final int error;
   final SituationModel situationRef;
-  final SimulationModel simulationRef;
   final bool isAddOrUpdate;
   final Function() onSituationSelect;
 
@@ -36,7 +35,6 @@ class QuestionEditDS extends StatefulWidget {
     this.onAdd,
     this.onUpdate,
     this.situationRef,
-    this.simulationRef,
     this.onSituationSelect,
   }) : super(key: key);
   @override
@@ -155,8 +153,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
           ),
           ListTile(
             title: Text('Situação ou Problema selecionado:'),
-            subtitle: Text(
-                '${widget.situationRef?.name}\n${widget.simulationRef?.id}'),
+            subtitle: Text('${widget.situationRef?.name}'),
             trailing: Icon(Icons.search),
             onTap: () => widget.onSituationSelect(),
           ),

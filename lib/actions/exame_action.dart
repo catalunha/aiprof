@@ -1,5 +1,6 @@
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/exame_model.dart';
+import 'package:aiprof/models/question_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aiprof/models/user_model.dart';
@@ -230,11 +231,11 @@ class UpdateDocSetStudentInExameCurrentAsyncExameAction
   }
 }
 
-class BatchDocsSetStudentListInExameCurrentAsyncExameAction
+class UpdateDocsSetStudentListInExameCurrentAsyncExameAction
     extends ReduxAction<AppState> {
   final bool isAddOrRemove;
 
-  BatchDocsSetStudentListInExameCurrentAsyncExameAction({
+  UpdateDocsSetStudentListInExameCurrentAsyncExameAction({
     this.isAddOrRemove,
   });
   @override
@@ -256,6 +257,50 @@ class BatchDocsSetStudentListInExameCurrentAsyncExameAction
           exameModel.studentMap.remove(student.id);
         }
       }
+    }
+    await firestore
+        .collection(ExameModel.collection)
+        .document(exameModel.id)
+        .updateData(exameModel.toMap());
+    return state.copyWith(
+      exameState: state.exameState.copyWith(
+        exameCurrent: exameModel,
+      ),
+    );
+  }
+
+  @override
+  void before() => dispatch(WaitAction.add(this));
+  @override
+  void after() {
+    dispatch(GetDocsExameListAsyncExameAction());
+    dispatch(WaitAction.remove(this));
+  }
+}
+
+class UpdateDocSetQuestionInExameCurrentAsyncExameAction
+    extends ReduxAction<AppState> {
+  final String questionId;
+  final bool isAddOrRemove;
+  UpdateDocSetQuestionInExameCurrentAsyncExameAction({
+    this.questionId,
+    this.isAddOrRemove,
+  });
+  @override
+  Future<AppState> reduce() async {
+    Firestore firestore = Firestore.instance;
+
+    ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
+        .fromMap(state.exameState.exameCurrent.toMap());
+
+    if (exameModel.questionMap == null)
+      exameModel.questionMap = Map<String, bool>();
+    if (isAddOrRemove) {
+      if (!exameModel.questionMap.containsKey(questionId)) {
+        exameModel.questionMap.addAll({questionId: false});
+      }
+    } else {
+      exameModel.questionMap.remove(questionId);
     }
     await firestore
         .collection(ExameModel.collection)

@@ -39,7 +39,7 @@ class ViewModel extends BaseModel<AppState> {
           ));
         },
         onSetStudentListInExameCurrent: (bool isAddOrRemove) {
-          dispatch(BatchDocsSetStudentListInExameCurrentAsyncExameAction(
+          dispatch(UpdateDocsSetStudentListInExameCurrentAsyncExameAction(
             isAddOrRemove: isAddOrRemove,
           ));
         },

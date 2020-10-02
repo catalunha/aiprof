@@ -1,7 +1,6 @@
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/exame_model.dart';
 import 'package:aiprof/models/firestore_model.dart';
-import 'package:aiprof/models/simulation_model.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:aiprof/models/user_model.dart';
 
@@ -10,9 +9,7 @@ class QuestionModel extends FirestoreModel {
   UserModel userRef;
   ClassroomModel classroomRef;
   ExameModel exameRef;
-  //
   SituationModel situationRef;
-  SimulationModel simulationRef;
   String name;
   String description;
   dynamic start;
@@ -28,7 +25,6 @@ class QuestionModel extends FirestoreModel {
     this.classroomRef,
     this.exameRef,
     this.situationRef,
-    this.simulationRef,
     this.start,
     this.end,
     this.scoreQuestion,
@@ -53,10 +49,6 @@ class QuestionModel extends FirestoreModel {
     if (map.containsKey('situationRef') && map['situationRef'] != null)
       situationRef = SituationModel(map['situationRef']['id'])
           .fromMap(map['situationRef']);
-    if (map.containsKey('simulationRef') && map['simulationRef'] != null)
-      simulationRef = SimulationModel(map['simulationRef']['id'])
-          .fromMap(map['simulationRef']);
-
     if (map.containsKey('name')) name = map['name'];
     if (map.containsKey('description')) description = map['description'];
     start = map.containsKey('start') && map['start'] != null
@@ -89,9 +81,6 @@ class QuestionModel extends FirestoreModel {
     }
     if (this.situationRef != null) {
       data['situationRef'] = this.situationRef.toMapRef();
-    }
-    if (this.simulationRef != null) {
-      data['simulationRef'] = this.simulationRef.toMapRef();
     }
     if (name != null) data['name'] = this.name;
     if (description != null) data['description'] = this.description;

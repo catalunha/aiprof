@@ -1,14 +1,16 @@
-import 'package:aiprof/models/simulation_model.dart';
 import 'package:flutter/material.dart';
+import 'package:aiprof/models/simulation_model.dart';
 
 class SimulationListDS extends StatefulWidget {
   final List<SimulationModel> simulationList;
+  final List<String> simulationIncosistent;
   final Function(String) onEditSimulation;
 
   const SimulationListDS({
     Key key,
     this.simulationList,
     this.onEditSimulation,
+    this.simulationIncosistent,
   }) : super(key: key);
 
   @override
@@ -31,7 +33,10 @@ class SimulationListDSState extends State<SimulationListDS> {
           final simulation = widget.simulationList[index];
           return Card(
             child: ListTile(
-              title: Text('${simulation.name}'),
+              selected: widget.simulationIncosistent.contains(simulation.id),
+              title: widget.simulationIncosistent.contains(simulation.id)
+                  ? Text('Simulação com ERRO na entrada ou saída')
+                  : Text('${simulation.name}'),
               subtitle: Text('${simulation.toString()}'),
               trailing: IconButton(
                 tooltip: 'Editar esta situação',
