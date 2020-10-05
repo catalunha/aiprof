@@ -17,7 +17,7 @@ class ExameModel extends FirestoreModel {
   int error;
   int scoreQuestion;
   // function
-  bool isDelivered;
+  bool isDelivery;
   bool isProcess;
   Map<String, bool> studentMap;
   Map<String, bool> questionMap;
@@ -32,7 +32,7 @@ class ExameModel extends FirestoreModel {
     this.time,
     this.error,
     this.scoreQuestion,
-    this.isDelivered,
+    this.isDelivery,
     this.isProcess,
     this.studentMap,
     this.questionMap,
@@ -65,7 +65,7 @@ class ExameModel extends FirestoreModel {
     if (map.containsKey('error')) error = map['error'];
     if (map.containsKey('scoreQuestion')) scoreQuestion = map['scoreQuestion'];
     // functions
-    if (map.containsKey('isDelivered')) isDelivered = map['isDelivered'];
+    if (map.containsKey('isDelivery')) isDelivery = map['isDelivery'];
     if (map.containsKey('isProcess')) isProcess = map['isProcess'];
     if (map["studentMap"] is Map) {
       studentMap = Map<String, bool>();
@@ -102,7 +102,7 @@ class ExameModel extends FirestoreModel {
     if (error != null) data['error'] = this.error;
     if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
     //function
-    if (isDelivered != null) data['isDelivered'] = this.isDelivered;
+    if (isDelivery != null) data['isDelivery'] = this.isDelivery;
     if (isProcess != null) data['isProcess'] = this.isProcess;
     if (studentMap != null && studentMap is Map) {
       data["studentMap"] = Map<String, dynamic>();

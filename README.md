@@ -7,13 +7,21 @@ TIK
 * User
 * classroom
 * know
-    arvore de situações
+    >
 * situation
-    * simulation
-* test
-    * question
-        situation1 com simulation2
-    * student
-        que é um user
+    > .
+* simulation
+    > .
+* exame
+  > a function se encarrega gerar task quando exame.isDelivery=true
+  * question
+    >: Add: atualiza em exame.questionMap[questionId]=false. pede para reaplicar exame
+    >: Update: Se question.isDelivered=true a function atualiza as tasks relacionadas a ela.
+    >: Delete: Se question.isDelivered=true apaga todas as tasks relacionados a ela. atualiza exame.questionMap.
+  * student
+    > Add: atualiza em exame.studentMap[studentId]=false. pede para reaplicar exame.
+    > delete: Se exame.studentMap=true apaga todas as tasks relacionados a ela. atualiza exame.studentMap.
 * task
-    é juntar uma questão a uma estudante
+    > é juntar as questões de um exame com os estudantes e gerar uma task
+
+

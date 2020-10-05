@@ -48,7 +48,9 @@ class _OutputEditDSState extends State<OutputEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate ? 'Criar saída' : 'Editar saída'),
+        title: Text(widget.isAddOrUpdate
+            ? 'Criar #output saída'
+            : 'Editar #output saída'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),

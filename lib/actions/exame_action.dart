@@ -116,7 +116,7 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.time = time;
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
-    exameModel.isDelivered = false;
+    exameModel.isDelivery = false;
     exameModel.isProcess = false;
     await firestore.collection(ExameModel.collection).add(exameModel.toMap());
 
@@ -137,7 +137,7 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
   final int time;
   final int error;
   final int scoreQuestion;
-  final bool isDelivered;
+  final bool isDelivery;
   final bool isDelete;
   UpdateDocExameCurrentAsyncExameAction({
     this.name,
@@ -149,7 +149,7 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     this.time,
     this.error,
     this.scoreQuestion,
-    this.isDelivered,
+    this.isDelivery,
     this.isDelete,
   });
   @override
@@ -167,7 +167,7 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.time = time;
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
-    exameModel.isDelivered = isDelivered;
+    exameModel.isDelivery = isDelivery;
 
     if (isDelete) {
       await firestore
@@ -288,6 +288,8 @@ class UpdateDocSetQuestionInExameCurrentAsyncExameAction
   });
   @override
   Future<AppState> reduce() async {
+    print(
+        'UpdateDocSetQuestionInExameCurrentAsyncExameAction: $questionId $isAddOrRemove');
     Firestore firestore = Firestore.instance;
 
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)

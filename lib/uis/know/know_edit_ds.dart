@@ -44,8 +44,8 @@ class _KnowEditDSState extends State<KnowEditDS> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.isCreateOrUpdate
-            ? 'Criar conhecimento'
-            : 'Editar conhecimento'),
+            ? 'Criar #Know conhecimento'
+            : 'Editar #Know conhecimento'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

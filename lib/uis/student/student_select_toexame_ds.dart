@@ -27,7 +27,8 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
       children: [
         Scaffold(
           appBar: AppBar(
-            title: Text('Alunos nesta turma (${widget.studentList.length})'),
+            title: Text(
+                '#Student2Exame Alunos nesta turma (${widget.studentList.length})'),
             actions: [
               IconButton(
                 tooltip: 'Marcar todos os possíveis',

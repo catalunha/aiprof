@@ -45,7 +45,9 @@ class _FolderEditDSState extends State<FolderEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isCreateOrUpdate ? 'Criar folder' : 'Editar folder'),
+        title: Text(widget.isCreateOrUpdate
+            ? 'Criar #folder Pasta'
+            : 'Editar #folder Pasta'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),

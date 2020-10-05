@@ -15,7 +15,7 @@ class ViewModel extends BaseModel<AppState> {
   int time;
   int error;
   int scoreQuestion;
-  bool isDelivered;
+  bool isDelivery;
   bool isAddOrUpdate;
   Function(String, String, dynamic, dynamic, int, int, int, int, int) onAdd;
   Function(
@@ -32,7 +32,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.time,
     @required this.error,
     @required this.scoreQuestion,
-    @required this.isDelivered,
+    @required this.isDelivery,
     @required this.isAddOrUpdate,
     @required this.onAdd,
     @required this.onUpdate,
@@ -46,7 +46,7 @@ class ViewModel extends BaseModel<AppState> {
           time,
           error,
           scoreQuestion,
-          isDelivered,
+          isDelivery,
           isAddOrUpdate,
         ]);
   @override
@@ -61,7 +61,7 @@ class ViewModel extends BaseModel<AppState> {
         time: state.exameState.exameCurrent.time,
         error: state.exameState.exameCurrent.error,
         scoreQuestion: state.exameState.exameCurrent.scoreQuestion,
-        isDelivered: state.exameState.exameCurrent.isDelivered ?? false,
+        isDelivery: state.exameState.exameCurrent.isDelivery ?? false,
         onAdd: (
           String name,
           String description,
@@ -96,7 +96,7 @@ class ViewModel extends BaseModel<AppState> {
           int time,
           int error,
           int scoreQuestion,
-          bool isDelivered,
+          bool isDelivery,
           bool isDelete,
         ) {
           dispatch(UpdateDocExameCurrentAsyncExameAction(
@@ -109,7 +109,7 @@ class ViewModel extends BaseModel<AppState> {
             time: time,
             error: error,
             scoreQuestion: scoreQuestion,
-            isDelivered: isDelivered,
+            isDelivery: isDelivery,
             isDelete: isDelete,
           ));
           dispatch(NavigateAction.pop());
@@ -134,7 +134,7 @@ class ExameEdit extends StatelessWidget {
         time: viewModel.time,
         error: viewModel.error,
         scoreQuestion: viewModel.scoreQuestion,
-        isDelivered: viewModel.isDelivered,
+        isDelivery: viewModel.isDelivery,
         onAdd: viewModel.onAdd,
         onUpdate: viewModel.onUpdate,
       ),

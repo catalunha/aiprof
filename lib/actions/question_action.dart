@@ -133,11 +133,16 @@ class AddDocQuestionCurrentAsyncQuestionAction extends ReduxAction<AppState> {
 
     await firestore
         .collection(QuestionModel.collection)
-        .add(questionModel.toMap());
-    dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
-      questionId: questionModel.id,
-      isAddOrRemove: true,
-    ));
+        .add(questionModel.toMap())
+        .then((value) =>
+            dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
+              questionId: value.documentID,
+              isAddOrRemove: true,
+            )));
+    // dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
+    //   questionId: questionModel.id,
+    //   isAddOrRemove: true,
+    // ));
     return null;
   }
 

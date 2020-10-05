@@ -12,7 +12,7 @@ class ExameEditDS extends StatefulWidget {
   final int time;
   final int error;
   final int scoreQuestion;
-  final bool isDelivered;
+  final bool isDelivery;
   final bool isAddOrUpdate;
   final Function(String, String, dynamic, dynamic, int, int, int, int, int)
       onAdd;
@@ -31,7 +31,7 @@ class ExameEditDS extends StatefulWidget {
     this.time,
     this.error,
     this.scoreQuestion,
-    this.isDelivered,
+    this.isDelivery,
     this.isAddOrUpdate,
     this.onAdd,
     this.onUpdate,
@@ -53,7 +53,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
   int _time;
   int _error;
   int _scoreQuestion;
-  bool _isDelivered;
+  bool _isDelivery;
   bool _isDelete = false;
   void validateData() {
     if (formKey.currentState.validate()) {
@@ -62,7 +62,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
           ? widget.onAdd(_name, _description, _start, _end, _scoreExame,
               _attempt, _time, _error, _scoreQuestion)
           : widget.onUpdate(_name, _description, _start, _end, _scoreExame,
-              _attempt, _time, _error, _scoreQuestion, _isDelivered, _isDelete);
+              _attempt, _time, _error, _scoreQuestion, _isDelivery, _isDelete);
     } else {
       setState(() {});
     }
@@ -71,7 +71,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
   @override
   void initState() {
     super.initState();
-    _isDelivered = widget.isDelivered;
+    _isDelivery = widget.isDelivery;
     _start = widget.start != null ? widget.start : DateTime.now();
     _end = widget.end != null ? widget.end : DateTime.now();
   }
@@ -80,8 +80,9 @@ class _ExameEditDSState extends State<ExameEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(widget.isAddOrUpdate ? 'Criar Avaliação' : 'Editar Avaliação'),
+        title: Text(widget.isAddOrUpdate
+            ? 'Criar #Exame Avaliação'
+            : 'Editar #Exame Avaliação'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -274,13 +275,13 @@ class _ExameEditDSState extends State<ExameEditDS> {
           widget.isAddOrUpdate
               ? Container()
               : SwitchListTile(
-                  value: _isDelivered,
-                  title: _isDelivered
+                  value: _isDelivery,
+                  title: _isDelivery
                       ? Text('Avaliação será distribuída.')
                       : Text('Distribuir avaliação ?'),
                   onChanged: (value) {
                     setState(() {
-                      _isDelivered = value;
+                      _isDelivery = value;
                     });
                   },
                 ),

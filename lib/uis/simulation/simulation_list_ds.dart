@@ -22,7 +22,7 @@ class SimulationListDSState extends State<SimulationListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Simulações (${widget.simulationList.length})'),
+        title: Text('#simulation Simulações (${widget.simulationList.length})'),
         actions: [
           // LogoutButton(),
         ],

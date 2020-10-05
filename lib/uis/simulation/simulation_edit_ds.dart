@@ -51,8 +51,9 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            Text(widget.isAddOrUpdate ? 'Criar simulação' : 'Editar simulação'),
+        title: Text(widget.isAddOrUpdate
+            ? 'Criar #simulation simulação'
+            : 'Editar #simulation simulação'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
