@@ -12,6 +12,7 @@ class ViewModel extends BaseModel<AppState> {
   List<UserModel> studentList;
   ExameModel exameCurrent;
   Function(UserModel, bool) onSetStudentInExameCurrent;
+  Function(String) onDeleteStudentInExameCurrent;
   Function(bool) onSetStudentListInExameCurrent;
   ViewModel();
   ViewModel.build({
@@ -19,6 +20,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.studentList,
     @required this.exameCurrent,
     @required this.onSetStudentInExameCurrent,
+    @required this.onDeleteStudentInExameCurrent,
     @required this.onSetStudentListInExameCurrent,
   }) : super(equals: [
           waiting,
@@ -27,23 +29,24 @@ class ViewModel extends BaseModel<AppState> {
         ]);
   @override
   ViewModel fromStore() => ViewModel.build(
-        waiting: state.wait.isWaiting,
-        studentList: state.studentState.studentList,
-        exameCurrent: state.exameState.exameCurrent,
-        onSetStudentInExameCurrent:
-            (UserModel studentModel, bool isAddOrRemove) {
-          print('id:${studentModel.id} isAddOrRemove:$isAddOrRemove');
-          dispatch(UpdateDocSetStudentInExameCurrentAsyncExameAction(
-            studentModel: studentModel,
-            isAddOrRemove: isAddOrRemove,
-          ));
-        },
-        onSetStudentListInExameCurrent: (bool isAddOrRemove) {
-          dispatch(UpdateDocsSetStudentListInExameCurrentAsyncExameAction(
-            isAddOrRemove: isAddOrRemove,
-          ));
-        },
-      );
+      waiting: state.wait.isWaiting,
+      studentList: state.studentState.studentList,
+      exameCurrent: state.exameState.exameCurrent,
+      onSetStudentInExameCurrent: (UserModel studentModel, bool isAddOrRemove) {
+        print('id:${studentModel.id} isAddOrRemove:$isAddOrRemove');
+        dispatch(UpdateDocSetStudentInExameCurrentAsyncExameAction(
+          studentModel: studentModel,
+          isAddOrRemove: isAddOrRemove,
+        ));
+      },
+      onSetStudentListInExameCurrent: (bool isAddOrRemove) {
+        dispatch(UpdateDocsSetStudentListInExameCurrentAsyncExameAction(
+          isAddOrRemove: isAddOrRemove,
+        ));
+      },
+      onDeleteStudentInExameCurrent: (String studentId) {
+        dispatch(DeleteStudentInExameCurrentAndTaskAsyncExameAction(studentId));
+      });
 }
 
 class StudentSelectToExame extends StatelessWidget {
@@ -58,6 +61,7 @@ class StudentSelectToExame extends StatelessWidget {
         studentList: viewModel.studentList,
         exameCurrent: viewModel.exameCurrent,
         onSetStudentInExameCurrent: viewModel.onSetStudentInExameCurrent,
+        onDeleteStudentInExameCurrent: viewModel.onDeleteStudentInExameCurrent,
         onSetStudentListInExameCurrent:
             viewModel.onSetStudentListInExameCurrent,
       ),

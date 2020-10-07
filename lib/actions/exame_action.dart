@@ -52,7 +52,7 @@ class SetExameFilterSyncExameAction extends ReduxAction<AppState> {
 // +++ Actions Async
 class GetDocsExameListAsyncExameAction extends ReduxAction<AppState> {
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     print('GetDocsExameListAsyncExameAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
@@ -61,15 +61,30 @@ class GetDocsExameListAsyncExameAction extends ReduxAction<AppState> {
         .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id)
         .where('classroomRef.id',
             isEqualTo: state.classroomState.classroomCurrent.id);
-    final docsSnapOld = await collRef.getDocuments();
+    Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
-    List<ExameModel> listDocs = docsSnapOld.documents
-        .map((docSnap) => ExameModel(docSnap.documentID).fromMap(docSnap.data))
-        .toList();
+    Stream<List<ExameModel>> streamList = streamQuerySnapshot.map(
+        (querySnapshot) => querySnapshot.documents
+            .map((docSnapshot) =>
+                ExameModel(docSnapshot.documentID).fromMap(docSnapshot.data))
+            .toList());
+    streamList.listen((List<ExameModel> exameList) {
+      dispatch(Get2DocsExameListAsyncExameAction(exameList));
+    });
 
+    return null;
+  }
+}
+
+class Get2DocsExameListAsyncExameAction extends ReduxAction<AppState> {
+  final List<ExameModel> exameList;
+
+  Get2DocsExameListAsyncExameAction(this.exameList);
+  @override
+  AppState reduce() {
     return state.copyWith(
       exameState: state.exameState.copyWith(
-        exameList: listDocs,
+        exameList: exameList,
       ),
     );
   }
@@ -215,6 +230,53 @@ class UpdateDocSetStudentInExameCurrentAsyncExameAction
         .collection(ExameModel.collection)
         .document(exameModel.id)
         .updateData(exameModel.toMap());
+    return state.copyWith(
+      exameState: state.exameState.copyWith(
+        exameCurrent: exameModel,
+      ),
+    );
+  }
+
+  @override
+  void before() => dispatch(WaitAction.add(this));
+  @override
+  void after() {
+    dispatch(GetDocsExameListAsyncExameAction());
+    dispatch(WaitAction.remove(this));
+  }
+}
+
+class DeleteStudentInExameCurrentAndTaskAsyncExameAction
+    extends ReduxAction<AppState> {
+  final String studentId;
+  DeleteStudentInExameCurrentAndTaskAsyncExameAction(this.studentId);
+  @override
+  Future<AppState> reduce() async {
+    Firestore firestore = Firestore.instance;
+
+    ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
+        .fromMap(state.exameState.exameCurrent.toMap());
+
+    exameModel.studentMap.remove(studentId);
+    await firestore
+        .collection(ExameModel.collection)
+        .document(exameModel.id)
+        .updateData(exameModel.toMap());
+
+// Deletando todas as tasks relacionadas. Pois taks para este student ja foi aplicada
+    Query collRef;
+    collRef = firestore
+        .collection('task')
+        .where('exameRef.id', isEqualTo: exameModel.id)
+        .where('studentUserRef.id', isEqualTo: studentId);
+    final docsSnap = await collRef.getDocuments();
+
+    List<String> listDocs =
+        docsSnap.documents.map((docSnap) => docSnap.documentID).toList();
+    print(listDocs);
+    for (var id in listDocs) {
+      await firestore.collection('task').document(id).delete();
+    }
     return state.copyWith(
       exameState: state.exameState.copyWith(
         exameCurrent: exameModel,

@@ -5,13 +5,47 @@
   <title>AI Prof</title>
 </head>
 <body>
-  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
-  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
-  <!-- Add Firebase products that you want to use -->
-  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
-  <script src="main.dart.js" type="application/javascript"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+<!-- Authentication -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+<!-- Cloud Firestore -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+<!-- Cloud Functions -->
+<script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-functions.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyDlaTPySdT3QHb0KoAz_cJvi4Tp-fCF4ig",
+    authDomain: "aiia01.firebaseapp.com",
+    databaseURL: "https://aiia01.firebaseio.com",
+    projectId: "aiia01",
+    storageBucket: "aiia01.appspot.com",
+    messagingSenderId: "434212952899",
+    appId: "1:434212952899:web:f17d8572721074ecb02df6",
+    measurementId: "G-PQ3XMSEDT8"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+
+<!-- <script>
+  const firebaseConfig = {
+    projectId: "aiia01",
+      databaseURL: "http://localhost:8080"
+  };
+  const app = firebase.initializeApp(firebaseConfig);
+  app.functions().useFunctionsEmulator('http://localhost:5001');
+  var db = firebase.firestore();
+  db.settings({host: "localhost:8081",ssl: false});
+  </script> -->
+
+<script src="main.dart.js" type="application/javascript"></script>
+
 
 </body>
 </html>

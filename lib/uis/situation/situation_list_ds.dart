@@ -1,6 +1,7 @@
 import 'package:aiprof/models/situation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:convert';
 
 class SituationListDS extends StatefulWidget {
   final List<SituationModel> situationList;
@@ -46,6 +47,7 @@ class _SituationListDSState extends State<SituationListDS> {
                     subtitle: Text('${situation.toString()}'),
                   ),
                 ),
+                // SelectableText(json.encode(situation.toMap()).toString()),
                 IconButton(
                   tooltip: 'Editar esta situação',
                   icon: Icon(Icons.edit),

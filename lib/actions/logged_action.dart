@@ -84,6 +84,9 @@ class CurrentUserModelSyncLoggedAction extends ReduxAction<AppState> {
       loggedState: state.loggedState.copyWith(
         userModelLogged: userModel,
       ),
+      userState: state.userState.copyWith(
+        userCurrent: userModel,
+      ),
     );
   }
 }

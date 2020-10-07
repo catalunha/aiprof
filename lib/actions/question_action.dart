@@ -63,7 +63,7 @@ class SetQuestionFilterSyncQuestionAction extends ReduxAction<AppState> {
 // +++ Actions Async
 class GetDocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     print('GetDocsQuestionListAsyncQuestionAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
@@ -73,16 +73,37 @@ class GetDocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
         .where('classroomRef.id',
             isEqualTo: state.classroomState.classroomCurrent.id)
         .where('exameRef.id', isEqualTo: state.exameState.exameCurrent.id);
-    final docsSnap = await collRef.getDocuments();
+    // final docsSnap =  collRef.getDocuments();
 
-    List<QuestionModel> listDocs = docsSnap.documents
-        .map((docSnap) =>
-            QuestionModel(docSnap.documentID).fromMap(docSnap.data))
-        .toList();
+    // List<QuestionModel> listDocs = docsSnap.documents
+    //     .map((docSnap) =>
+    //         QuestionModel(docSnap.documentID).fromMap(docSnap.data))
+    //     .toList();
+    Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
+    Stream<List<QuestionModel>> streamList = streamQuerySnapshot.map(
+        (querySnapshot) => querySnapshot.documents
+            .map((docSnapshot) =>
+                QuestionModel(docSnapshot.documentID).fromMap(docSnapshot.data))
+            .toList());
+    streamList.listen((List<QuestionModel> list) {
+      dispatch(Get2DocsQuestionListAsyncQuestionAction(list));
+    });
+
+    return null;
+  }
+}
+
+class Get2DocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
+  final List<QuestionModel> questionList;
+
+  Get2DocsQuestionListAsyncQuestionAction(this.questionList);
+
+  @override
+  AppState reduce() {
     return state.copyWith(
       questionState: state.questionState.copyWith(
-        questionList: listDocs,
+        questionList: questionList,
       ),
     );
   }

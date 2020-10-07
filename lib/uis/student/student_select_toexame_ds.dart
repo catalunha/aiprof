@@ -7,6 +7,7 @@ class StudentSelectToExameDS extends StatefulWidget {
   final List<UserModel> studentList;
   final ExameModel exameCurrent;
   final Function(UserModel, bool) onSetStudentInExameCurrent;
+  final Function(String) onDeleteStudentInExameCurrent;
   final Function(bool) onSetStudentListInExameCurrent;
   const StudentSelectToExameDS({
     Key key,
@@ -15,6 +16,7 @@ class StudentSelectToExameDS extends StatefulWidget {
     this.onSetStudentInExameCurrent,
     this.waiting,
     this.onSetStudentListInExameCurrent,
+    this.onDeleteStudentInExameCurrent,
   }) : super(key: key);
   @override
   _StudentSelectToExameDSState createState() => _StudentSelectToExameDSState();
@@ -51,25 +53,65 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
             itemCount: widget.studentList.length,
             itemBuilder: (context, index) {
               final student = widget.studentList[index];
-              return ListTile(
-                enabled: widget.exameCurrent.studentMap != null &&
-                        widget.exameCurrent.studentMap.containsKey(student.id)
-                    ? !widget.exameCurrent.studentMap[student.id]
-                    : true,
-                selected: widget.exameCurrent.studentMap != null
-                    ? widget.exameCurrent.studentMap.containsKey(student.id)
-                    : false,
-                title: Text('${student.name}'),
-                subtitle: Text('${student.id}'),
-                onTap: () {
-                  widget.onSetStudentInExameCurrent(
-                      student,
-                      !(widget.exameCurrent.studentMap != null
+              return Row(
+                children: [
+                  widget.exameCurrent.studentMap.containsKey(student.id) &&
+                          widget.exameCurrent.studentMap[student.id]
+                      ? Expanded(
+                          flex: 1,
+                          child: InkWell(
+                            child: Tooltip(
+                              message:
+                                  'Deleta este aluno desta avaliação e todas as suas tarefas nesta avaliação',
+                              child: Icon(
+                                Icons.delete,
+                                size: 15,
+                              ),
+                            ),
+                            onDoubleTap: () {
+                              widget.onDeleteStudentInExameCurrent(student.id);
+                            },
+                          ),
+                        )
+                      : Container(),
+                  Expanded(
+                    flex: 8,
+                    child: ListTile(
+                      enabled: widget.exameCurrent.studentMap != null &&
+                              widget.exameCurrent.studentMap
+                                  .containsKey(student.id)
+                          ? !widget.exameCurrent.studentMap[student.id]
+                          : true,
+                      selected: widget.exameCurrent.studentMap != null
                           ? widget.exameCurrent.studentMap
                               .containsKey(student.id)
-                          : false));
-                  setState(() {});
-                },
+                          : false,
+                      title: Text('${student.name}'),
+                      subtitle: Text(
+                          '${student.id} - ${widget.exameCurrent.studentMap[student.id]}'),
+                      onTap: () {
+                        widget.onSetStudentInExameCurrent(
+                            student,
+                            !(widget.exameCurrent.studentMap != null
+                                ? widget.exameCurrent.studentMap
+                                    .containsKey(student.id)
+                                : false));
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                  widget.exameCurrent.studentMap.containsKey(student.id) &&
+                          widget.exameCurrent.studentMap[student.id]
+                      ? Expanded(
+                          flex: 1,
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: Icon(Icons.art_track_sharp),
+                            tooltip: 'Lista suas tarefas nesta avaliação',
+                          ),
+                        )
+                      : Container(),
+                ],
               );
             },
           ),

@@ -40,6 +40,7 @@ class _ExameListDSState extends State<ExameListDS> {
                 Container(
                   width: 500,
                   child: ListTile(
+                    selected: exame.isDelivery,
                     title: Text('${exame.name}'),
                     subtitle: Text('${exame.toString()}'),
                   ),

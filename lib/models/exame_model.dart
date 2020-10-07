@@ -4,14 +4,15 @@ import 'package:aiprof/models/user_model.dart';
 
 class ExameModel extends FirestoreModel {
   static final String collection = "exame";
-  UserModel userRef;
+  UserModel userRef; //teacher
   ClassroomModel classroomRef;
   String name;
   String description;
+  //dados do exame
   dynamic start;
   dynamic end;
   int scoreExame;
-  //herdar na questio
+  //dados para herdar na questao
   int attempt;
   int time;
   int error;
