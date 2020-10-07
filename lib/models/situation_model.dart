@@ -10,11 +10,13 @@ class SituationModel extends FirestoreModel {
   String description;
   String url;
   bool isActive;
+  bool isInconsistent;
   Map<String, SimulationModel> simulationModel;
 
   SituationModel(
     String id, {
     this.isActive,
+    this.isInconsistent,
     this.area,
     this.name,
     this.description,
@@ -27,6 +29,7 @@ class SituationModel extends FirestoreModel {
       : this(
           origin.id,
           isActive: origin.isActive,
+          isInconsistent: origin.isInconsistent,
           area: origin.area,
           name: origin.name,
           description: origin.description,
@@ -39,6 +42,8 @@ class SituationModel extends FirestoreModel {
   SituationModel fromMap(Map<String, dynamic> map) {
     if (map.containsKey('ativo')) isActive = map['ativo'];
     if (map.containsKey('isActive')) isActive = map['isActive'];
+    if (map.containsKey('isInconsistent'))
+      isInconsistent = map['isInconsistent'];
     if (map.containsKey('pasta') && map['pasta'] != null)
       area = map['pasta']['nome'];
     if (map.containsKey('area')) area = map['area'];
@@ -67,6 +72,7 @@ class SituationModel extends FirestoreModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     // _updateAll();
     if (isActive != null) data['isActive'] = this.isActive;
+    if (isInconsistent != null) data['isInconsistent'] = this.isInconsistent;
     // if (number != null) data['number'] = this.number;
     if (area != null) data['area'] = this.area;
     if (name != null) data['name'] = this.name;
@@ -96,6 +102,7 @@ class SituationModel extends FirestoreModel {
   String toString() {
     String _return = '';
     _return = _return + '\nArea: $area';
+    _return = _return + '\nisInconsistent: $isInconsistent';
     _return = _return + '\nDescrição: $description';
     _return = _return + '\nuserRef.name: ${userRef.name}';
     _return = _return + '\nsimulationModel: ${simulationModel?.length}';

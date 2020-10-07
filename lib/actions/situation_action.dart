@@ -296,3 +296,49 @@ class UpdateDocSituationCurrentAsyncSituationAction
   @override
   void after() => dispatch(GetDocsSituationListAsyncSituationAction());
 }
+
+class UpdateFieldDocSituationCurrentAsyncSituationAction
+    extends ReduxAction<AppState> {
+  final String field;
+  final dynamic value;
+
+  UpdateFieldDocSituationCurrentAsyncSituationAction({
+    this.field,
+    this.value,
+  });
+  @override
+  Future<AppState> reduce() async {
+    print('UpdateFieldDocSituationCurrentAsyncSituationAction...');
+    Firestore firestore = Firestore.instance;
+    // SituationModel situationModel =
+    //     SituationModel(state.situationState.situationCurrent.id)
+    //         .fromMap(state.situationState.situationCurrent.toMap());
+    // situationModel.area = area;
+    // situationModel.name = name;
+    // situationModel.description = description;
+    // situationModel.url = url;
+    // // if (situationModel.isActive != isActive && isActive) {
+    // //   await firestore
+    // //       .collection(UserModel.collection)
+    // //       .document(state.loggedState.userModelLogged.id)
+    // //       .updateData({
+    // //     'situationId': FieldValue.arrayUnion([situationModel.id])
+    // //   });
+    // // }
+    // // if (situationModel.isActive != isActive && !isActive) {
+    // //   await firestore
+    // //       .collection(UserModel.collection)
+    // //       .document(state.loggedState.userModelLogged.id)
+    // //       .updateData({
+    // //     'situationId': FieldValue.arrayRemove([situationModel.id])
+    // //   });
+    // // }
+    // situationModel.isActive = isActive;
+
+    await firestore
+        .collection(SituationModel.collection)
+        .document(state.situationState.situationCurrent.id)
+        .updateData({field: value});
+    return null;
+  }
+}

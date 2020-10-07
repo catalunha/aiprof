@@ -1,314 +1,197 @@
-// import 'package:aiprof/models/classroom_model.dart';
-// import 'package:aiprof/models/exame_model.dart';
-// import 'package:aiprof/models/firestore_model.dart';
-// import 'package:aiprof/models/question_model.dart';
-// import 'package:aiprof/models/situation_model.dart';
-// import 'package:aiprof/models/user_model.dart';
+import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/models/exame_model.dart';
+import 'package:aiprof/models/firestore_model.dart';
+import 'package:aiprof/models/question_model.dart';
+import 'package:aiprof/models/simulation_model.dart';
+import 'package:aiprof/models/situation_model.dart';
+import 'package:aiprof/models/user_model.dart';
 
-// class TarefaModel extends FirestoreModel {
-//   static final String collection = "Tarefa";
-//   UserModel teacherUserRef;
-//   ClassroomModel classroomRef;
-//   ExameModel exameRef;
-//   QuestionModel questionRef;
-//   SituationModel situationRef;
-//   UserModel studentUserRef;
-//   //dados do exame
-//   dynamic start;
-//   dynamic end;
-//   int scoreExame;
-//   //dados da questao
-//   int attempt;
-//   int time;
-//   int error;
-//   int scoreQuestion;
+class TaskModel extends FirestoreModel {
+  static final String collection = "task";
+  UserModel teacherUserRef;
+  ClassroomModel classroomRef;
+  ExameModel exameRef;
+  QuestionModel questionRef;
+  SituationModel situationRef;
+  UserModel studentUserRef;
+  //dados do exame
+  dynamic start;
+  dynamic end;
+  int scoreExame;
+  //dados da questao
+  int attempt;
+  int time;
+  int error;
+  int scoreQuestion;
+  // gestão da tarefa
+  dynamic started;
+  dynamic lastSendAnswer;
+  dynamic attempted;
+  bool open;
+  Map<String, Input> simulationInput = Map<String, Input>();
+  Map<String, Output> simulationOutput = Map<String, Output>();
 
-//   dynamic started;
-//   dynamic lastSendAnswer;
-//   dynamic attempted;
-//   bool open;
-//   Map<String, Input> simulationInput = Map<String, Input>();
-//   Map<String, Output> simulationOutput = Map<String, Output>();
+  TaskModel(
+    String id, {
+    this.teacherUserRef,
+    this.classroomRef,
+    this.exameRef,
+    this.questionRef,
+    this.situationRef,
+    this.studentUserRef,
+    this.start,
+    this.end,
+    this.scoreExame,
+    this.attempt,
+    this.time,
+    this.error,
+    this.scoreQuestion,
+    this.started,
+    this.lastSendAnswer,
+    this.attempted,
+    this.open,
+    this.simulationInput,
+    this.simulationOutput,
+  }) : super(id);
 
-//   TarefaModel({
-//     String id,
-//     this.ativo,
-//     this.professor,
-//     this.turma,
-//     this.avaliacao,
-//     this.questao,
-//     this.aluno,
-//     this.modificado,
-//     this.inicio,
-//     this.iniciou,
-//     this.enviou,
-//     this.fim,
-//     this.tentativa,
-//     this.tentou,
-//     this.tempo,
-//     this.erroRelativo,
-//     this.avaliacaoNota,
-//     this.questaoNota,
-//     this.aberta,
-//     this.problema,
-//     this.simulacao,
-//     this.variavel,
-//     this.gabarito,
-//   }) : super(id);
+  @override
+  TaskModel fromMap(Map<String, dynamic> map) {
+    if (map.containsKey('teacherUserRef') && map['teacherUserRef'] != null)
+      teacherUserRef =
+          UserModel(map['teacherUserRef']['id']).fromMap(map['teacherUserRef']);
+    if (map.containsKey('classroomRef') && map['classroomRef'] != null)
+      classroomRef = ClassroomModel(map['classroomRef']['id'])
+          .fromMap(map['classroomRef']);
+    if (map.containsKey('exameRef') && map['exameRef'] != null)
+      exameRef = ExameModel(map['exameRef']['id']).fromMap(map['exameRef']);
+    if (map.containsKey('questionRef') && map['questionRef'] != null)
+      questionRef =
+          QuestionModel(map['questionRef']['id']).fromMap(map['questionRef']);
+    if (map.containsKey('situationRef') && map['situationRef'] != null)
+      situationRef = SituationModel(map['situationRef']['id'])
+          .fromMap(map['situationRef']);
+    if (map.containsKey('studentUserRef') && map['studentUserRef'] != null)
+      studentUserRef =
+          UserModel(map['studentUserRef']['id']).fromMap(map['studentUserRef']);
+    start = map.containsKey('start') && map['start'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+            map['start'].millisecondsSinceEpoch)
+        : null;
+    end = map.containsKey('end') && map['end'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(map['end'].millisecondsSinceEpoch)
+        : null;
+    if (map.containsKey('scoreExame')) scoreExame = map['scoreExame'];
+    if (map.containsKey('attempt')) attempt = map['attempt'];
+    if (map.containsKey('time')) time = map['time'];
+    if (map.containsKey('error')) error = map['error'];
+    if (map.containsKey('scoreQuestion')) scoreQuestion = map['scoreQuestion'];
+    started = map.containsKey('started') && map['started'] != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+            map['started'].millisecondsSinceEpoch)
+        : null;
+    lastSendAnswer =
+        map.containsKey('lastSendAnswer') && map['lastSendAnswer'] != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                map['lastSendAnswer'].millisecondsSinceEpoch)
+            : null;
+    if (map.containsKey('attempted')) attempted = map['attempted'];
+    if (map.containsKey('open')) open = map['open'];
+    if (map["simulationInput"] is Map) {
+      simulationInput = Map<String, Input>();
+      for (var item in map["simulationInput"].entries) {
+        simulationInput[item.key] = Input(item.key).fromMap(item.value);
+      }
+    }
+    if (map["simulationOutput"] is Map) {
+      simulationOutput = Map<String, Output>();
+      for (var item in map["simulationOutput"].entries) {
+        simulationOutput[item.key] = Output(item.key).fromMap(item.value);
+      }
+    }
+    return this;
+  }
 
-//   @override
-//   TarefaModel fromMap(Map<String, dynamic> map) {
-//     if (map.containsKey('ativo')) ativo = map['ativo'];
-//     professor = map.containsKey('professor') && map['professor'] != null
-//         ? UsuarioFk.fromMap(map['professor'])
-//         : null;
-//     turma = map.containsKey('turma') && map['turma'] != null
-//         ? TurmaFk.fromMap(map['turma'])
-//         : null;
-//     avaliacao = map.containsKey('avaliacao') && map['avaliacao'] != null
-//         ? AvaliacaoFk.fromMap(map['avaliacao'])
-//         : null;
-//     questao = map.containsKey('questao') && map['questao'] != null
-//         ? QuestaoFk.fromMap(map['questao'])
-//         : null;
-//     aluno = map.containsKey('aluno') && map['aluno'] != null
-//         ? UsuarioFk.fromMap(map['aluno'])
-//         : null;
-//     simulacao = map.containsKey('simulacao') && map['simulacao'] != null
-//         ? SimulacaoFk.fromMap(map['simulacao'])
-//         : null;
+  @override
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.teacherUserRef != null) {
+      data['teacherUserRef'] = this.teacherUserRef.toMapRef();
+    }
+    if (this.classroomRef != null) {
+      data['classroomRef'] = this.classroomRef.toMapRef();
+    }
+    if (this.exameRef != null) {
+      data['exameRef'] = this.exameRef.toMapRef();
+    }
+    if (this.questionRef != null) {
+      data['questionRef'] = this.questionRef.toMapRef();
+    }
+    if (this.situationRef != null) {
+      data['situationRef'] = this.situationRef.toMapRef();
+    }
+    if (this.studentUserRef != null) {
+      data['studentUserRef'] = this.studentUserRef.toMapRef();
+    }
+    data['start'] = this.start;
+    data['end'] = this.end;
+    if (scoreExame != null) data['scoreExame'] = this.scoreExame;
+    if (attempt != null) data['attempt'] = this.attempt;
+    if (time != null) data['time'] = this.time;
+    if (error != null) data['error'] = this.error;
+    if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
+    data['started'] = this.started;
+    data['lastSendAnswer'] = this.lastSendAnswer;
+    if (attempted != null) data['attempted'] = this.attempted;
+    if (open != null) data['open'] = this.open;
 
-//     modificado = map.containsKey('modificado') && map['modificado'] != null
-//         ? DateTime.fromMillisecondsSinceEpoch(
-//             map['modificado'].millisecondsSinceEpoch)
-//         : null;
-//     inicio = map.containsKey('inicio') && map['inicio'] != null
-//         ? DateTime.fromMillisecondsSinceEpoch(
-//             map['inicio'].millisecondsSinceEpoch)
-//         : null;
-//     iniciou = map.containsKey('iniciou') && map['iniciou'] != null
-//         ? DateTime.fromMillisecondsSinceEpoch(
-//             map['iniciou'].millisecondsSinceEpoch)
-//         : null;
-//     enviou = map.containsKey('enviou') && map['enviou'] != null
-//         ? DateTime.fromMillisecondsSinceEpoch(
-//             map['enviou'].millisecondsSinceEpoch)
-//         : null;
-//     fim = map.containsKey('fim') && map['fim'] != null
-//         ? DateTime.fromMillisecondsSinceEpoch(map['fim'].millisecondsSinceEpoch)
-//         : null;
-//     if (map.containsKey('tentativa')) tentativa = map['tentativa'];
-//     if (map.containsKey('tentou')) tentou = map['tentou'];
-//     if (map.containsKey('tempo')) tempo = map['tempo'];
-//     if (map.containsKey('erroRelativo')) erroRelativo = map['erroRelativo'];
-//     if (map.containsKey('avaliacaoNota')) avaliacaoNota = map['avaliacaoNota'];
-//     if (map.containsKey('questaoNota')) questaoNota = map['questaoNota'];
+    return data;
+  }
 
-//     if (map.containsKey('aberta')) aberta = map['aberta'];
-//     problema = map.containsKey('problema') && map['problema'] != null
-//         ? ProblemaFk.fromMap(map['problema'])
-//         : null;
+  bool get isOpen {
+    if (this.open && this.end.isBefore(DateTime.now())) {
+      this.open = false;
+      // print('==> Tarefa ${this.id}. aberta=${this.aberta} pois fim < now');
+    }
+    if (this.open &&
+        this.start != null &&
+        this.responderAte != null &&
+        this.responderAte.isBefore(DateTime.now())) {
+      this.open = false;
+      // print('==> Tarefa ${this.id} Fechada pois responderAte < now');
+    }
+    if (this.open && this.attempted != null && this.attempted >= this.attempt) {
+      this.open = false;
+      // print('==> Tarefa ${this.id} Fechada pois tentou < tentativa');
+    }
+    return this.open;
+  }
 
-//     if (map["variavel"] is Map) {
-//       variavel = Map<String, Variavel>();
-//       for (var item in map["variavel"].entries) {
-//         variavel[item.key] = Variavel.fromMap(item.value);
-//       }
-//     }
-//     if (map["gabarito"] is Map) {
-//       gabarito = Map<String, Gabarito>();
-//       for (var item in map["gabarito"].entries) {
-//         gabarito[item.key] = Gabarito.fromMap(item.value);
-//       }
-//     }
-//     // _updateAll();
-//     return this;
-//   }
+  DateTime get responderAte {
+    if (this.start != null) {
+      return this.start.add(Duration(hours: this.time));
+    } else {
+      return null;
+    }
+  }
 
-//   @override
-//   Map<String, dynamic> toMap() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     // _updateAll();
-//     if (ativo != null) data['ativo'] = this.ativo;
-//     if (this.professor != null) {
-//       data['professor'] = this.professor.toMap();
-//     }
-//     if (this.turma != null) {
-//       data['turma'] = this.turma.toMap();
-//     }
-//     if (this.avaliacao != null) {
-//       data['avaliacao'] = this.avaliacao.toMap();
-//     }
-//     if (this.questao != null) {
-//       data['questao'] = this.questao.toMap();
-//     }
-//     if (this.aluno != null) {
-//       data['aluno'] = this.aluno.toMap();
-//     }
-//     if (modificado != null) data['modificado'] = this.modificado;
-//     if (inicio != null) data['inicio'] = this.inicio;
-//     if (iniciou != null) data['iniciou'] = this.iniciou;
-//     if (enviou != null) data['enviou'] = this.enviou;
-//     if (fim != null) data['fim'] = this.fim;
-//     if (tentativa != null) data['tentativa'] = this.tentativa;
-//     if (tentou != null) data['tentou'] = this.tentou;
-//     if (tempo != null) data['tempo'] = this.tempo;
-//     if (erroRelativo != null) data['erroRelativo'] = this.erroRelativo;
-//     if (avaliacaoNota != null) data['avaliacaoNota'] = this.avaliacaoNota;
-//     if (questaoNota != null) data['questaoNota'] = this.questaoNota;
-//     if (aberta != null) data['aberta'] = aberta;
+  dynamic get tempoPResponder {
+    responderAte;
+    if (this.start == null) {
+      // return Duration(hours: this.tempo);
+      return null;
+    } else {
+      if (this.responderAte != null && this.end.isBefore(this.responderAte)) {
+        return this.end.difference(DateTime.now());
+      }
+      if (this.responderAte != null) {
+        return this.responderAte.difference(DateTime.now());
+      }
+    }
+  }
 
-//     if (this.problema != null) {
-//       data['problema'] = this.problema.toMap();
-//     }
-//     if (this.simulacao != null) {
-//       data['simulacao'] = this.simulacao.toMap();
-//     }
-
-//     if (variavel != null && variavel is Map) {
-//       data["variavel"] = Map<String, dynamic>();
-//       for (var item in variavel.entries) {
-//         data["variavel"][item.key] = item.value.toMap();
-//       }
-//     }
-//     if (gabarito != null && gabarito is Map) {
-//       data["gabarito"] = Map<String, dynamic>();
-//       for (var item in gabarito.entries) {
-//         data["gabarito"][item.key] = item.value.toMap();
-//       }
-//     }
-//     return data;
-//   }
-
-//   bool get isAberta {
-//     if (this.aberta && this.fim.isBefore(DateTime.now())) {
-//       this.aberta = false;
-//       // print('==> Tarefa ${this.id}. aberta=${this.aberta} pois fim < now');
-//     }
-//     if (this.aberta &&
-//         this.iniciou != null &&
-//         this.responderAte != null &&
-//         this.responderAte.isBefore(DateTime.now())) {
-//       this.aberta = false;
-//       // print('==> Tarefa ${this.id} Fechada pois responderAte < now');
-//     }
-//     if (this.aberta && this.tentou != null && this.tentou >= this.tentativa) {
-//       this.aberta = false;
-//       // print('==> Tarefa ${this.id} Fechada pois tentou < tentativa');
-//     }
-//     return this.aberta;
-//   }
-
-//   DateTime get responderAte {
-//     if (this.iniciou != null) {
-//       return this.iniciou.add(Duration(hours: this.tempo));
-//     } else {
-//       return null;
-//     }
-//   }
-
-//   dynamic get tempoPResponder {
-//     responderAte;
-//     if (this.iniciou == null) {
-//       // return Duration(hours: this.tempo);
-//       return null;
-//     } else {
-//       if (this.responderAte != null && this.fim.isBefore(this.responderAte)) {
-//         return this.fim.difference(DateTime.now());
-//       }
-//       if (this.responderAte != null) {
-//         return this.responderAte.difference(DateTime.now());
-//       }
-//     }
-//   }
-
-//   void updateAll() {
-//     responderAte;
-//     tempoPResponder;
-//     isAberta;
-//   }
-// }
-
-// // class Variavel {
-// //   String nome;
-// //   int ordem;
-// //   String tipo;
-// //   String valor;
-
-// //   Variavel({
-// //     this.nome,
-// //     this.ordem,
-// //     this.tipo,
-// //     this.valor,
-// //   });
-
-// //   Variavel.fromMap(Map<dynamic, dynamic> map) {
-// //     if (map.containsKey('ordem')) ordem = map['ordem'];
-// //     if (map.containsKey('nome')) nome = map['nome'];
-// //     if (map.containsKey('tipo')) tipo = map['tipo'];
-// //     if (map.containsKey('valor')) valor = map['valor'];
-// //   }
-
-// //   Map<dynamic, dynamic> toMap() {
-// //     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
-// //     if (ordem != null) data['ordem'] = this.ordem;
-// //     if (nome != null) data['nome'] = this.nome;
-// //     if (tipo != null) data['tipo'] = this.tipo;
-// //     if (valor != null) data['valor'] = this.valor;
-// //     return data;
-// //   }
-// // }
-
-// // class Gabarito {
-// //   String nome;
-// //   int ordem;
-// //   String tipo;
-// //   String gabarito;
-// //   String resposta;
-// //   int nota;
-// //   String gabaritoUploadID;
-// //   String respostaUploadID;
-// //   String respostaPath;
-
-// //   Gabarito({
-// //     this.nome,
-// //     this.ordem,
-// //     this.tipo,
-// //     this.gabarito,
-// //     this.resposta,
-// //     this.nota,
-// //     this.gabaritoUploadID,
-// //     this.respostaPath,
-// //     this.respostaUploadID,
-// //   });
-
-// //   Gabarito.fromMap(Map<dynamic, dynamic> map) {
-// //     if (map.containsKey('nome')) nome = map['nome'];
-// //     if (map.containsKey('ordem')) ordem = map['ordem'];
-// //     if (map.containsKey('tipo')) tipo = map['tipo'];
-// //     if (map.containsKey('gabarito')) gabarito = map['gabarito'];
-// //     if (map.containsKey('resposta')) resposta = map['resposta'];
-// //     if (map.containsKey('nota')) nota = map['nota'];
-// //     if (map.containsKey('gabaritoUploadID'))
-// //       gabaritoUploadID = map['gabaritoUploadID'];
-// //     if (map.containsKey('respostaPath')) respostaPath = map['respostaPath'];
-// //     if (map.containsKey('respostaUploadID'))
-// //       respostaUploadID = map['respostaUploadID'];
-// //   }
-
-// //   Map<dynamic, dynamic> toMap() {
-// //     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
-// //     if (nome != null) data['nome'] = this.nome;
-// //     if (ordem != null) data['ordem'] = this.ordem;
-// //     if (tipo != null) data['tipo'] = this.tipo;
-// //     if (gabarito != null) data['gabarito'] = this.gabarito;
-// //     if (resposta != null) data['resposta'] = this.resposta;
-// //     data['nota'] = this.nota ?? Bootstrap.instance.fieldValue.delete();
-// //     if (gabaritoUploadID != null)
-// //       data['gabaritoUploadID'] = this.gabaritoUploadID;
-// //     if (respostaPath != null) data['respostaPath'] = this.respostaPath;
-// //     if (respostaUploadID != null)
-// //       data['respostaUploadID'] = this.respostaUploadID;
-// //     return data;
-// //   }
-// // }
+  void updateAll() {
+    responderAte;
+    tempoPResponder;
+    isOpen;
+  }
+}

@@ -1,4 +1,5 @@
 import 'package:aiprof/actions/simulation_action.dart';
+import 'package:aiprof/actions/situation_action.dart';
 import 'package:aiprof/models/simulation_model.dart';
 import 'package:aiprof/uis/simulation/simulation_list_ds.dart';
 import 'package:flutter/material.dart';
@@ -67,6 +68,15 @@ class ViewModel extends BaseModel<AppState> {
         }
       }
     }
+    print('_simulationIncosistent: $_simulationIncosistent');
+    if (_simulationIncosistent.isEmpty) {
+      dispatch(UpdateFieldDocSituationCurrentAsyncSituationAction(
+          field: 'isInconsistent', value: false));
+    } else {
+      dispatch(UpdateFieldDocSituationCurrentAsyncSituationAction(
+          field: 'isInconsistent', value: true));
+    }
+
     return _simulationIncosistent;
   }
 

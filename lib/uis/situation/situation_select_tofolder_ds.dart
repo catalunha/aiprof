@@ -36,6 +36,7 @@ class _SituationSelectToFolderDSState extends State<SituationSelectToFolderDS> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                Text('Lista situações para incluir em folder'),
                 IconButton(
                   tooltip: 'Ordenar itens por Ordem alfabética',
                   icon: Icon(Icons.sort_by_alpha),

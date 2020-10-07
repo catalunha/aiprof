@@ -58,7 +58,6 @@ class QuestionModel extends FirestoreModel {
     end = map.containsKey('end') && map['end'] != null
         ? DateTime.fromMillisecondsSinceEpoch(map['end'].millisecondsSinceEpoch)
         : null;
-    if (map.containsKey('scoreQuestion')) scoreQuestion = map['scoreQuestion'];
     if (map.containsKey('attempt')) attempt = map['attempt'];
     if (map.containsKey('time')) time = map['time'];
     if (map.containsKey('error')) error = map['error'];
@@ -86,7 +85,6 @@ class QuestionModel extends FirestoreModel {
     if (description != null) data['description'] = this.description;
     data['start'] = this.start;
     data['end'] = this.end;
-    if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
     if (attempt != null) data['attempt'] = this.attempt;
     if (time != null) data['time'] = this.time;
     if (error != null) data['error'] = this.error;
