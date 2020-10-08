@@ -147,6 +147,67 @@ class TaskModel extends FirestoreModel {
     return data;
   }
 
+  @override
+  String toString() {
+    String _return = '';
+    _return = _return +
+        '\nProfessor: ${teacherUserRef.name.split(' ')[0]} (${teacherUserRef.id.substring(0, 4)})';
+    // _return = _return + '\nteacherUserRef.name: ${teacherUserRef.name}';
+    _return = _return +
+        '\nTurma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
+    // _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
+    _return = _return +
+        ' Avaliação: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
+    // _return = _return + '\nexameRef.name: ${exameRef.name}';
+    _return = _return +
+        '\nQuestão: ${questionRef.name} (${questionRef.id.substring(0, 4)}).';
+    // _return = _return + '\nquestionRef.name: ${questionRef.name}';
+    _return = _return +
+        ' Situação: ${situationRef.name} (${situationRef.id.substring(0, 4)})';
+    // _return = _return + '\nsituationRef.name: ${situationRef.name}';
+    _return = _return +
+        '\nAluno: ${studentUserRef.name.split(' ')[0]} (${studentUserRef.id.substring(0, 4)})';
+    // _return = _return + '\nstudentUserRef.name: ${studentUserRef.name}';
+
+    _return = _return + '\nInício: $start';
+    _return = _return + '\nIniciou: $started';
+    _return = _return + '\nÚltimo envio: $lastSendAnswer';
+    _return = _return + '\nFim: $end';
+    _return =
+        _return + '\nPeso avaliação-tarefa: $scoreExame - $scoreQuestion.';
+    // _return = _return + '\nscoreQuestion: $scoreQuestion';
+    _return = _return + ' Tentativa: $attempted de $attempt';
+    // _return = _return + '\nattempted: $attempted';
+    _return = _return + '\nTempo de resolução: $time h. Erro relativo: $error%';
+    // _return = _return + '\nerror: $error';
+    _return = _return + '\nopen: $open';
+
+    _return = _return + '\n ** Entrada: ${simulationInput.length} ** ';
+    List<Input> _inputList = [];
+    if (simulationInput != null) {
+      for (var item in simulationInput.entries) {
+        _inputList.add(Input(item.key).fromMap(item.value.toMap()));
+      }
+      _inputList.sort((a, b) => a.name.compareTo(b.name));
+    }
+    for (var item in _inputList) {
+      _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+    }
+    _return = _return + '\n ** Saída: ${simulationOutput.length} ** ';
+    List<Output> _outputList = [];
+    if (simulationOutput != null) {
+      for (var item in simulationOutput.entries) {
+        _outputList.add(Output(item.key).fromMap(item.value.toMap()));
+      }
+      _outputList.sort((a, b) => a.name.compareTo(b.name));
+    }
+    for (var item in _outputList) {
+      _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+    }
+
+    return _return;
+  }
+
   bool get isOpen {
     if (this.open && this.end.isBefore(DateTime.now())) {
       this.open = false;

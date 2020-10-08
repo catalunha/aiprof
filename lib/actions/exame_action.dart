@@ -49,6 +49,36 @@ class SetExameFilterSyncExameAction extends ReduxAction<AppState> {
   void after() => dispatch(GetDocsExameListAsyncExameAction());
 }
 
+class SetQuestionSelectedSyncExameAction extends ReduxAction<AppState> {
+  final String questionIdSelected;
+
+  SetQuestionSelectedSyncExameAction(this.questionIdSelected);
+
+  @override
+  AppState reduce() {
+    return state.copyWith(
+      exameState: state.exameState.copyWith(
+        questionIdSelected: questionIdSelected,
+      ),
+    );
+  }
+}
+
+class SetStudentSelectedSyncExameAction extends ReduxAction<AppState> {
+  final String studentIdSelected;
+
+  SetStudentSelectedSyncExameAction(this.studentIdSelected);
+
+  @override
+  AppState reduce() {
+    return state.copyWith(
+      exameState: state.exameState.copyWith(
+        studentIdSelected: studentIdSelected,
+      ),
+    );
+  }
+}
+
 // +++ Actions Async
 class GetDocsExameListAsyncExameAction extends ReduxAction<AppState> {
   @override

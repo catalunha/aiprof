@@ -91,3 +91,10 @@ enum QuestionFilter {
 enum QuestionOrder {
   name,
 }
+enum TaskFilter {
+  isActive,
+  isNotActive,
+}
+enum TaskOrder {
+  name,
+}

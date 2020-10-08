@@ -1,6 +1,7 @@
 import 'package:aiprof/actions/exame_action.dart';
 import 'package:aiprof/actions/student_action.dart';
 import 'package:aiprof/models/exame_model.dart';
+import 'package:aiprof/routes.dart';
 import 'package:aiprof/uis/student/student_select_toexame_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:async_redux/async_redux.dart';
@@ -12,6 +13,7 @@ class ViewModel extends BaseModel<AppState> {
   List<UserModel> studentList;
   ExameModel exameCurrent;
   Function(UserModel, bool) onSetStudentInExameCurrent;
+  Function(String) onSetStudentSelected;
   Function(String) onDeleteStudentInExameCurrent;
   Function(bool) onSetStudentListInExameCurrent;
   ViewModel();
@@ -20,6 +22,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.studentList,
     @required this.exameCurrent,
     @required this.onSetStudentInExameCurrent,
+    @required this.onSetStudentSelected,
     @required this.onDeleteStudentInExameCurrent,
     @required this.onSetStudentListInExameCurrent,
   }) : super(equals: [
@@ -29,24 +32,31 @@ class ViewModel extends BaseModel<AppState> {
         ]);
   @override
   ViewModel fromStore() => ViewModel.build(
-      waiting: state.wait.isWaiting,
-      studentList: state.studentState.studentList,
-      exameCurrent: state.exameState.exameCurrent,
-      onSetStudentInExameCurrent: (UserModel studentModel, bool isAddOrRemove) {
-        print('id:${studentModel.id} isAddOrRemove:$isAddOrRemove');
-        dispatch(UpdateDocSetStudentInExameCurrentAsyncExameAction(
-          studentModel: studentModel,
-          isAddOrRemove: isAddOrRemove,
-        ));
-      },
-      onSetStudentListInExameCurrent: (bool isAddOrRemove) {
-        dispatch(UpdateDocsSetStudentListInExameCurrentAsyncExameAction(
-          isAddOrRemove: isAddOrRemove,
-        ));
-      },
-      onDeleteStudentInExameCurrent: (String studentId) {
-        dispatch(DeleteStudentInExameCurrentAndTaskAsyncExameAction(studentId));
-      });
+        waiting: state.wait.isWaiting,
+        studentList: state.studentState.studentList,
+        exameCurrent: state.exameState.exameCurrent,
+        onSetStudentInExameCurrent:
+            (UserModel studentModel, bool isAddOrRemove) {
+          print('id:${studentModel.id} isAddOrRemove:$isAddOrRemove');
+          dispatch(UpdateDocSetStudentInExameCurrentAsyncExameAction(
+            studentModel: studentModel,
+            isAddOrRemove: isAddOrRemove,
+          ));
+        },
+        onSetStudentListInExameCurrent: (bool isAddOrRemove) {
+          dispatch(UpdateDocsSetStudentListInExameCurrentAsyncExameAction(
+            isAddOrRemove: isAddOrRemove,
+          ));
+        },
+        onDeleteStudentInExameCurrent: (String studentId) {
+          dispatch(
+              DeleteStudentInExameCurrentAndTaskAsyncExameAction(studentId));
+        },
+        onSetStudentSelected: (String studentIdSelected) {
+          dispatch(SetStudentSelectedSyncExameAction(studentIdSelected));
+          dispatch(NavigateAction.pushNamed(Routes.taskList));
+        },
+      );
 }
 
 class StudentSelectToExame extends StatelessWidget {
@@ -61,6 +71,7 @@ class StudentSelectToExame extends StatelessWidget {
         studentList: viewModel.studentList,
         exameCurrent: viewModel.exameCurrent,
         onSetStudentInExameCurrent: viewModel.onSetStudentInExameCurrent,
+        onSetStudentSelected: viewModel.onSetStudentSelected,
         onDeleteStudentInExameCurrent: viewModel.onDeleteStudentInExameCurrent,
         onSetStudentListInExameCurrent:
             viewModel.onSetStudentListInExameCurrent,

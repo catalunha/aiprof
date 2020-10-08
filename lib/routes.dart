@@ -19,6 +19,7 @@ import 'package:aiprof/conectors/situation/situation_list.dart';
 import 'package:aiprof/conectors/student/student_edit.dart';
 import 'package:aiprof/conectors/student/student_list.dart';
 import 'package:aiprof/conectors/student/student_select_toexame.dart';
+import 'package:aiprof/conectors/task/task_list.dart';
 import 'package:aiprof/conectors/welcome.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:async_redux/async_redux.dart';
@@ -47,6 +48,7 @@ class Routes {
   static final knowSelectToQuestion = '/knowSelectToQuestion';
   static final folderSelectToQuestion = '/folderSelectToQuestion';
   static final questionStudentSelect = '/questionStudentSelect';
+  static final taskList = '/taskList';
 
   static final routes = {
     welcome: (BuildContext context) => UserExceptionDialog<AppState>(
@@ -74,6 +76,7 @@ class Routes {
     folderSelectToQuestion: (BuildContext context) =>
         FolderSelectToQuestionList(),
     questionStudentSelect: (BuildContext context) => StudentSelectToExame(),
+    taskList: (BuildContext context) => TaskList(),
   };
 }
 

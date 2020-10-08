@@ -7,6 +7,7 @@ class StudentSelectToExameDS extends StatefulWidget {
   final List<UserModel> studentList;
   final ExameModel exameCurrent;
   final Function(UserModel, bool) onSetStudentInExameCurrent;
+  final Function(String) onSetStudentSelected;
   final Function(String) onDeleteStudentInExameCurrent;
   final Function(bool) onSetStudentListInExameCurrent;
   const StudentSelectToExameDS({
@@ -17,6 +18,7 @@ class StudentSelectToExameDS extends StatefulWidget {
     this.waiting,
     this.onSetStudentListInExameCurrent,
     this.onDeleteStudentInExameCurrent,
+    this.onSetStudentSelected,
   }) : super(key: key);
   @override
   _StudentSelectToExameDSState createState() => _StudentSelectToExameDSState();
@@ -105,7 +107,9 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
                       ? Expanded(
                           flex: 1,
                           child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              widget.onSetStudentSelected(student.id);
+                            },
                             icon: Icon(Icons.art_track_sharp),
                             tooltip: 'Lista suas tarefas nesta avaliação',
                           ),
