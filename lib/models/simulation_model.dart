@@ -169,7 +169,7 @@ class Output {
   String type;
   String value;
   String answer;
-  int score;
+  bool right;
 
   Output(
     this.id, {
@@ -177,7 +177,7 @@ class Output {
     this.type,
     this.value,
     this.answer,
-    this.score,
+    this.right,
   });
 
   Output fromMap(Map<dynamic, dynamic> map) {
@@ -186,13 +186,13 @@ class Output {
     if (map.containsKey('tipo')) type = map['tipo'];
     if (map.containsKey('valor')) value = map['valor'];
     if (map.containsKey('resposta')) answer = map['resposta'];
-    if (map.containsKey('nota')) score = map['nota'];
+    if (map.containsKey('nota')) right = map['nota'];
     //new fields
     if (map.containsKey('name')) name = map['name'];
     if (map.containsKey('type')) type = map['type'];
     if (map.containsKey('value')) value = map['value'];
     if (map.containsKey('answer')) answer = map['answer'];
-    if (map.containsKey('score')) score = map['score'];
+    if (map.containsKey('right')) right = map['right'];
     return this;
   }
 
@@ -202,7 +202,7 @@ class Output {
     if (type != null) data['type'] = this.type;
     if (value != null) data['value'] = this.value;
     if (answer != null) data['answer'] = this.answer;
-    if (score != null) data['score'] = this.score;
+    if (right != null) data['right'] = this.right;
     return data;
   }
 }

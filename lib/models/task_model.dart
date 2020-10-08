@@ -144,6 +144,18 @@ class TaskModel extends FirestoreModel {
     if (attempted != null) data['attempted'] = this.attempted;
     if (open != null) data['open'] = this.open;
 
+    if (simulationInput != null && simulationInput is Map) {
+      data["simulationInput"] = Map<String, dynamic>();
+      for (var item in simulationInput.entries) {
+        data["simulationInput"][item.key] = item.value.toMap();
+      }
+    }
+    if (simulationOutput != null && simulationOutput is Map) {
+      data["simulationOutput"] = Map<String, dynamic>();
+      for (var item in simulationOutput.entries) {
+        data["simulationOutput"][item.key] = item.value.toMap();
+      }
+    }
     return data;
   }
 
@@ -202,7 +214,8 @@ class TaskModel extends FirestoreModel {
       _outputList.sort((a, b) => a.name.compareTo(b.name));
     }
     for (var item in _outputList) {
-      _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+      _return =
+          _return + '\n${item.name}=${item.value} [${item.type}] ${item.right}';
     }
 
     return _return;
