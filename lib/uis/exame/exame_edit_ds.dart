@@ -12,7 +12,7 @@ class ExameEditDS extends StatefulWidget {
   final int time;
   final int error;
   final int scoreQuestion;
-  final bool isDelivery;
+  final bool isDelivered;
   final bool isAddOrUpdate;
   final Function(String, String, dynamic, dynamic, int, int, int, int, int)
       onAdd;
@@ -31,7 +31,7 @@ class ExameEditDS extends StatefulWidget {
     this.time,
     this.error,
     this.scoreQuestion,
-    this.isDelivery,
+    this.isDelivered,
     this.isAddOrUpdate,
     this.onAdd,
     this.onUpdate,
@@ -53,7 +53,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
   int _time;
   int _error;
   int _scoreQuestion;
-  bool _isDelivery;
+  bool _isDelivered;
   bool _isDelete = false;
   void validateData() {
     if (formKey.currentState.validate()) {
@@ -62,7 +62,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
           ? widget.onAdd(_name, _description, _start, _end, _scoreExame,
               _attempt, _time, _error, _scoreQuestion)
           : widget.onUpdate(_name, _description, _start, _end, _scoreExame,
-              _attempt, _time, _error, _scoreQuestion, _isDelivery, _isDelete);
+              _attempt, _time, _error, _scoreQuestion, _isDelivered, _isDelete);
     } else {
       setState(() {});
     }
@@ -71,7 +71,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
   @override
   void initState() {
     super.initState();
-    _isDelivery = widget.isDelivery;
+    _isDelivered = widget.isDelivered;
     _start = widget.start != null ? widget.start : DateTime.now();
     _end = widget.end != null ? widget.end : DateTime.now();
   }
@@ -275,13 +275,13 @@ class _ExameEditDSState extends State<ExameEditDS> {
           widget.isAddOrUpdate
               ? Container()
               : SwitchListTile(
-                  value: _isDelivery,
-                  title: _isDelivery
+                  value: _isDelivered,
+                  title: _isDelivered
                       ? Text('Avaliação será distribuída.')
                       : Text('Distribuir avaliação ?'),
                   onChanged: (value) {
                     setState(() {
-                      _isDelivery = value;
+                      _isDelivered = value;
                     });
                   },
                 ),

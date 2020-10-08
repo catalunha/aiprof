@@ -40,21 +40,15 @@ class SituationModel extends FirestoreModel {
 
   @override
   SituationModel fromMap(Map<String, dynamic> map) {
-    if (map.containsKey('ativo')) isActive = map['ativo'];
     if (map.containsKey('isActive')) isActive = map['isActive'];
     if (map.containsKey('isInconsistent'))
       isInconsistent = map['isInconsistent'];
-    if (map.containsKey('pasta') && map['pasta'] != null)
-      area = map['pasta']['nome'];
+
     if (map.containsKey('area')) area = map['area'];
-    if (map.containsKey('nome')) name = map['nome'];
     if (map.containsKey('name')) name = map['name'];
-    if (map.containsKey('descricao')) description = map['descricao'];
     if (map.containsKey('description')) description = map['description'];
     if (map.containsKey('url')) url = map['url'];
-    if (map.containsKey('professor') && map['professor'] != null)
-      userRef = UserModel(map['professor']['id'])
-          .fromMap({'name': map['professor']['nome']});
+
     if (map.containsKey('userRef') && map['userRef'] != null)
       userRef = UserModel(map['userRef']['id']).fromMap(map['userRef']);
     if (map["simulationModel"] is Map) {
@@ -73,7 +67,6 @@ class SituationModel extends FirestoreModel {
     // _updateAll();
     if (isActive != null) data['isActive'] = this.isActive;
     if (isInconsistent != null) data['isInconsistent'] = this.isInconsistent;
-    // if (number != null) data['number'] = this.number;
     if (area != null) data['area'] = this.area;
     if (name != null) data['name'] = this.name;
     if (description != null) data['description'] = this.description;

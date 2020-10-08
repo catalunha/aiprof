@@ -77,11 +77,17 @@ class Get2DocsTaskListAsyncTaskAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     TaskModel taskModel;
+    print('Get2DocsTaskListAsyncTaskAction... ${taskList.length}');
 
     if (state.taskState.taskCurrent != null) {
-      TaskModel taskModelTemp = taskList.firstWhere(
+      int index = taskList.indexWhere(
           (element) => element.id == state.taskState.taskCurrent.id);
-      taskModel = TaskModel(taskModelTemp.id).fromMap(taskModelTemp.toMap());
+      print(index);
+      if (index >= 0) {
+        TaskModel taskModelTemp = taskList.firstWhere(
+            (element) => element.id == state.taskState.taskCurrent.id);
+        taskModel = TaskModel(taskModelTemp.id).fromMap(taskModelTemp.toMap());
+      }
     }
 
     return state.copyWith(

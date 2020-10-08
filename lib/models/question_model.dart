@@ -103,19 +103,28 @@ class QuestionModel extends FirestoreModel {
   @override
   String toString() {
     String _return = '';
-    _return = _return + '\nuserRef.name: ${userRef.name}';
-    _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
-    _return = _return + '\nexameRef.name: ${exameRef.name}';
-    _return = _return + '\nstart: $start';
-    _return = _return + '\nend: $end';
-    _return = _return + '\nscoreQuestion: $scoreQuestion';
-    _return = _return + '\nattempt: $attempt';
-    _return = _return + '\ntime: $time';
-    _return = _return + '\nerror: $error';
-    _return = _return + '\nisDelivered: $isDelivered';
-    _return = _return + '\nsituationRef.name: ${situationRef?.name}';
+    _return = _return +
+        '\nProfessor: ${userRef.name.split(' ')[0]} (${userRef.id.substring(0, 4)})';
+    _return = _return +
+        '\nTurma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
+    _return = _return +
+        ' Avaliação: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
+    _return = _return +
+        '\nSituação: ${situationRef.name} (${situationRef.id.substring(0, 4)})';
+
+    // _return = _return + '\nuserRef.name: ${userRef.name}';
+    // _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
+    // _return = _return + '\nexameRef.name: ${exameRef.name}';
+    _return = _return + '\nInício: $start';
+    _return = _return + '\nFim: $end';
+    _return = _return + '\nPeso: $scoreQuestion.';
+    _return = _return + ' Tentativa: $attempt';
+    _return = _return + '\nTempo: $time h.';
+    _return = _return + ' Erro: $error%';
+    _return = _return + '\nAplicada: ${isDelivered ? "Sim" : "Não"}';
+    // _return = _return + '\nsituationRef.name: ${situationRef?.name}';
     // _return = _return + '\nsimulationRef.name: ${simulationRef.id}';
-    _return = _return + '\nid: $id';
+    _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }
 }

@@ -68,7 +68,7 @@ class ViewModel extends BaseModel<AppState> {
         }
       }
     }
-    print('_simulationIncosistent: $_simulationIncosistent');
+    // print('_simulationIncosistent: $_simulationIncosistent');
     if (_simulationIncosistent.isEmpty) {
       dispatch(UpdateFieldDocSituationCurrentAsyncSituationAction(
           field: 'isInconsistent', value: false));

@@ -1,4 +1,3 @@
-import 'package:aiprof/models/simulation_model.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ class QuestionEditDS extends StatefulWidget {
   final int time;
   final int error;
   final SituationModel situationRef;
+  final bool isDelivered;
   final bool isAddOrUpdate;
   final Function() onSituationSelect;
 
@@ -36,6 +36,7 @@ class QuestionEditDS extends StatefulWidget {
     this.onUpdate,
     this.situationRef,
     this.onSituationSelect,
+    this.isDelivered,
   }) : super(key: key);
   @override
   _QuestionEditDSState createState() => _QuestionEditDSState();
@@ -153,12 +154,14 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             //   return null;
             // },
           ),
-          ListTile(
-            title: Text('Situação ou Problema selecionado:'),
-            subtitle: Text('${widget.situationRef?.name}'),
-            trailing: Icon(Icons.search),
-            onTap: () => widget.onSituationSelect(),
-          ),
+          widget?.isDelivered != null && !widget.isDelivered
+              ? ListTile(
+                  title: Text('Selecione uma situação ou problema :'),
+                  subtitle: Text('${widget.situationRef?.name}'),
+                  trailing: Icon(Icons.search),
+                  onTap: () => widget.onSituationSelect(),
+                )
+              : Text('Questão já aplicada não pode mudar situação ou problema'),
           Text('Inicio do desenvolvimento:'),
           SizedBox(
             height: 100,

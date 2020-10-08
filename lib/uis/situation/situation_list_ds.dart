@@ -43,7 +43,9 @@ class _SituationListDSState extends State<SituationListDS> {
                 Container(
                   width: 500,
                   child: ListTile(
-                    selected: situation.isInconsistent,
+                    selected: situation?.isInconsistent != null
+                        ? situation.isInconsistent
+                        : true,
                     title: Text('${situation.name}'),
                     subtitle: Text('${situation.toString()}'),
                   ),

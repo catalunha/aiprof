@@ -18,7 +18,7 @@ class ExameModel extends FirestoreModel {
   int error;
   int scoreQuestion;
   // function
-  bool isDelivery;
+  bool isDelivered;
   bool isProcess;
   Map<String, bool> studentMap;
   Map<String, bool> questionMap;
@@ -33,7 +33,7 @@ class ExameModel extends FirestoreModel {
     this.time,
     this.error,
     this.scoreQuestion,
-    this.isDelivery,
+    this.isDelivered,
     this.isProcess,
     this.studentMap,
     this.questionMap,
@@ -66,7 +66,7 @@ class ExameModel extends FirestoreModel {
     if (map.containsKey('error')) error = map['error'];
     if (map.containsKey('scoreQuestion')) scoreQuestion = map['scoreQuestion'];
     // functions
-    if (map.containsKey('isDelivery')) isDelivery = map['isDelivery'];
+    if (map.containsKey('isDelivered')) isDelivered = map['isDelivered'];
     if (map.containsKey('isProcess')) isProcess = map['isProcess'];
     if (map["studentMap"] is Map) {
       studentMap = Map<String, bool>();
@@ -103,7 +103,7 @@ class ExameModel extends FirestoreModel {
     if (error != null) data['error'] = this.error;
     if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
     //function
-    if (isDelivery != null) data['isDelivery'] = this.isDelivery;
+    if (isDelivered != null) data['isDelivered'] = this.isDelivered;
     if (isProcess != null) data['isProcess'] = this.isProcess;
     if (studentMap != null && studentMap is Map) {
       data["studentMap"] = Map<String, dynamic>();
@@ -130,12 +130,13 @@ class ExameModel extends FirestoreModel {
   @override
   String toString() {
     String _return = '';
-    _return = _return + '\nDescrição: $description';
-    _return = _return + '\nuserRef.name: ${userRef.name}';
-    _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
-    _return = _return + '\nstudentMap.name: ${studentMap?.length}';
-    _return = _return + '\nquestionMap.name: ${questionMap?.length}';
-    _return = _return + '\nid: $id';
+    _return = _return +
+        '\nProfessor: ${userRef.name.split(' ')[0]} (${userRef.id.substring(0, 4)})';
+    _return = _return +
+        '\nTurma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
+    _return = _return + '\nAlunos: ${studentMap?.length}';
+    _return = _return + '\nQuestões: ${questionMap?.length}';
+    _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }
 }

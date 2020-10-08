@@ -1,9 +1,5 @@
-import 'package:aiprof/models/firestore_model.dart';
-import 'package:aiprof/models/situation_model.dart';
-import 'package:aiprof/models/user_model.dart';
-
-class SimulationModel extends FirestoreModel {
-  static final String collection = "Simulacao";
+class SimulationModel {
+  String id;
   // UserModel userRef;
   // SituationModel situationRef;
   String name;
@@ -11,15 +7,14 @@ class SimulationModel extends FirestoreModel {
   Map<String, Output> output = Map<String, Output>();
 
   SimulationModel(
-    String id, {
+    this.id, {
     // this.userRef,
     // this.situationRef,
     this.name,
     this.input,
     this.output,
-  }) : super(id);
+  });
 
-  @override
   SimulationModel fromMap(Map<String, dynamic> map) {
 // //old fields
 //     if (map.containsKey('professor') && map['professor'] != null)
@@ -64,7 +59,6 @@ class SimulationModel extends FirestoreModel {
     return this;
   }
 
-  @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     // if (this.userRef != null) {

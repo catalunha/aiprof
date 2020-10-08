@@ -61,7 +61,7 @@ class _FolderListDSState extends State<FolderListDS> {
   Widget folderContent(Folder folder) {
     return Row(
       children: [
-        Text('${folder.name}  ${folder.id.substring(0, 3)}'),
+        Text('${folder.name}  (${folder.id.substring(0, 3)})'),
         SizedBox(
           height: 5,
         ),
@@ -121,7 +121,8 @@ class _FolderListDSState extends State<FolderListDS> {
             widget.onSetSituationInFolderSyncKnowAction(situationModel);
           },
         ),
-        Text(' ${situationModel.name}'),
+        Text(
+            ' ${situationModel.name} - (${situationModel.id.substring(0, 4)})'),
         // containSituation
         //     ? IconButton(
         //         tooltip: 'Editar situação',

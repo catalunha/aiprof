@@ -44,19 +44,19 @@ class SetSituationCurrentSyncSituationAction extends ReduxAction<AppState> {
     if (id == null) {
       situationModel = SituationModel(null);
     } else {
-      Firestore firestore = Firestore.instance;
-      //+++ old doc
-      DocumentSnapshot docRef = await firestore
-          .collection(SituationModel.collection)
-          .document(id)
-          .get();
-      situationModel = SituationModel(docRef.documentID).fromMap(docRef.data);
+      // Firestore firestore = Firestore.instance;
+      // //+++ old doc
+      // DocumentSnapshot docRef = await firestore
+      //     .collection(SituationModel.collection)
+      //     .document(id)
+      //     .get();
+      // situationModel = SituationModel(docRef.documentID).fromMap(docRef.data);
 
-      // SituationModel situationModelTemp = state.situationState.situationList
-      //     .firstWhere((element) => element.id == id);
-      // // situationModel = SituationModel.clone(situationModelTemp);
-      // situationModel = SituationModel(situationModelTemp.id)
-      //     .fromMap(situationModelTemp.toMap());
+      SituationModel situationModelTemp = state.situationState.situationList
+          .firstWhere((element) => element.id == id);
+      // situationModel = SituationModel.clone(situationModelTemp);
+      situationModel = SituationModel(situationModelTemp.id)
+          .fromMap(situationModelTemp.toMap());
     }
     return state.copyWith(
       situationState: state.situationState.copyWith(
@@ -123,7 +123,7 @@ class SetSituationInQuestionCurrentSyncSituationAction
 // +++ Actions Async
 class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
   @override
-  Future<AppState> reduce() async {
+  AppState reduce() {
     print('GetDocsSituationListAsyncSituationAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
@@ -161,12 +161,23 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: false);
     }
-    final docsSnapNew = await collRef.getDocuments();
+    Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
-    List<SituationModel> listDocsNew = docsSnapNew.documents
-        .map((docSnapNew) =>
-            SituationModel(docSnapNew.documentID).fromMap(docSnapNew.data))
-        .toList();
+    Stream<List<SituationModel>> streamList = streamQuerySnapshot.map(
+        (querySnapshot) => querySnapshot.documents
+            .map((docSnapshot) => SituationModel(docSnapshot.documentID)
+                .fromMap(docSnapshot.data))
+            .toList());
+    streamList.listen((List<SituationModel> list) {
+      dispatch(Get2DocsSituationListAsyncSituationAction(list));
+    });
+    return null;
+    // final docsSnapNew = await collRef.getDocuments();
+
+    // List<SituationModel> listDocsNew = docsSnapNew.documents
+    //     .map((docSnapNew) =>
+    //         SituationModel(docSnapNew.documentID).fromMap(docSnapNew.data))
+    //     .toList();
     //--- collection new
 
     // for (SituationModel item in listDocsOld) {
@@ -174,7 +185,7 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
     // }
     // List<SituationModel> listDocsDistinct = [...listDocsOld, ...listDocsNew];
 
-    listDocsNew.sort((a, b) => a.name.compareTo(b.name));
+    // listDocsNew.sort((a, b) => a.name.compareTo(b.name));
 
     // // listDocs.forEach((element) {
     // //   print(element.id);
@@ -187,9 +198,43 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
     // // listDocsSorted.forEach((element) {
     // //   print(element.id);
     // // });
+    // return state.copyWith(
+    //   situationState: state.situationState.copyWith(
+    //     situationList: listDocsNew,
+    //   ),
+    // );
+  }
+}
+
+class Get2DocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
+  final List<SituationModel> situationList;
+
+  Get2DocsSituationListAsyncSituationAction(this.situationList);
+
+  @override
+  AppState reduce() {
+    situationList.sort((a, b) => a.name.compareTo(b.name));
+
+    SituationModel situationModel;
+    print('Get2DocsTaskListAsyncTaskAction... ${situationList.length}');
+
+    if (state.situationState.situationCurrent != null) {
+      int index = situationList.indexWhere(
+          (element) => element.id == state.situationState.situationCurrent.id);
+      print(index);
+      if (index >= 0) {
+        SituationModel situationModelTemp = situationList.firstWhere(
+            (element) =>
+                element.id == state.situationState.situationCurrent.id);
+        situationModel = SituationModel(situationModelTemp.id)
+            .fromMap(situationModelTemp.toMap());
+      }
+    }
+
     return state.copyWith(
       situationState: state.situationState.copyWith(
-        situationList: listDocsNew,
+        situationList: situationList,
+        situationCurrent: situationModel,
       ),
     );
   }

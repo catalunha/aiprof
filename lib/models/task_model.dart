@@ -192,7 +192,7 @@ class TaskModel extends FirestoreModel {
     // _return = _return + '\nattempted: $attempted';
     _return = _return + '\nTempo de resolução: $time h. Erro relativo: $error%';
     // _return = _return + '\nerror: $error';
-    _return = _return + '\nopen: $open';
+    _return = _return + '\nAberta: $open';
 
     _return = _return + '\n ** Entrada: ${simulationInput.length} ** ';
     List<Input> _inputList = [];
@@ -214,8 +214,8 @@ class TaskModel extends FirestoreModel {
       _outputList.sort((a, b) => a.name.compareTo(b.name));
     }
     for (var item in _outputList) {
-      _return =
-          _return + '\n${item.name}=${item.value} [${item.type}] ${item.right}';
+      _return = _return +
+          '\n${item.name}=${item.value} [${item.type}] ${item?.right != null ? item.right ? "Certo" : "Errado" : "Não corrigido"}';
     }
 
     return _return;

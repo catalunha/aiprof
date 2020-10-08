@@ -79,32 +79,35 @@ class SetSimulationFilterSyncSimulationAction extends ReduxAction<AppState> {
 // +++ Actions Async
 class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
   @override
-  Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
+  AppState reduce() {
+    print('GetDocsSimulationListAsyncSimulationAction...');
+    // Firestore firestore = Firestore.instance;
     //+++ old doc
-    DocumentSnapshot docRef = await firestore
-        .collection(SituationModel.collection)
-        .document(state.situationState.situationCurrent.id)
-        .get();
-    SituationModel situationModel =
-        SituationModel(docRef.documentID).fromMap(docRef.data);
-    //+++ Atualiza lista de situations pois uma situação foi alterar e a lista nao precisa ser relida.
-    int index = state.situationState.situationList
-        .indexWhere((element) => element.id == situationModel.id);
-    List<SituationModel> situationList = [];
-    situationList.addAll(state.situationState.situationList);
-    situationList[index] = situationModel;
-    //---
+    // DocumentSnapshot docRef = await firestore
+    //     .collection(SituationModel.collection)
+    //     .document(state.situationState.situationCurrent.id)
+    //     .get();
+    // SituationModel situationModel =
+    //     SituationModel(docRef.documentID).fromMap(docRef.data);
+    // //+++ Atualiza lista de situations pois uma situação foi alterar e a lista nao precisa ser relida.
+    // int index = state.situationState.situationList
+    //     .indexWhere((element) => element.id == situationModel.id);
+    // List<SituationModel> situationList = [];
+    // situationList.addAll(state.situationState.situationList);
+    // situationList[index] = situationModel;
+    // //---
     List<SimulationModel> simulationList = [];
-    simulationList
-        .addAll(situationModel.simulationModel?.values?.toList() ?? []);
+    for (var item
+        in state.situationState.situationCurrent.simulationModel.entries) {
+      simulationList.add(SimulationModel(item.key).fromMap(item.value.toMap()));
+    }
+    // print(simulationList);
     simulationList.sort((a, b) => a.name.compareTo(b.name));
-
     return state.copyWith(
-      situationState: state.situationState.copyWith(
-        situationCurrent: situationModel,
-        situationList: situationList,
-      ),
+      // situationState: state.situationState.copyWith(
+      //   situationCurrent: situationModel,
+      //   situationList: situationList,
+      // ),
       simulationState: state.simulationState.copyWith(
         simulationList: simulationList,
       ),

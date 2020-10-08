@@ -70,7 +70,7 @@ class KnowModel extends FirestoreModel {
   String toString() {
     String _return = '';
     _return = _return + 'Descrição: $description';
-    _return = _return + '\nfolder: ${folderMap.length}';
+    _return = _return + '\nfolder: ${folderMap?.length}';
     _return = _return + '\nid: $id';
     return _return;
   }

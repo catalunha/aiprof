@@ -34,38 +34,42 @@ class _ExameListDSState extends State<ExameListDS> {
         itemBuilder: (context, index) {
           final exame = widget.exameList[index];
           return Card(
-            child: Wrap(
-              alignment: WrapAlignment.spaceEvenly,
+            child: Row(
+              // alignment: WrapAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: 500,
+                Expanded(
+                  flex: 6,
                   child: ListTile(
-                    selected: exame.isDelivery,
+                    selected: exame.isDelivered,
                     title: Text('${exame.name}'),
                     subtitle: Text('${exame.toString()}'),
                   ),
                 ),
-                IconButton(
-                  tooltip: 'Editar esta avaliação',
-                  icon: Icon(Icons.edit),
-                  onPressed: () async {
-                    widget.onEditExameCurrent(exame.id);
-                  },
-                ),
-                IconButton(
-                  tooltip: 'Lista de questões',
-                  icon: Icon(Icons.format_list_numbered),
-                  onPressed: () async {
-                    widget.onQuestionList(exame.id);
-                  },
-                ),
-                IconButton(
-                  tooltip: 'Lista de estudantes',
-                  icon: Icon(Icons.person),
-                  onPressed: () async {
-                    widget.onStudentList(exame.id);
-                  },
-                ),
+                Expanded(
+                    flex: 2,
+                    child: Column(children: [
+                      IconButton(
+                        tooltip: 'Editar esta avaliação',
+                        icon: Icon(Icons.edit),
+                        onPressed: () async {
+                          widget.onEditExameCurrent(exame.id);
+                        },
+                      ),
+                      IconButton(
+                        tooltip: 'Lista de questões',
+                        icon: Icon(Icons.format_list_numbered),
+                        onPressed: () async {
+                          widget.onQuestionList(exame.id);
+                        },
+                      ),
+                      IconButton(
+                        tooltip: 'Lista de estudantes',
+                        icon: Icon(Icons.person),
+                        onPressed: () async {
+                          widget.onStudentList(exame.id);
+                        },
+                      ),
+                    ])),
               ],
             ),
           );

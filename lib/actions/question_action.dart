@@ -101,6 +101,8 @@ class Get2DocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
 
   @override
   AppState reduce() {
+    questionList.sort((a, b) => a.name.compareTo(b.name));
+
     return state.copyWith(
       questionState: state.questionState.copyWith(
         questionList: questionList,

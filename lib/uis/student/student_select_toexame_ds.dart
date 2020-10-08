@@ -90,7 +90,7 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
                           : false,
                       title: Text('${student.name}'),
                       subtitle: Text(
-                          '${student.id} - ${widget.exameCurrent.studentMap[student.id]}'),
+                          '${student.id.substring(0, 4)} - ${widget.exameCurrent.studentMap[student.id]}'),
                       onTap: () {
                         widget.onSetStudentInExameCurrent(
                             student,

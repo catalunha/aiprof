@@ -33,35 +33,42 @@ class _QuestionListDSState extends State<QuestionListDS> {
         itemBuilder: (context, index) {
           final question = widget.questionList[index];
           return Card(
-            child: Wrap(
-              alignment: WrapAlignment.spaceEvenly,
+            child: Row(
+              // alignment: WrapAlignment.spaceEvenly,
               children: [
-                Container(
-                  width: 500,
+                Expanded(
+                  flex: 6,
                   child: ListTile(
                     selected: question.isDelivered ? true : false,
                     title: Text('${question.name}'),
                     subtitle: Text('${question.toString()}'),
                   ),
                 ),
-                IconButton(
-                  tooltip: 'Editar esta questão',
-                  icon: Icon(Icons.edit),
-                  onPressed: () async {
-                    widget.onEditQuestionCurrent(question.id);
-                  },
-                ),
-                IconButton(
-                  tooltip: 'URL para a situação',
-                  icon: Icon(Icons.local_library),
-                  onPressed: () async {
-                    if (question.situationRef?.url != null) {
-                      if (await canLaunch(question.situationRef.url)) {
-                        await launch(question.situationRef.url);
-                      }
-                    }
-                  },
-                ),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      IconButton(
+                        tooltip: 'Editar esta questão',
+                        icon: Icon(Icons.edit),
+                        onPressed: () async {
+                          widget.onEditQuestionCurrent(question.id);
+                        },
+                      ),
+                      IconButton(
+                        tooltip: 'URL para a situação',
+                        icon: Icon(Icons.local_library),
+                        onPressed: () async {
+                          if (question.situationRef?.url != null) {
+                            if (await canLaunch(question.situationRef.url)) {
+                              await launch(question.situationRef.url);
+                            }
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           );
