@@ -4,11 +4,13 @@ import 'package:aiprof/models/user_model.dart';
 class StudentListDS extends StatefulWidget {
   final List<UserModel> studentList;
   final Function() onAddStudent;
+  final Function(String) onRemoveStudent;
 
   const StudentListDS({
     Key key,
     this.studentList,
     this.onAddStudent,
+    this.onRemoveStudent,
   }) : super(key: key);
 
   @override
@@ -30,11 +32,16 @@ class _StudentListDSState extends State<StudentListDS> {
         itemBuilder: (context, index) {
           final student = widget.studentList[index];
           return Card(
-            color:
-                !student.isActive ? Colors.brown : Theme.of(context).cardColor,
             child: ListTile(
               title: Text('${student.name}'),
               subtitle: Text('${student.toString()}'),
+              trailing: IconButton(
+                tooltip: 'Remover este aluno desta turma.',
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  widget.onRemoveStudent(student.id);
+                },
+              ),
             ),
           );
         },

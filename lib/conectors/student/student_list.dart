@@ -9,10 +9,12 @@ import 'package:aiprof/states/app_state.dart';
 class ViewModel extends BaseModel<AppState> {
   List<UserModel> studentList;
   Function() onAddStudent;
+  Function(String) onRemoveStudent;
   ViewModel();
   ViewModel.build({
     @required this.studentList,
     @required this.onAddStudent,
+    @required this.onRemoveStudent,
   }) : super(equals: [
           studentList,
         ]);
@@ -21,6 +23,9 @@ class ViewModel extends BaseModel<AppState> {
         studentList: state.studentState.studentList,
         onAddStudent: () {
           dispatch(NavigateAction.pushNamed(Routes.studentEdit));
+        },
+        onRemoveStudent: (String studentId) {
+          dispatch(RemoveStudentForClassroomAsyncStudentAction(studentId));
         },
       );
 }
@@ -35,6 +40,7 @@ class StudentList extends StatelessWidget {
       builder: (context, viewModel) => StudentListDS(
         studentList: viewModel.studentList,
         onAddStudent: viewModel.onAddStudent,
+        onRemoveStudent: viewModel.onRemoveStudent,
       ),
     );
   }

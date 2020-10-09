@@ -134,8 +134,13 @@ class ExameModel extends FirestoreModel {
         '\nProfessor: ${userRef.name.split(' ')[0]} (${userRef.id.substring(0, 4)})';
     _return = _return +
         '\nTurma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
-    _return = _return + '\nAlunos: ${studentMap?.length}';
-    _return = _return + '\nQuestões: ${questionMap?.length}';
+    _return = _return +
+        '\nAlunos: ${studentMap?.length == null ? "0" : studentMap.length}';
+    _return = _return +
+        '\nQuestões: ${questionMap?.length == null ? "0" : questionMap.length}';
+    if (isDelivered) {
+      _return = _return + '\nDistribuindo avaliação';
+    }
     _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }

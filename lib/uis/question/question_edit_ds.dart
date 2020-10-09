@@ -8,10 +8,10 @@ class QuestionEditDS extends StatefulWidget {
   final String description;
   final dynamic start;
   final dynamic end;
-  final int scoreQuestion;
   final int attempt;
   final int time;
   final int error;
+  final int scoreQuestion;
   final SituationModel situationRef;
   final bool isDelivered;
   final bool isAddOrUpdate;
@@ -64,13 +64,22 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
               _description,
               _start,
               _end,
-              _scoreQuestion,
               _attempt,
               _time,
               _error,
+              _scoreQuestion,
             )
-          : widget.onUpdate(_name, _description, _start, _end, _scoreQuestion,
-              _attempt, _time, _error, _isDelete);
+          : widget.onUpdate(
+              _name,
+              _description,
+              _start,
+              _end,
+              _attempt,
+              _time,
+              _error,
+              _scoreQuestion,
+              _isDelete,
+            );
     } else {
       setState(() {});
     }
@@ -154,42 +163,6 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             //   return null;
             // },
           ),
-          widget?.isDelivered != null && !widget.isDelivered
-              ? ListTile(
-                  title: Text('Selecione uma situação ou problema :'),
-                  subtitle: Text('${widget.situationRef?.name}'),
-                  trailing: Icon(Icons.search),
-                  onTap: () => widget.onSituationSelect(),
-                )
-              : Text('Questão já aplicada não pode mudar situação ou problema'),
-          Text('Inicio do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _start,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                print(datetime);
-                setState(() {
-                  _start = datetime;
-                });
-              },
-            ),
-          ),
-          Text('Fim do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _end,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                print(datetime);
-                setState(() {
-                  _end = datetime;
-                });
-              },
-            ),
-          ),
           TextFormField(
             initialValue: widget.scoreQuestion == null
                 ? '1'
@@ -256,6 +229,42 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
               }
               return null;
             },
+          ),
+          widget?.isDelivered != null && !widget.isDelivered
+              ? ListTile(
+                  title: Text('Selecione uma situação ou problema :'),
+                  subtitle: Text('${widget.situationRef?.name}'),
+                  trailing: Icon(Icons.search),
+                  onTap: () => widget.onSituationSelect(),
+                )
+              : Text('Questão já aplicada não pode mudar situação ou problema'),
+          Text('Inicio do desenvolvimento:'),
+          SizedBox(
+            height: 100,
+            child: CupertinoDatePicker(
+              initialDateTime: _start,
+              use24hFormat: true,
+              onDateTimeChanged: (datetime) {
+                print(datetime);
+                setState(() {
+                  _start = datetime;
+                });
+              },
+            ),
+          ),
+          Text('Fim do desenvolvimento:'),
+          SizedBox(
+            height: 100,
+            child: CupertinoDatePicker(
+              initialDateTime: _end,
+              use24hFormat: true,
+              onDateTimeChanged: (datetime) {
+                print(datetime);
+                setState(() {
+                  _end = datetime;
+                });
+              },
+            ),
           ),
           widget.isAddOrUpdate
               ? Container()

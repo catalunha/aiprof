@@ -78,4 +78,13 @@ class UserModel extends FirestoreModel {
     // if (photoUrl != null) data['photoUrl'] = this.photoUrl;
     return data;
   }
+
+  String toString() {
+    String _return = '';
+    _return = _return + '\nEmail: $email';
+    _return = _return +
+        '\nTurmas: ${classroomId?.length != null && classroomId.length > 0 ? classroomId.length : "NENHUMA"}. ';
+    _return = _return + '\nId: $id';
+    return _return;
+  }
 }

@@ -147,34 +147,6 @@ class _ExameEditDSState extends State<ExameEditDS> {
             //   return null;
             // },
           ),
-          Text('Inicio do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _start,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                print(datetime);
-                setState(() {
-                  _start = datetime;
-                });
-              },
-            ),
-          ),
-          Text('Fim do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _end,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                print(datetime);
-                setState(() {
-                  _end = datetime;
-                });
-              },
-            ),
-          ),
           TextFormField(
             initialValue:
                 widget.scoreExame == null ? '1' : widget.scoreExame.toString(),
@@ -259,19 +231,34 @@ class _ExameEditDSState extends State<ExameEditDS> {
               return null;
             },
           ),
-          widget.isAddOrUpdate
-              ? Container()
-              : SwitchListTile(
-                  value: _isDelete,
-                  title: _isDelete
-                      ? Text('Avaliação será apagada.')
-                      : Text('Apagar avaliação ?'),
-                  onChanged: (value) {
-                    setState(() {
-                      _isDelete = value;
-                    });
-                  },
-                ),
+          Text('Inicio do desenvolvimento:'),
+          SizedBox(
+            height: 100,
+            child: CupertinoDatePicker(
+              initialDateTime: _start,
+              use24hFormat: true,
+              onDateTimeChanged: (datetime) {
+                print(datetime);
+                setState(() {
+                  _start = datetime;
+                });
+              },
+            ),
+          ),
+          Text('Fim do desenvolvimento:'),
+          SizedBox(
+            height: 100,
+            child: CupertinoDatePicker(
+              initialDateTime: _end,
+              use24hFormat: true,
+              onDateTimeChanged: (datetime) {
+                print(datetime);
+                setState(() {
+                  _end = datetime;
+                });
+              },
+            ),
+          ),
           widget.isAddOrUpdate
               ? Container()
               : SwitchListTile(
@@ -282,6 +269,19 @@ class _ExameEditDSState extends State<ExameEditDS> {
                   onChanged: (value) {
                     setState(() {
                       _isDelivered = value;
+                    });
+                  },
+                ),
+          widget.isAddOrUpdate
+              ? Container()
+              : SwitchListTile(
+                  value: _isDelete,
+                  title: _isDelete
+                      ? Text('Avaliação será apagada.')
+                      : Text('Apagar avaliação ?'),
+                  onChanged: (value) {
+                    setState(() {
+                      _isDelete = value;
                     });
                   },
                 ),

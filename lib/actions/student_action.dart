@@ -64,7 +64,7 @@ class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
     final listDocs = docsSnap.documents
         .map((docSnap) => UserModel(docSnap.documentID).fromMap(docSnap.data))
         .toList();
-
+    print(listDocs);
     listDocs.sort((a, b) => a.name.compareTo(b.name));
     return state.copyWith(
       studentState: state.studentState.copyWith(
@@ -209,7 +209,6 @@ class BatchDocImportStudentAsyncStudentAction extends ReduxAction<AppState> {
         batch.setData(
             studentDoc,
             {
-              // 'isUser': false,
               'isActive': true,
               'isTeacher': false,
               'code': student[0],
@@ -247,4 +246,29 @@ class BatchDocImportStudentAsyncStudentAction extends ReduxAction<AppState> {
   // @override
   // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
 
+}
+
+class RemoveStudentForClassroomAsyncStudentAction
+    extends ReduxAction<AppState> {
+  final String studentId;
+
+  RemoveStudentForClassroomAsyncStudentAction(this.studentId);
+
+  @override
+  Future<AppState> reduce() async {
+    Firestore firestore = Firestore.instance;
+
+    await firestore
+        .collection(UserModel.collection)
+        .document(studentId)
+        .updateData({
+      'classroomId':
+          FieldValue.arrayRemove([state.classroomState.classroomCurrent.id])
+    });
+
+    return null;
+  }
+
+  @override
+  void after() => dispatch(GetDocsStudentListAsyncStudentAction());
 }
