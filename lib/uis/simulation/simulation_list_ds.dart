@@ -35,7 +35,8 @@ class SimulationListDSState extends State<SimulationListDS> {
             child: ListTile(
               selected: widget.simulationIncosistent.contains(simulation.id),
               title: widget.simulationIncosistent.contains(simulation.id)
-                  ? Text('Simulação com ERRO na entrada ou saída')
+                  ? Text(
+                      '${simulation.name} - (${simulation.id.substring(0, 4)}) - ERRO na entrada ou saída')
                   : Text(
                       '${simulation.name} - (${simulation.id.substring(0, 4)})'),
               subtitle: Text('${simulation.toString()}'),

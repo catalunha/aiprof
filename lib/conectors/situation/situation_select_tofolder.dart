@@ -27,7 +27,8 @@ class ViewModel extends BaseModel<AppState> {
   _situationList() {
     List<SituationModel> situationList = [];
     situationList.addAll(state.situationState.situationList);
-    situationList.removeWhere((element) => element.isInconsistent == true);
+    situationList
+        .removeWhere((element) => element.isSimulationConsistent == true);
     for (var folder in state.knowState.knowCurrent.folderMap.entries) {
       if (folder.value.situationRefMap != null &&
           folder.value.situationRefMap.isNotEmpty) {
