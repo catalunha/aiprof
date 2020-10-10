@@ -43,7 +43,7 @@ class ExameEditDS extends StatefulWidget {
 class _ExameEditDSState extends State<ExameEditDS> {
   final formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
-  bool isInvisibilityDelete = false;
+  bool isInvisibilityDelete = true;
 
   String _name;
   String _description;
@@ -293,7 +293,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
                             },
                           ),
                     IconButton(
-                      tooltip: 'Liberar opção de apagar este item',
+                      tooltip: 'Liberar opção para apagar este item',
                       color: Colors.grey[400],
                       icon: const Icon(
                         Icons.delete,

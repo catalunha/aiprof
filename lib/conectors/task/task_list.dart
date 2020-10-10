@@ -33,7 +33,7 @@ class TaskList extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       model: ViewModel(),
-      onInit: (store) => store.dispatch(GetDocsTaskListAsyncTaskAction()),
+      onInit: (store) => store.dispatch(StreamColTaskAsyncTaskAction()),
       builder: (context, viewModel) => TaskListDS(
         taskList: viewModel.taskList,
         onEditTaskCurrent: viewModel.onEditTaskCurrent,

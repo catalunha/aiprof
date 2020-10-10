@@ -102,6 +102,7 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
                       //     : false,
                       selected: isStudentInExame,
                       title: Text('${student.name}'),
+                      subtitle: Text('${student.toString()}'),
                       // subtitle: Text(
                       //     '${student.id.substring(0, 4)} - ${widget.exameCurrent.studentMap[student.id]}'),
                       onTap: () {

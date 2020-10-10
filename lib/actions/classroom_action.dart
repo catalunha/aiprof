@@ -6,7 +6,6 @@ import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uuid/uuid.dart' as uuid;
 
 class SetClassroomCurrentSyncClassroomAction extends ReduxAction<AppState> {
   final String id;
@@ -46,14 +45,13 @@ class SetClassroomFilterSyncClassroomAction extends ReduxAction<AppState> {
     );
   }
 
-  void after() => dispatch(GetDocsClassroomListAsyncClassroomAction());
+  // void after() => dispatch(StreamColClassroomAsyncClassroomAction());
 }
 
-// +++ Actions Async
-class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
+class StreamColClassroomAsyncClassroomAction extends ReduxAction<AppState> {
   @override
-  Future<AppState> reduce() async {
-    print('GetDocsClassroomListAsyncClassroomAction...');
+  AppState reduce() {
+    print('StreamColClassroomAsyncClassroomAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
     if (state.classroomState.classroomFilter == ClassroomFilter.isactive) {
@@ -68,31 +66,77 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: false);
     }
-    final docsSnap = await collRef.getDocuments();
+    Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
-    final listDocs = docsSnap.documents
-        .map((docSnap) =>
-            ClassroomModel(docSnap.documentID).fromMap(docSnap.data))
-        .toList();
-    // listDocs.forEach((element) {
-    //   print(element.id);
-    // });
-    Map<dynamic, ClassroomModel> mapping =
-        Map.fromIterable(listDocs, key: (v) => v.id, value: (v) => v);
-    List<dynamic> ids = state.loggedState.userModelLogged.classroomId;
-    // print(ids);
-    final listDocsSorted = [for (dynamic id in ids) mapping[id]];
-    // listDocsSorted.forEach((element) {
-    //   print(element.id);
-    // });
+    Stream<List<ClassroomModel>> streamList = streamQuerySnapshot.map(
+        (querySnapshot) => querySnapshot.documents
+            .map((docSnapshot) => ClassroomModel(docSnapshot.documentID)
+                .fromMap(docSnapshot.data))
+            .toList());
+    streamList.listen((List<ClassroomModel> list) {
+      dispatch(GetDocsClassroomListAsyncClassroomAction(list));
+    });
+    return null;
+    // final docsSnap = await collRef.getDocuments();
+
+    // final listDocs = docsSnap.documents
+    //     .map((docSnap) =>
+    //         ClassroomModel(docSnap.documentID).fromMap(docSnap.data))
+    //     .toList();
+    // // listDocs.forEach((element) {
+    // //   print(element.id);
+    // // });
+    // Map<dynamic, ClassroomModel> mapping =
+    //     Map.fromIterable(listDocs, key: (v) => v.id, value: (v) => v);
+    // List<dynamic> ids = state.loggedState.userModelLogged.classroomId;
+    // // print(ids);
+    // final listDocsSorted = [for (dynamic id in ids) mapping[id]];
+    // // listDocsSorted.forEach((element) {
+    // //   print(element.id);
+    // // });
+    // return state.copyWith(
+    //   classroomState: state.classroomState.copyWith(
+    //     classroomList: listDocsSorted,
+    //   ),
+    // );
+  }
+}
+
+class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
+  final List<ClassroomModel> classroomList;
+
+  GetDocsClassroomListAsyncClassroomAction(this.classroomList);
+
+  @override
+  AppState reduce() {
+    classroomList.sort((a, b) => a.name.compareTo(b.name));
+
+    ClassroomModel classroomModel;
+    print('Get2DocsTaskListAsyncTaskAction... ${classroomList.length}');
+
+    if (state.classroomState.classroomCurrent != null) {
+      int index = classroomList.indexWhere(
+          (element) => element.id == state.classroomState.classroomCurrent.id);
+      print(index);
+      if (index >= 0) {
+        ClassroomModel classroomModelTemp = classroomList.firstWhere(
+            (element) =>
+                element.id == state.classroomState.classroomCurrent.id);
+        classroomModel = ClassroomModel(classroomModelTemp.id)
+            .fromMap(classroomModelTemp.toMap());
+      }
+    }
+
     return state.copyWith(
       classroomState: state.classroomState.copyWith(
-        classroomList: listDocsSorted,
+        classroomList: classroomList,
+        classroomCurrent: classroomModel,
       ),
     );
   }
 }
 
+// +++ Actions Async
 class AddDocClassroomCurrentAsyncClassroomAction extends ReduxAction<AppState> {
   final String company;
   final String component;
@@ -139,8 +183,8 @@ class AddDocClassroomCurrentAsyncClassroomAction extends ReduxAction<AppState> {
 
   // @override
   // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
-  @override
-  void after() => dispatch(GetDocsClassroomListAsyncClassroomAction());
+  // @override
+  // void after() => dispatch(StreamColClassroomAsyncClassroomAction());
 }
 
 class UpdateDocClassroomCurrentAsyncClassroomAction
@@ -197,8 +241,8 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
     return null;
   }
 
-  @override
-  void after() => dispatch(GetDocsClassroomListAsyncClassroomAction());
+  // @override
+  // void after() => dispatch(StreamColClassroomAsyncClassroomAction());
 }
 
 class UpdateDocclassroomIdInUserAsyncClassroomAction
@@ -234,91 +278,8 @@ class UpdateDocclassroomIdInUserAsyncClassroomAction
 
   @override
   void after() {
-    dispatch(GetDocsClassroomListAsyncClassroomAction());
+    // dispatch(StreamColClassroomAsyncClassroomAction());
     dispatch(GetDocsUserModelAsyncLoggedAction(
         id: state.loggedState.userModelLogged.id));
-  }
-}
-
-class UpdateStudentMapTempAsyncClassroomAction extends ReduxAction<AppState> {
-  final String studentListString;
-
-  UpdateStudentMapTempAsyncClassroomAction({
-    this.studentListString,
-  });
-  @override
-  Future<AppState> reduce() async {
-    print('AddDocStudentCurrentAsyncStudentAction...');
-    Firestore firestore = Firestore.instance;
-    ClassroomModel classroomModel =
-        ClassroomModel(state.classroomState.classroomCurrent.id)
-            .fromMap(state.classroomState.classroomCurrent.toMap());
-    StudentsToImport _studentsToImport = StudentsToImport(studentListString);
-
-    classroomModel.studentUserRefMapTemp =
-        _studentsToImport.studentStringToMap();
-
-    await firestore
-        .collection(ClassroomModel.collection)
-        .document(classroomModel.id)
-        .updateData(classroomModel.toMap());
-    return null;
-  }
-
-  // @override
-  // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
-  // @override
-  // void after() => dispatch(GetDocsStudentListAsyncStudentAction());
-}
-
-class StudentsToImport {
-  final String studentsToImport;
-
-  StudentsToImport(this.studentsToImport);
-  Map<String, UserModel> studentStringToMap() {
-    Map<String, UserModel> studentMap = {};
-    List<List<String>> studentList = List<List<String>>();
-    studentList.clear();
-    String matricula;
-    String email;
-    String nome;
-    if (studentsToImport != null) {
-      // // print('::cadastro::');
-      // // print(studentsToImport);
-      List<String> linhas = studentsToImport.split('\n');
-      // // print('::linhas::');
-      // // print(linhas);
-      for (var linha in linhas) {
-        // // print('::linha::');
-        // // print(linha);
-        if (linha != null) {
-          List<String> campos = linha.trim().split(';');
-          // // print('::campos::');
-          // // print(campos);
-          if (campos != null &&
-              campos.length == 3 &&
-              campos[0] != null &&
-              campos[0].length >= 1 &&
-              campos[1] != null &&
-              campos[1].length >= 3 &&
-              campos[1].contains('@') &&
-              campos[2] != null &&
-              campos[2].length >= 3) {
-            matricula = campos[0].trim();
-            email = campos[1].trim();
-            nome = campos[2].trim();
-            // // print('::matricula::$matricula');
-            // // print('::email::$email');
-            // // print('::nome::$nome');
-            studentList.add([matricula, email, nome]);
-            String id = uuid.Uuid().v4();
-            studentMap[id] =
-                UserModel(id, code: matricula, email: email, name: nome);
-          }
-        }
-      }
-    }
-    print(studentList);
-    return studentMap;
   }
 }

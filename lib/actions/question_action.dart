@@ -57,14 +57,14 @@ class SetQuestionFilterSyncQuestionAction extends ReduxAction<AppState> {
     );
   }
 
-  void after() => dispatch(GetDocsQuestionListAsyncQuestionAction());
+  // void after() => dispatch(StreamColQuestionAsyncQuestionAction());
 }
 
 // +++ Actions Async
-class GetDocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
+class StreamColQuestionAsyncQuestionAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
-    print('GetDocsQuestionListAsyncQuestionAction...');
+    print('StreamColQuestionAsyncQuestionAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
     collRef = firestore
@@ -87,17 +87,17 @@ class GetDocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
                 QuestionModel(docSnapshot.documentID).fromMap(docSnapshot.data))
             .toList());
     streamList.listen((List<QuestionModel> list) {
-      dispatch(Get2DocsQuestionListAsyncQuestionAction(list));
+      dispatch(GetDocsQuestionListAsyncQuestionAction(list));
     });
 
     return null;
   }
 }
 
-class Get2DocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
+class GetDocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
   final List<QuestionModel> questionList;
 
-  Get2DocsQuestionListAsyncQuestionAction(this.questionList);
+  GetDocsQuestionListAsyncQuestionAction(this.questionList);
 
   @override
   AppState reduce() {
@@ -169,8 +169,8 @@ class AddDocQuestionCurrentAsyncQuestionAction extends ReduxAction<AppState> {
     return null;
   }
 
-  @override
-  void after() => dispatch(GetDocsQuestionListAsyncQuestionAction());
+  // @override
+  // void after() => dispatch(StreamColQuestionAsyncQuestionAction());
 }
 
 class UpdateDocQuestionCurrentAsyncQuestionAction
@@ -230,6 +230,6 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
     return null;
   }
 
-  @override
-  void after() => dispatch(GetDocsQuestionListAsyncQuestionAction());
+  // @override
+  // void after() => dispatch(StreamColQuestionAsyncQuestionAction());
 }

@@ -40,14 +40,14 @@ class SetTaskFilterSyncTaskAction extends ReduxAction<AppState> {
     );
   }
 
-  void after() => dispatch(GetDocsTaskListAsyncTaskAction());
+  // void after() => dispatch(StreamColTaskAsyncTaskAction());
 }
 
 // +++ Actions Async
-class GetDocsTaskListAsyncTaskAction extends ReduxAction<AppState> {
+class StreamColTaskAsyncTaskAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
-    print('GetDocsTaskListAsyncTaskAction...');
+    print('StreamColTaskAsyncTaskAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
     collRef = firestore
@@ -63,16 +63,16 @@ class GetDocsTaskListAsyncTaskAction extends ReduxAction<AppState> {
                 TaskModel(docSnapshot.documentID).fromMap(docSnapshot.data))
             .toList());
     streamList.listen((List<TaskModel> list) {
-      dispatch(Get2DocsTaskListAsyncTaskAction(list));
+      dispatch(GetDocsTaskListAsyncTaskAction(list));
     });
     return null;
   }
 }
 
-class Get2DocsTaskListAsyncTaskAction extends ReduxAction<AppState> {
+class GetDocsTaskListAsyncTaskAction extends ReduxAction<AppState> {
   final List<TaskModel> taskList;
 
-  Get2DocsTaskListAsyncTaskAction(this.taskList);
+  GetDocsTaskListAsyncTaskAction(this.taskList);
 
   @override
   AppState reduce() {
@@ -112,7 +112,7 @@ class UpdateDocTaskCurrentAsyncTaskAction extends ReduxAction<AppState> {
   // gestão da tarefa
   final bool nullStarted;
   final int attempted;
-  final bool open;
+  final bool isOpen;
   final bool isDelete;
   UpdateDocTaskCurrentAsyncTaskAction({
     this.start,
@@ -124,7 +124,7 @@ class UpdateDocTaskCurrentAsyncTaskAction extends ReduxAction<AppState> {
     this.scoreQuestion,
     this.nullStarted,
     this.attempted,
-    this.open,
+    this.isOpen,
     this.isDelete,
   });
   @override
@@ -148,7 +148,7 @@ class UpdateDocTaskCurrentAsyncTaskAction extends ReduxAction<AppState> {
       taskModel.error = error;
       taskModel.scoreQuestion = scoreQuestion;
       taskModel.attempted = attempted;
-      // taskModel.open = open;
+      // taskModel.isOpen = isOpen;
       if (nullStarted) {
         taskModel.started = null;
       }

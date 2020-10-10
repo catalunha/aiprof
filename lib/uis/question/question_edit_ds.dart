@@ -45,6 +45,7 @@ class QuestionEditDS extends StatefulWidget {
 class _QuestionEditDSState extends State<QuestionEditDS> {
   final formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
+  bool isInvisibilityDelete = true;
 
   String _name;
   String _description;
@@ -268,19 +269,39 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
           ),
           widget.isAddOrUpdate
               ? Container()
-              : SwitchListTile(
-                  value: _isDelete,
-                  title: _isDelete
-                      ? Text('Questão será apagada.')
-                      : Text('Apagar questão ?'),
-                  onChanged: (value) {
-                    setState(() {
-                      _isDelete = value;
-                    });
-                  },
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isInvisibilityDelete
+                        ? Container()
+                        : SwitchListTile(
+                            value: _isDelete,
+                            title: _isDelete
+                                ? Text('Questão será apagada.')
+                                : Text('Apagar esta questão ?'),
+                            onChanged: (value) {
+                              setState(() {
+                                _isDelete = value;
+                              });
+                            },
+                          ),
+                    IconButton(
+                      tooltip: 'Liberar opção para apagar este item',
+                      color: Colors.grey[400],
+                      icon: const Icon(
+                        Icons.delete,
+                        // size: 22.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isInvisibilityDelete = !isInvisibilityDelete;
+                        });
+                      },
+                    ),
+                  ],
                 ),
           Container(
-            height: 50,
+            height: 100,
           ),
         ],
       ),

@@ -27,7 +27,7 @@ class TaskModel extends FirestoreModel {
   dynamic started;
   dynamic lastSendAnswer;
   dynamic attempted;
-  bool open;
+  bool isOpen;
   Map<String, Input> simulationInput = Map<String, Input>();
   Map<String, Output> simulationOutput = Map<String, Output>();
 
@@ -49,7 +49,7 @@ class TaskModel extends FirestoreModel {
     this.started,
     this.lastSendAnswer,
     this.attempted,
-    this.open,
+    this.isOpen,
     this.simulationInput,
     this.simulationOutput,
   }) : super(id);
@@ -95,7 +95,7 @@ class TaskModel extends FirestoreModel {
                 map['lastSendAnswer'].millisecondsSinceEpoch)
             : null;
     if (map.containsKey('attempted')) attempted = map['attempted'];
-    if (map.containsKey('open')) open = map['open'];
+    if (map.containsKey('isOpen')) isOpen = map['isOpen'];
     if (map["simulationInput"] is Map) {
       simulationInput = Map<String, Input>();
       for (var item in map["simulationInput"].entries) {
@@ -142,7 +142,7 @@ class TaskModel extends FirestoreModel {
     data['started'] = this.started;
     data['lastSendAnswer'] = this.lastSendAnswer;
     if (attempted != null) data['attempted'] = this.attempted;
-    if (open != null) data['open'] = this.open;
+    if (isOpen != null) data['isOpen'] = this.isOpen;
 
     if (simulationInput != null && simulationInput is Map) {
       data["simulationInput"] = Map<String, dynamic>();
@@ -192,7 +192,7 @@ class TaskModel extends FirestoreModel {
     // _return = _return + '\nattempted: $attempted';
     _return = _return + '\nTempo de resolução: $time h. Erro relativo: $error%';
     // _return = _return + '\nerror: $error';
-    _return = _return + '\nAberta: $open';
+    _return = _return + '\nAberta: $isOpen';
 
     _return = _return + '\n ** Entrada: ${simulationInput.length} ** ';
     List<Input> _inputList = [];
@@ -221,23 +221,25 @@ class TaskModel extends FirestoreModel {
     return _return;
   }
 
-  bool get isOpen {
-    if (this.open && this.end.isBefore(DateTime.now())) {
-      this.open = false;
+  bool get _isOpen {
+    if (this.isOpen && this.end.isBefore(DateTime.now())) {
+      this.isOpen = false;
       // print('==> Tarefa ${this.id}. aberta=${this.aberta} pois fim < now');
     }
-    if (this.open &&
+    if (this.isOpen &&
         this.start != null &&
         this.responderAte != null &&
         this.responderAte.isBefore(DateTime.now())) {
-      this.open = false;
+      this.isOpen = false;
       // print('==> Tarefa ${this.id} Fechada pois responderAte < now');
     }
-    if (this.open && this.attempted != null && this.attempted >= this.attempt) {
-      this.open = false;
+    if (this.isOpen &&
+        this.attempted != null &&
+        this.attempted >= this.attempt) {
+      this.isOpen = false;
       // print('==> Tarefa ${this.id} Fechada pois tentou < tentativa');
     }
-    return this.open;
+    return this.isOpen;
   }
 
   DateTime get responderAte {
@@ -266,6 +268,6 @@ class TaskModel extends FirestoreModel {
   void updateAll() {
     responderAte;
     tempoPResponder;
-    isOpen;
+    _isOpen;
   }
 }

@@ -70,8 +70,18 @@ class KnowModel extends FirestoreModel {
   String toString() {
     String _return = '';
     _return = _return + 'Descrição: $description';
-    _return = _return + '\nfolder: ${folderMap?.length}';
-    _return = _return + '\nid: $id';
+    int qdeFolder = folderMap?.length ?? 0;
+    int qdeSituation = 0;
+    if (folderMap != null)
+      for (var situation in folderMap.values) {
+        if (situation.situationRefMap != null &&
+            situation.situationRefMap.isNotEmpty) {
+          qdeSituation += situation.situationRefMap.length;
+        }
+      }
+    _return = _return + '\nPastas: ${qdeFolder}';
+    _return = _return + '. Situações: ${qdeSituation}';
+    _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }
 }

@@ -80,7 +80,7 @@ class SetSituationFilterSyncSituationAction extends ReduxAction<AppState> {
     );
   }
 
-  void after() => dispatch(GetDocsSituationListAsyncSituationAction());
+  // void after() => dispatch(StreamColSituationAsyncSituationAction());
 }
 
 class SetSituationInQuestionCurrentSyncSituationAction
@@ -121,10 +121,10 @@ class SetSituationInQuestionCurrentSyncSituationAction
 }
 
 // +++ Actions Async
-class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
+class StreamColSituationAsyncSituationAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
-    print('GetDocsSituationListAsyncSituationAction...');
+    print('StreamColSituationAsyncSituationAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
     // //+++ collection old
@@ -169,7 +169,7 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
                 .fromMap(docSnapshot.data))
             .toList());
     streamList.listen((List<SituationModel> list) {
-      dispatch(Get2DocsSituationListAsyncSituationAction(list));
+      dispatch(GetDocsSituationListAsyncSituationAction(list));
     });
     return null;
     // final docsSnapNew = await collRef.getDocuments();
@@ -206,10 +206,10 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
   }
 }
 
-class Get2DocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
+class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
   final List<SituationModel> situationList;
 
-  Get2DocsSituationListAsyncSituationAction(this.situationList);
+  GetDocsSituationListAsyncSituationAction(this.situationList);
 
   @override
   AppState reduce() {
@@ -266,6 +266,7 @@ class AddDocSituationCurrentAsyncSituationAction extends ReduxAction<AppState> {
     situationModel.description = description;
     situationModel.url = url;
     situationModel.isActive = true;
+    situationModel.isSimulationConsistent = false;
 // final situationAdded =
     await firestore
         .collection(SituationModel.collection)
@@ -283,8 +284,8 @@ class AddDocSituationCurrentAsyncSituationAction extends ReduxAction<AppState> {
 
   // @override
   // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
-  @override
-  void after() => dispatch(GetDocsSituationListAsyncSituationAction());
+  // @override
+  // void after() => dispatch(StreamColSituationAsyncSituationAction());
 }
 
 class UpdateDocSituationCurrentAsyncSituationAction
@@ -338,8 +339,8 @@ class UpdateDocSituationCurrentAsyncSituationAction
     return null;
   }
 
-  @override
-  void after() => dispatch(GetDocsSituationListAsyncSituationAction());
+  // @override
+  // void after() => dispatch(StreamColSituationAsyncSituationAction());
 }
 
 class UpdateFieldDocSituationCurrentAsyncSituationAction

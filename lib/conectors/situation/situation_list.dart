@@ -39,7 +39,7 @@ class SituationList extends StatelessWidget {
       //debug: this,
       model: ViewModel(),
       onInit: (store) =>
-          store.dispatch(GetDocsSituationListAsyncSituationAction()),
+          store.dispatch(StreamColSituationAsyncSituationAction()),
       builder: (context, viewModel) => SituationListDS(
         situationList: viewModel.situationList,
         onEditSituationCurrent: viewModel.onEditSituationCurrent,

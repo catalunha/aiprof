@@ -74,9 +74,6 @@ class SetSimulationFilterSyncSimulationAction extends ReduxAction<AppState> {
   void after() => dispatch(GetDocsSimulationListAsyncSimulationAction());
 }
 
-// --- Actions Sync
-
-// +++ Actions Async
 class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
@@ -117,6 +114,9 @@ class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
     );
   }
 }
+// --- Actions Sync
+
+// +++ Actions Async
 // class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
 //   @override
 //   Future<AppState> reduce() async {

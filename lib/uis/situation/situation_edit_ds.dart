@@ -134,7 +134,7 @@ class _SituationEditDSState extends State<SituationEditDS> {
               : SwitchListTile(
                   value: _isActive,
                   title: _isActive
-                      ? Text('Situação ativo')
+                      ? Text('Situação ativa')
                       : Text('Desativar situação'),
                   onChanged: (value) {
                     setState(() {

@@ -27,14 +27,14 @@ class ViewModel extends BaseModel<AppState> {
         folderMap:
             state.knowState.knowCurrent?.folderMap ?? Map<String, Folder>(),
         knowModel: state.knowState.knowCurrent,
-        onEditFolderCurrent: (String id, bool isCreateOrUpdate) {
+        onEditFolderCurrent: (String id, bool isAddOrUpdate) {
           dispatch(SetFolderCurrentSyncKnowAction(
-              id: id, isCreateOrUpdate: isCreateOrUpdate));
+              id: id, isAddOrUpdate: isAddOrUpdate));
           dispatch(NavigateAction.pushNamed(Routes.folderEdit));
         },
-        onSetFolderCurrent: (String id, bool isCreateOrUpdate) {
+        onSetFolderCurrent: (String id, bool isAddOrUpdate) {
           dispatch(SetFolderCurrentSyncKnowAction(
-              id: id, isCreateOrUpdate: isCreateOrUpdate));
+              id: id, isAddOrUpdate: isAddOrUpdate));
         },
         onSetSituationInFolderSyncKnowAction: (SituationModel situationRef) {
           dispatch(SetSituationInFolderSyncKnowAction(

@@ -75,7 +75,7 @@ class UserModel extends FirestoreModel {
     final Map<String, dynamic> data = Map<String, dynamic>();
     if (id != null) data['id'] = this.id;
     if (code != null) data['code'] = this.code;
-    if (name != null) data['email'] = this.name;
+    if (email != null) data['email'] = this.email;
     if (name != null) data['name'] = this.name;
     // if (photoUrl != null) data['photoUrl'] = this.photoUrl;
     return data;
@@ -83,10 +83,11 @@ class UserModel extends FirestoreModel {
 
   String toString() {
     String _return = '';
+    _return = _return + '\nMatricula: $code';
     _return = _return + '\nEmail: $email';
-    _return = _return +
-        '\nTurmas: ${classroomId?.length != null && classroomId.length > 0 ? classroomId.length : "NENHUMA"}. ';
-    _return = _return + '\nId: $id';
+    // _return = _return +
+    //     '\nTurmas: ${classroomId?.length != null && classroomId.length > 0 ? classroomId.length : "NENHUMA"}. ';
+    _return = _return + '\nId: ${id.substring(0, 4)}';
     return _return;
   }
 }

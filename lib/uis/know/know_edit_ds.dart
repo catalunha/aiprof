@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 class KnowEditDS extends StatefulWidget {
   final String name;
   final String description;
-  final bool isCreateOrUpdate;
-  final Function(String, String) onCreate;
-  final Function(String, String) onUpdate;
+  final bool isAddOrUpdate;
+  final Function(String, String) onAdd;
+  final Function(String, String, bool) onUpdate;
 
   const KnowEditDS({
     Key key,
     this.name,
     this.description,
-    this.isCreateOrUpdate,
-    this.onCreate,
+    this.isAddOrUpdate,
+    this.onAdd,
     this.onUpdate,
   }) : super(key: key);
   @override
@@ -21,14 +21,18 @@ class KnowEditDS extends StatefulWidget {
 
 class _KnowEditDSState extends State<KnowEditDS> {
   final formKey = GlobalKey<FormState>();
+  bool isInvisibilityDelete = true;
+
   String _description;
   String _name;
+  bool _isDelete = false;
+
   void validateData() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      widget.isCreateOrUpdate
-          ? widget.onCreate(_name, _description)
-          : widget.onUpdate(_name, _description);
+      widget.isAddOrUpdate
+          ? widget.onAdd(_name, _description)
+          : widget.onUpdate(_name, _description, _isDelete);
     } else {
       setState(() {});
     }
@@ -43,7 +47,7 @@ class _KnowEditDSState extends State<KnowEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isCreateOrUpdate
+        title: Text(widget.isAddOrUpdate
             ? 'Criar #Know conhecimento'
             : 'Editar #Know conhecimento'),
       ),
@@ -84,13 +88,46 @@ class _KnowEditDSState extends State<KnowEditDS> {
               labelText: 'Descrição',
             ),
             onSaved: (newValue) => _description = newValue,
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Informe o que se pede.';
-              }
-              return null;
-            },
+            // validator: (value) {
+            //   if (value.isEmpty) {
+            //     return 'Informe o que se pede.';
+            //   }
+            //   return null;
+            // },
           ),
+          widget.isAddOrUpdate
+              ? Container()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isInvisibilityDelete
+                        ? Container()
+                        : SwitchListTile(
+                            value: _isDelete,
+                            title: _isDelete
+                                ? Text('Simulação será apagada.')
+                                : Text('Remover esta simulação ?'),
+                            onChanged: (value) {
+                              setState(() {
+                                _isDelete = value;
+                              });
+                            },
+                          ),
+                    IconButton(
+                      tooltip: 'Liberar opção para apagar este item',
+                      color: Colors.grey[400],
+                      icon: const Icon(
+                        Icons.delete,
+                        // size: 22.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isInvisibilityDelete = !isInvisibilityDelete;
+                        });
+                      },
+                    ),
+                  ],
+                ),
         ],
       ),
     );

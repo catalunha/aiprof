@@ -17,7 +17,7 @@ class TaskEditDS extends StatefulWidget {
   final int scoreQuestion;
   // gestão da tarefa
   final int attempted;
-  final bool open;
+  final bool isOpen;
 
   final List<Input> simulationInput;
   final List<Output> simulationOutput;
@@ -37,7 +37,7 @@ class TaskEditDS extends StatefulWidget {
     this.error,
     this.scoreQuestion,
     this.attempted,
-    this.open,
+    this.isOpen,
     this.simulationInput,
     this.simulationOutput,
     this.onUpdateTask,
@@ -50,6 +50,8 @@ class TaskEditDS extends StatefulWidget {
 
 class _TaskEditDSState extends State<TaskEditDS> {
   final formKey = GlobalKey<FormState>();
+  bool isInvisibilityDelete = true;
+
   //dados do exame
   dynamic _start;
   dynamic _end;
@@ -61,14 +63,14 @@ class _TaskEditDSState extends State<TaskEditDS> {
   int _scoreQuestion;
   // gestão da tarefa
   int _attempted;
-  bool _open;
+  bool _isOpen;
   bool _nullStarted = false;
   bool _isDelete = false;
   void validateData() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       widget.onUpdateTask(_start, _end, _scoreExame, _attempt, _time, _error,
-          _scoreQuestion, _nullStarted, _attempted, _open, _isDelete);
+          _scoreQuestion, _nullStarted, _attempted, _isOpen, _isDelete);
     } else {
       setState(() {});
     }
@@ -77,7 +79,7 @@ class _TaskEditDSState extends State<TaskEditDS> {
   @override
   void initState() {
     super.initState();
-    _open = widget.open;
+    _isOpen = widget.isOpen;
     _start = widget.start != null ? widget.start : DateTime.now();
     _end = widget.end != null ? widget.end : DateTime.now();
   }
@@ -257,16 +259,36 @@ class _TaskEditDSState extends State<TaskEditDS> {
               });
             },
           ),
-          SwitchListTile(
-            value: _isDelete,
-            title: _isDelete
-                ? Text('Tarefa será removida.')
-                : Text('Remover esta tarefa?'),
-            onChanged: (value) {
-              setState(() {
-                _isDelete = value;
-              });
-            },
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              isInvisibilityDelete
+                  ? Container()
+                  : SwitchListTile(
+                      value: _isDelete,
+                      title: _isDelete
+                          ? Text('Tarefa será apagada.')
+                          : Text('Apagar esta tarefa ?'),
+                      onChanged: (value) {
+                        setState(() {
+                          _isDelete = value;
+                        });
+                      },
+                    ),
+              IconButton(
+                tooltip: 'Liberar opção para apagar este item',
+                color: Colors.grey[400],
+                icon: const Icon(
+                  Icons.delete,
+                  // size: 22.0,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isInvisibilityDelete = !isInvisibilityDelete;
+                  });
+                },
+              ),
+            ],
           ),
           Container(
             height: 50,

@@ -69,7 +69,7 @@ class ClassroomList extends StatelessWidget {
       //debug: this,
       model: ViewModel(),
       onInit: (store) =>
-          store.dispatch(GetDocsClassroomListAsyncClassroomAction()),
+          store.dispatch(StreamColClassroomAsyncClassroomAction()),
       builder: (context, viewModel) => ClassroomListDS(
         userLogged: viewModel.userLogged,
         classroomList: viewModel.classroomList,

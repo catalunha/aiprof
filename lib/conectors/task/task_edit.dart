@@ -18,7 +18,7 @@ class ViewModel extends BaseModel<AppState> {
   int scoreQuestion;
   // gestão da tarefa
   int attempted;
-  bool open;
+  bool isOpen;
 
   List<Input> simulationInput;
   List<Output> simulationOutput;
@@ -38,7 +38,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.error,
     @required this.scoreQuestion,
     @required this.attempted,
-    @required this.open,
+    @required this.isOpen,
     @required this.simulationInput,
     @required this.simulationOutput,
     @required this.onUpdateTask,
@@ -53,7 +53,7 @@ class ViewModel extends BaseModel<AppState> {
           error,
           scoreQuestion,
           attempted,
-          open,
+          isOpen,
           simulationInput,
           simulationOutput,
         ]);
@@ -90,7 +90,7 @@ class ViewModel extends BaseModel<AppState> {
         error: state.taskState.taskCurrent.error,
         scoreQuestion: state.taskState.taskCurrent.scoreQuestion,
         attempted: state.taskState.taskCurrent.attempted,
-        open: state.taskState.taskCurrent.open,
+        isOpen: state.taskState.taskCurrent.isOpen,
         simulationInput:
             _simulationInput(state.taskState.taskCurrent.simulationInput),
         simulationOutput:
@@ -105,7 +105,7 @@ class ViewModel extends BaseModel<AppState> {
           int scoreQuestion,
           bool nullStarted,
           int attempted,
-          bool open,
+          bool isOpen,
           bool isDelete,
         ) {
           dispatch(UpdateDocTaskCurrentAsyncTaskAction(
@@ -118,7 +118,7 @@ class ViewModel extends BaseModel<AppState> {
             scoreQuestion: scoreQuestion,
             nullStarted: nullStarted,
             attempted: attempted,
-            open: open,
+            isOpen: isOpen,
             isDelete: isDelete,
           ));
           dispatch(NavigateAction.pop());
@@ -148,7 +148,7 @@ class TaskEdit extends StatelessWidget {
         attempted: viewModel.attempted,
         simulationInput: viewModel.simulationInput,
         simulationOutput: viewModel.simulationOutput,
-        open: viewModel.open,
+        isOpen: viewModel.isOpen,
         onUpdateTask: viewModel.onUpdateTask,
         onUpdateOutput: viewModel.onUpdateOutput,
       ),

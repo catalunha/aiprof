@@ -36,7 +36,7 @@ class _TaskListDSState extends State<TaskListDS> {
                 Container(
                   width: 500,
                   child: ListTile(
-                    selected: task.open,
+                    selected: task?.isOpen != null ? task.isOpen : false,
                     title: Text('${task.id}'),
                     subtitle: Text('${task.toString()}'),
                     trailing: IconButton(

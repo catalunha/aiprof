@@ -27,8 +27,10 @@ class ViewModel extends BaseModel<AppState> {
   _situationList() {
     List<SituationModel> situationList = [];
     situationList.addAll(state.situationState.situationList);
-    situationList
-        .removeWhere((element) => element.isSimulationConsistent == true);
+    print(situationList.length);
+    situationList.removeWhere((element) =>
+        element.isSimulationConsistent == false ||
+        element.isSimulationConsistent == null);
     for (var folder in state.knowState.knowCurrent.folderMap.entries) {
       if (folder.value.situationRefMap != null &&
           folder.value.situationRefMap.isNotEmpty) {
@@ -69,7 +71,7 @@ class SituationSelectToFolder extends StatelessWidget {
       debug: this,
       model: ViewModel(),
       onInit: (store) =>
-          store.dispatch(GetDocsSituationListAsyncSituationAction()),
+          store.dispatch(StreamColSituationAsyncSituationAction()),
       builder: (context, viewModel) => SituationSelectToFolderDS(
         situationList: viewModel.situationList,
         folderCurrent: viewModel.folderCurrent,

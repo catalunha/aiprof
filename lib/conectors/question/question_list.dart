@@ -32,8 +32,7 @@ class QuestionList extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       model: ViewModel(),
-      onInit: (store) =>
-          store.dispatch(GetDocsQuestionListAsyncQuestionAction()),
+      onInit: (store) => store.dispatch(StreamColQuestionAsyncQuestionAction()),
       builder: (context, viewModel) => QuestionListDS(
         questionList: viewModel.questionList,
         onEditQuestionCurrent: viewModel.onEditQuestionCurrent,

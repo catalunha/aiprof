@@ -45,7 +45,7 @@ class SetExameFilterSyncExameAction extends ReduxAction<AppState> {
     );
   }
 
-  void after() => dispatch(GetDocsExameListAsyncExameAction());
+  // void after() => dispatch(StreamColExameAsyncExameAction());
 }
 
 class SetQuestionSelectedSyncExameAction extends ReduxAction<AppState> {
@@ -79,10 +79,10 @@ class SetStudentSelectedSyncExameAction extends ReduxAction<AppState> {
 }
 
 // +++ Actions Async
-class GetDocsExameListAsyncExameAction extends ReduxAction<AppState> {
+class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
-    print('GetDocsExameListAsyncExameAction...');
+    print('StreamColExameAsyncExameAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
     collRef = firestore
@@ -98,17 +98,17 @@ class GetDocsExameListAsyncExameAction extends ReduxAction<AppState> {
                 ExameModel(docSnapshot.documentID).fromMap(docSnapshot.data))
             .toList());
     streamList.listen((List<ExameModel> exameList) {
-      dispatch(Get2DocsExameListAsyncExameAction(exameList));
+      dispatch(GetDocsExameListAsyncExameAction(exameList));
     });
 
     return null;
   }
 }
 
-class Get2DocsExameListAsyncExameAction extends ReduxAction<AppState> {
+class GetDocsExameListAsyncExameAction extends ReduxAction<AppState> {
   final List<ExameModel> exameList;
 
-  Get2DocsExameListAsyncExameAction(this.exameList);
+  GetDocsExameListAsyncExameAction(this.exameList);
   @override
   AppState reduce() {
     return state.copyWith(
@@ -167,8 +167,8 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     return null;
   }
 
-  @override
-  void after() => dispatch(GetDocsExameListAsyncExameAction());
+  // @override
+  // void after() => dispatch(StreamColExameAsyncExameAction());
 }
 
 class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
@@ -227,8 +227,8 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     return null;
   }
 
-  @override
-  void after() => dispatch(GetDocsExameListAsyncExameAction());
+  // @override
+  // void after() => dispatch(StreamColExameAsyncExameAction());
 }
 
 class UpdateDocSetStudentInExameCurrentAsyncExameAction
@@ -270,7 +270,7 @@ class UpdateDocSetStudentInExameCurrentAsyncExameAction
   void before() => dispatch(WaitAction.add(this));
   @override
   void after() {
-    dispatch(GetDocsExameListAsyncExameAction());
+    // dispatch(StreamColExameAsyncExameAction());
     dispatch(WaitAction.remove(this));
   }
 }
@@ -317,7 +317,7 @@ class DeleteStudentInExameCurrentAndTaskAsyncExameAction
   void before() => dispatch(WaitAction.add(this));
   @override
   void after() {
-    dispatch(GetDocsExameListAsyncExameAction());
+    // dispatch(StreamColExameAsyncExameAction());
     dispatch(WaitAction.remove(this));
   }
 }
@@ -364,7 +364,7 @@ class UpdateDocsSetStudentListInExameCurrentAsyncExameAction
   void before() => dispatch(WaitAction.add(this));
   @override
   void after() {
-    dispatch(GetDocsExameListAsyncExameAction());
+    // dispatch(StreamColExameAsyncExameAction());
     dispatch(WaitAction.remove(this));
   }
 }
@@ -410,7 +410,7 @@ class UpdateDocSetQuestionInExameCurrentAsyncExameAction
   void before() => dispatch(WaitAction.add(this));
   @override
   void after() {
-    dispatch(GetDocsExameListAsyncExameAction());
+    // dispatch(StreamColExameAsyncExameAction());
     dispatch(WaitAction.remove(this));
   }
 }

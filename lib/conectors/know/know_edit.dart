@@ -7,41 +7,39 @@ import 'package:aiprof/states/app_state.dart';
 class ViewModel extends BaseModel<AppState> {
   String name;
   String description;
-  bool isCreateOrUpdate;
-  Function(String, String) onCreate;
-  Function(String, String) onUpdate;
+  bool isAddOrUpdate;
+  Function(String, String) onAdd;
+  Function(String, String, bool) onUpdate;
   // Function(InfoCodeModel, bool) onSetInfoCodeInKnow;
 
   ViewModel();
   ViewModel.build({
     @required this.name,
     @required this.description,
-    @required this.isCreateOrUpdate,
-    @required this.onCreate,
+    @required this.isAddOrUpdate,
+    @required this.onAdd,
     @required this.onUpdate,
     // @required this.onSetInfoCodeInKnow,
   }) : super(equals: [
           name,
           description,
-          isCreateOrUpdate,
+          isAddOrUpdate,
         ]);
   @override
   ViewModel fromStore() => ViewModel.build(
-        isCreateOrUpdate: state.knowState.knowCurrent.id == null,
+        isAddOrUpdate: state.knowState.knowCurrent.id == null,
         name: state.knowState.knowCurrent.name,
         description: state.knowState.knowCurrent.description,
-        onCreate: (String name, String description) {
+        onAdd: (String name, String description) {
           dispatch(AddDocKnowCurrentAsyncKnowAction(
             name: name,
             description: description,
           ));
           dispatch(NavigateAction.pop());
         },
-        onUpdate: (String name, String description) {
+        onUpdate: (String name, String description, bool isDelete) {
           dispatch(UpdateDocKnowCurrentAsyncKnowAction(
-            name: name,
-            description: description,
-          ));
+              name: name, description: description, isDelete: isDelete));
           dispatch(NavigateAction.pop());
         },
       );
@@ -54,10 +52,10 @@ class KnowEdit extends StatelessWidget {
       //debug: this,
       model: ViewModel(),
       builder: (context, viewModel) => KnowEditDS(
-        isCreateOrUpdate: viewModel.isCreateOrUpdate,
+        isAddOrUpdate: viewModel.isAddOrUpdate,
         name: viewModel.name,
         description: viewModel.description,
-        onCreate: viewModel.onCreate,
+        onAdd: viewModel.onAdd,
         onUpdate: viewModel.onUpdate,
       ),
     );

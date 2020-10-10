@@ -29,6 +29,8 @@ class SimulationEditDS extends StatefulWidget {
 
 class _SimulationEditDSState extends State<SimulationEditDS> {
   final formKey = GlobalKey<FormState>();
+  bool isInvisibilityDelete = true;
+
   String _name;
   bool _isDelete = false;
   void validateData() {
@@ -104,16 +106,36 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
           ...outputBuilder(context, widget.output),
           widget.isAddOrUpdate
               ? Container()
-              : SwitchListTile(
-                  value: _isDelete,
-                  title: _isDelete
-                      ? Text('Simulação será removida.')
-                      : Text('Remover esta simulação?'),
-                  onChanged: (value) {
-                    setState(() {
-                      _isDelete = value;
-                    });
-                  },
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isInvisibilityDelete
+                        ? Container()
+                        : SwitchListTile(
+                            value: _isDelete,
+                            title: _isDelete
+                                ? Text('Simulação será apagada.')
+                                : Text('Remover esta simulação ?'),
+                            onChanged: (value) {
+                              setState(() {
+                                _isDelete = value;
+                              });
+                            },
+                          ),
+                    IconButton(
+                      tooltip: 'Liberar opção para apagar este item',
+                      color: Colors.grey[400],
+                      icon: const Icon(
+                        Icons.delete,
+                        // size: 22.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isInvisibilityDelete = !isInvisibilityDelete;
+                        });
+                      },
+                    ),
+                  ],
                 ),
           Container(
             height: 50,

@@ -44,7 +44,7 @@ class ExameList extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       model: ViewModel(),
-      onInit: (store) => store.dispatch(GetDocsExameListAsyncExameAction()),
+      onInit: (store) => store.dispatch(StreamColExameAsyncExameAction()),
       builder: (context, viewModel) => ExameListDS(
         exameList: viewModel.exameList,
         onEditExameCurrent: viewModel.onEditExameCurrent,

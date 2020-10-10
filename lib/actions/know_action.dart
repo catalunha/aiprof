@@ -111,9 +111,12 @@ class AddDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
 class UpdateDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
   final String name;
   final String description;
+  final bool isDelete;
+
   UpdateDocKnowCurrentAsyncKnowAction({
     this.name,
     this.description,
+    this.isDelete,
   });
   @override
   Future<AppState> reduce() async {
@@ -121,12 +124,19 @@ class UpdateDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
     Firestore firestore = Firestore.instance;
     KnowModel knowModel = KnowModel(state.knowState.knowCurrent.id)
         .fromMap(state.knowState.knowCurrent.toMap());
-    knowModel.name = name;
-    knowModel.description = description;
-    await firestore
-        .collection(KnowModel.collection)
-        .document(knowModel.id)
-        .updateData(knowModel.toMap());
+    if (isDelete) {
+      await firestore
+          .collection(KnowModel.collection)
+          .document(knowModel.id)
+          .delete();
+    } else {
+      knowModel.name = name;
+      knowModel.description = description;
+      await firestore
+          .collection(KnowModel.collection)
+          .document(knowModel.id)
+          .updateData(knowModel.toMap());
+    }
     return null;
   }
 
@@ -138,14 +148,14 @@ class UpdateDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
 
 class SetFolderCurrentSyncKnowAction extends ReduxAction<AppState> {
   final String id;
-  final bool isCreateOrUpdate;
+  final bool isAddOrUpdate;
 
-  SetFolderCurrentSyncKnowAction({this.id, this.isCreateOrUpdate});
+  SetFolderCurrentSyncKnowAction({this.id, this.isAddOrUpdate});
 
   @override
   AppState reduce() {
     Folder folder;
-    if (isCreateOrUpdate) {
+    if (isAddOrUpdate) {
       folder = Folder(null);
       folder.idParent = id;
     } else {

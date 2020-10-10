@@ -16,7 +16,7 @@ class ViewModel extends BaseModel<AppState> {
         onAdd: (String studentsToImport) {
           // dispatch(BatchDocImportStudentAsyncStudentAction(
           //     studentsToImport: studentsToImport));
-          dispatch(UpdateStudentMapTempAsyncClassroomAction(
+          dispatch(UpdateStudentMapTempAsyncStudentAction(
               studentListString: studentsToImport));
           dispatch(NavigateAction.pop());
         },

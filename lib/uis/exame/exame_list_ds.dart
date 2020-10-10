@@ -64,7 +64,7 @@ class _ExameListDSState extends State<ExameListDS> {
                       ),
                       IconButton(
                         tooltip: 'Lista de estudantes',
-                        icon: Icon(Icons.person_add),
+                        icon: Icon(Icons.person),
                         onPressed: () async {
                           widget.onStudentList(exame.id);
                         },
