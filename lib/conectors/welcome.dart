@@ -25,8 +25,8 @@ class Welcome extends StatelessWidget {
       //debug: this,
       model: ViewModel(),
       builder: (BuildContext context, ViewModel viewModel) =>
-          viewModel.logged ? HomePage() : LoginPage(),
-      // viewModel.logged ? ClassroomList() : LoginPage(),
+          // viewModel.logged ? HomePage() : LoginPage(),
+          viewModel.logged ? ClassroomList() : LoginPage(),
     );
   }
 }

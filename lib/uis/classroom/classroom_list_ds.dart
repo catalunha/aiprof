@@ -1,4 +1,5 @@
 import 'package:aiprof/models/user_model.dart';
+import 'package:aiprof/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/conectors/components/logout_button.dart';
 import 'package:aiprof/models/classroom_model.dart';
@@ -37,7 +38,10 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
       appBar: AppBar(
         title: Text('#Classroom Turma (${widget.classroomList.length})'),
         actions: [
-          // LogoutButton(),
+          IconButton(
+              icon: Icon(Icons.line_style),
+              onPressed: () => Navigator.pushNamed(context, Routes.knowList)),
+          LogoutButton(),
         ],
       ),
       body: Column(

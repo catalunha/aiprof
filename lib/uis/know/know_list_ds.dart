@@ -1,3 +1,4 @@
+import 'package:aiprof/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/models/know_model.dart';
 
@@ -18,6 +19,12 @@ class KnowListDS extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('#Know Conhecimento (${knowList?.length})'),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.fact_check_outlined),
+              onPressed: () =>
+                  Navigator.pushNamed(context, Routes.situationList))
+        ],
       ),
       body: ListView.builder(
         itemCount: knowList.length,

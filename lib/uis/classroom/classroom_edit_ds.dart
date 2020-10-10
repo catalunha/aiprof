@@ -9,7 +9,7 @@ class ClassroomEditDS extends StatefulWidget {
   final String urlProgram;
   final bool isAddOrUpdate;
   final Function(String, String, String, String, String) onAdd;
-  final Function(String, String, String, String, String, bool) onUpdate;
+  final Function(String, String, String, String, String, bool, bool) onUpdate;
 
   const ClassroomEditDS({
     Key key,
@@ -35,13 +35,16 @@ class _ClassroomEditDSState extends State<ClassroomEditDS> {
   String _name;
   String _description;
   String _urlProgram;
+  bool _isDelete = false;
+  bool isInvisibilityDelete = true;
+
   void validateData() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       widget.isAddOrUpdate
           ? widget.onAdd(_company, _component, _name, _description, _urlProgram)
           : widget.onUpdate(_company, _component, _name, _description,
-              _urlProgram, _isActive);
+              _urlProgram, _isActive, _isDelete);
     } else {
       setState(() {});
     }
@@ -157,6 +160,39 @@ class _ClassroomEditDSState extends State<ClassroomEditDS> {
                       _isActive = value;
                     });
                   },
+                ),
+          widget.isAddOrUpdate
+              ? Container()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isInvisibilityDelete
+                        ? Container()
+                        : SwitchListTile(
+                            value: _isDelete,
+                            title: _isDelete
+                                ? Text('Turma será apagada.')
+                                : Text('Remover esta turma ?'),
+                            onChanged: (value) {
+                              setState(() {
+                                _isDelete = value;
+                              });
+                            },
+                          ),
+                    IconButton(
+                      tooltip: 'Liberar opção para apagar este item',
+                      color: Colors.grey[400],
+                      icon: const Icon(
+                        Icons.delete,
+                        // size: 22.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isInvisibilityDelete = !isInvisibilityDelete;
+                        });
+                      },
+                    ),
+                  ],
                 ),
           Container(
             height: 50,

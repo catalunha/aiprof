@@ -103,8 +103,9 @@ class ClassroomModel extends FirestoreModel {
     // _return = _return + '\nTurma: $name';
     _return = _return +
         '\nProfessor: ${userRef.name.split(' ')[0]} (${userRef.id.substring(0, 4)})';
+    _return = _return +
+        '\nAlunos: ${studentUserRefMap?.length != null ? studentUserRefMap.length : 0}';
     _return = _return + '\nid: ${id.substring(0, 4)}';
-    _return = _return + '\nAlunos: ${studentUserRefMap?.length}';
     return _return;
   }
 }

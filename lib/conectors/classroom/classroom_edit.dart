@@ -13,7 +13,7 @@ class ViewModel extends BaseModel<AppState> {
   bool isActive;
   bool isAddOrUpdate;
   Function(String, String, String, String, String) onAdd;
-  Function(String, String, String, String, String, bool) onUpdate;
+  Function(String, String, String, String, String, bool, bool) onUpdate;
   ViewModel();
   ViewModel.build({
     @required this.company,
@@ -59,8 +59,13 @@ class ViewModel extends BaseModel<AppState> {
           ));
           dispatch(NavigateAction.pop());
         },
-        onUpdate: (String company, String component, String name,
-            String description, String urlProgram, bool isActive) {
+        onUpdate: (String company,
+            String component,
+            String name,
+            String description,
+            String urlProgram,
+            bool isActive,
+            bool isDelete) {
           dispatch(UpdateDocClassroomCurrentAsyncClassroomAction(
             company: company,
             component: component,
@@ -68,6 +73,7 @@ class ViewModel extends BaseModel<AppState> {
             description: description,
             urlProgram: urlProgram,
             isActive: isActive,
+            isDelete: isDelete,
           ));
           dispatch(NavigateAction.pop());
         },

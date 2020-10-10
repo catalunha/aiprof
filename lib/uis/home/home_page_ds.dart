@@ -26,11 +26,11 @@ class HomePageDS extends StatelessWidget {
             title: Text('#Classroom Turmas ou Classes'),
             onTap: () => Navigator.pushNamed(context, Routes.classroomList),
           ),
-          ListTile(
-            leading: Icon(Icons.check),
-            title: Text('#Situation Situações ou Problemas'),
-            onTap: () => Navigator.pushNamed(context, Routes.situationList),
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.fact_check_outlined),
+          //   title: Text('#Situation Situações ou Problemas'),
+          //   onTap: () => Navigator.pushNamed(context, Routes.situationList),
+          // ),
           ListTile(
             leading: Icon(Icons.line_style),
             title: Text('#Know Conhecimentos ou Componentes'),

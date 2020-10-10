@@ -54,18 +54,11 @@ class StreamColClassroomAsyncClassroomAction extends ReduxAction<AppState> {
     print('StreamColClassroomAsyncClassroomAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
-    if (state.classroomState.classroomFilter == ClassroomFilter.isactive) {
-      collRef = firestore
-          .collection(ClassroomModel.collection)
-          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
-      // .where('isActive', isEqualTo: true);
-    } else if (state.classroomState.classroomFilter ==
-        ClassroomFilter.isNotactive) {
-      collRef = firestore
-          .collection(ClassroomModel.collection)
-          .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
-      // .where('isActive', isEqualTo: false);
-    }
+    collRef = firestore
+        .collection(ClassroomModel.collection)
+        .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
+    // .where('isActive', isEqualTo: true);
+
     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
     Stream<List<ClassroomModel>> streamList = streamQuerySnapshot.map(
@@ -195,6 +188,7 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
   final String description;
   final String urlProgram;
   final bool isActive;
+  final bool isDelete;
 
   UpdateDocClassroomCurrentAsyncClassroomAction({
     this.company,
@@ -203,6 +197,7 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
     this.description,
     this.urlProgram,
     this.isActive,
+    this.isDelete,
   });
   @override
   Future<AppState> reduce() async {
@@ -211,33 +206,40 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());
-    classroomModel.company = company;
-    classroomModel.component = component;
-    classroomModel.name = name;
-    classroomModel.description = description;
-    classroomModel.urlProgram = urlProgram;
-    if (classroomModel.isActive != isActive && isActive) {
+    if (isDelete) {
       await firestore
-          .collection(UserModel.collection)
-          .document(state.loggedState.userModelLogged.id)
-          .updateData({
-        'classroomId': FieldValue.arrayUnion([classroomModel.id])
-      });
-    }
-    if (classroomModel.isActive != isActive && !isActive) {
-      await firestore
-          .collection(UserModel.collection)
-          .document(state.loggedState.userModelLogged.id)
-          .updateData({
-        'classroomId': FieldValue.arrayRemove([classroomModel.id])
-      });
-    }
-    classroomModel.isActive = isActive;
+          .collection(ClassroomModel.collection)
+          .document(classroomModel.id)
+          .delete();
+    } else {
+      classroomModel.company = company;
+      classroomModel.component = component;
+      classroomModel.name = name;
+      classroomModel.description = description;
+      classroomModel.urlProgram = urlProgram;
+      // if (classroomModel.isActive != isActive && isActive) {
+      //   await firestore
+      //       .collection(UserModel.collection)
+      //       .document(state.loggedState.userModelLogged.id)
+      //       .updateData({
+      //     'classroomId': FieldValue.arrayUnion([classroomModel.id])
+      //   });
+      // }
+      if (classroomModel.isActive != isActive && !isActive) {
+        await firestore
+            .collection(UserModel.collection)
+            .document(state.loggedState.userModelLogged.id)
+            .updateData({
+          'classroomId': FieldValue.arrayRemove([classroomModel.id])
+        });
+      }
+      classroomModel.isActive = isActive;
 
-    await firestore
-        .collection(ClassroomModel.collection)
-        .document(classroomModel.id)
-        .updateData(classroomModel.toMap());
+      await firestore
+          .collection(ClassroomModel.collection)
+          .document(classroomModel.id)
+          .updateData(classroomModel.toMap());
+    }
     return null;
   }
 
