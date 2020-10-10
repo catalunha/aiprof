@@ -43,6 +43,7 @@ class ExameEditDS extends StatefulWidget {
 class _ExameEditDSState extends State<ExameEditDS> {
   final formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> scaffoldState = GlobalKey<ScaffoldState>();
+  bool isInvisibilityDelete = false;
 
   String _name;
   String _description;
@@ -74,6 +75,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
     _isDelivered = widget.isDelivered;
     _start = widget.start != null ? widget.start : DateTime.now();
     _end = widget.end != null ? widget.end : DateTime.now();
+    isInvisibilityDelete = true;
   }
 
   @override
@@ -274,19 +276,39 @@ class _ExameEditDSState extends State<ExameEditDS> {
                 ),
           widget.isAddOrUpdate
               ? Container()
-              : SwitchListTile(
-                  value: _isDelete,
-                  title: _isDelete
-                      ? Text('Avaliação será apagada.')
-                      : Text('Apagar avaliação ?'),
-                  onChanged: (value) {
-                    setState(() {
-                      _isDelete = value;
-                    });
-                  },
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isInvisibilityDelete
+                        ? Container()
+                        : SwitchListTile(
+                            value: _isDelete,
+                            title: _isDelete
+                                ? Text('Avaliação será apagada.')
+                                : Text('Apagar avaliação ?'),
+                            onChanged: (value) {
+                              setState(() {
+                                _isDelete = value;
+                              });
+                            },
+                          ),
+                    IconButton(
+                      tooltip: 'Liberar opção de apagar este item',
+                      color: Colors.grey[400],
+                      icon: const Icon(
+                        Icons.delete,
+                        // size: 22.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isInvisibilityDelete = !isInvisibilityDelete;
+                        });
+                      },
+                    ),
+                  ],
                 ),
           Container(
-            height: 50,
+            height: 100,
           ),
         ],
       ),

@@ -1,6 +1,5 @@
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/exame_model.dart';
-import 'package:aiprof/models/question_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aiprof/models/user_model.dart';

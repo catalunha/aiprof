@@ -10,6 +10,8 @@ class ClassroomModel extends FirestoreModel {
   String description;
   String urlProgram;
   bool isActive;
+  Map<String, UserModel> studentUserRefMapTemp;
+  Map<String, UserModel> studentUserRefMap;
   // dynamic number;
   // dynamic questionNumber;
 
@@ -23,7 +25,8 @@ class ClassroomModel extends FirestoreModel {
     this.description,
     this.urlProgram,
     this.userRef,
-    // this.questionNumber,
+    this.studentUserRefMapTemp,
+    this.studentUserRefMap,
   }) : super(id);
 
   @override
@@ -38,8 +41,19 @@ class ClassroomModel extends FirestoreModel {
     userRef = map.containsKey('userRef') && map['userRef'] != null
         ? UserModel(map['userRef']['id']).fromMap(map['userRef'])
         : null;
-    // if (map.containsKey('questionNumber'))
-    //   questionNumber = map['questionNumber'];
+    if (map["studentUserRefMapTemp"] is Map) {
+      studentUserRefMapTemp = Map<String, UserModel>();
+      for (var item in map["studentUserRefMapTemp"].entries) {
+        studentUserRefMapTemp[item.key] =
+            UserModel(item.key).fromMap(item.value);
+      }
+    }
+    if (map["studentUserRefMap"] is Map) {
+      studentUserRefMap = Map<String, UserModel>();
+      for (var item in map["studentUserRefMap"].entries) {
+        studentUserRefMap[item.key] = UserModel(item.key).fromMap(item.value);
+      }
+    }
     return this;
   }
 
@@ -57,7 +71,18 @@ class ClassroomModel extends FirestoreModel {
     if (this.userRef != null) {
       data['userRef'] = this.userRef.toMapRef();
     }
-    // if (questionNumber != null) data['questionNumber'] = this.questionNumber;
+    if (studentUserRefMapTemp != null && studentUserRefMapTemp is Map) {
+      data["studentUserRefMapTemp"] = Map<String, dynamic>();
+      for (var item in studentUserRefMapTemp.entries) {
+        data["studentUserRefMapTemp"][item.key] = item.value.toMapRef();
+      }
+    }
+    if (studentUserRefMap != null && studentUserRefMap is Map) {
+      data["studentUserRefMap"] = Map<String, dynamic>();
+      for (var item in studentUserRefMap.entries) {
+        data["studentUserRefMap"][item.key] = item.value.toMapRef();
+      }
+    }
     return data;
   }
 
@@ -79,6 +104,7 @@ class ClassroomModel extends FirestoreModel {
     _return = _return +
         '\nProfessor: ${userRef.name.split(' ')[0]} (${userRef.id.substring(0, 4)})';
     _return = _return + '\nid: ${id.substring(0, 4)}';
+    _return = _return + '\nAlunos: ${studentUserRefMap?.length}';
     return _return;
   }
 }

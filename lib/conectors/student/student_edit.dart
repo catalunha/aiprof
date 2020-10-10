@@ -1,3 +1,4 @@
+import 'package:aiprof/actions/classroom_action.dart';
 import 'package:aiprof/actions/student_action.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/uis/student/student_edit_ds.dart';
@@ -13,8 +14,10 @@ class ViewModel extends BaseModel<AppState> {
   @override
   ViewModel fromStore() => ViewModel.build(
         onAdd: (String studentsToImport) {
-          dispatch(BatchDocImportStudentAsyncStudentAction(
-              studentsToImport: studentsToImport));
+          // dispatch(BatchDocImportStudentAsyncStudentAction(
+          //     studentsToImport: studentsToImport));
+          dispatch(UpdateStudentMapTempAsyncClassroomAction(
+              studentListString: studentsToImport));
           dispatch(NavigateAction.pop());
         },
       );

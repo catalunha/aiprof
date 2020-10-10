@@ -6,6 +6,7 @@ import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart' as uuid;
 
 class SetClassroomCurrentSyncClassroomAction extends ReduxAction<AppState> {
   final String id;
@@ -236,5 +237,88 @@ class UpdateDocclassroomIdInUserAsyncClassroomAction
     dispatch(GetDocsClassroomListAsyncClassroomAction());
     dispatch(GetDocsUserModelAsyncLoggedAction(
         id: state.loggedState.userModelLogged.id));
+  }
+}
+
+class UpdateStudentMapTempAsyncClassroomAction extends ReduxAction<AppState> {
+  final String studentListString;
+
+  UpdateStudentMapTempAsyncClassroomAction({
+    this.studentListString,
+  });
+  @override
+  Future<AppState> reduce() async {
+    print('AddDocStudentCurrentAsyncStudentAction...');
+    Firestore firestore = Firestore.instance;
+    ClassroomModel classroomModel =
+        ClassroomModel(state.classroomState.classroomCurrent.id)
+            .fromMap(state.classroomState.classroomCurrent.toMap());
+    StudentsToImport _studentsToImport = StudentsToImport(studentListString);
+
+    classroomModel.studentUserRefMapTemp =
+        _studentsToImport.studentStringToMap();
+
+    await firestore
+        .collection(ClassroomModel.collection)
+        .document(classroomModel.id)
+        .updateData(classroomModel.toMap());
+    return null;
+  }
+
+  // @override
+  // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
+  // @override
+  // void after() => dispatch(GetDocsStudentListAsyncStudentAction());
+}
+
+class StudentsToImport {
+  final String studentsToImport;
+
+  StudentsToImport(this.studentsToImport);
+  Map<String, UserModel> studentStringToMap() {
+    Map<String, UserModel> studentMap = {};
+    List<List<String>> studentList = List<List<String>>();
+    studentList.clear();
+    String matricula;
+    String email;
+    String nome;
+    if (studentsToImport != null) {
+      // // print('::cadastro::');
+      // // print(studentsToImport);
+      List<String> linhas = studentsToImport.split('\n');
+      // // print('::linhas::');
+      // // print(linhas);
+      for (var linha in linhas) {
+        // // print('::linha::');
+        // // print(linha);
+        if (linha != null) {
+          List<String> campos = linha.trim().split(';');
+          // // print('::campos::');
+          // // print(campos);
+          if (campos != null &&
+              campos.length == 3 &&
+              campos[0] != null &&
+              campos[0].length >= 1 &&
+              campos[1] != null &&
+              campos[1].length >= 3 &&
+              campos[1].contains('@') &&
+              campos[2] != null &&
+              campos[2].length >= 3) {
+            matricula = campos[0].trim();
+            email = campos[1].trim();
+            nome = campos[2].trim();
+            // // print('::matricula::$matricula');
+            // // print('::email::$email');
+            // // print('::nome::$nome');
+            studentList.add([matricula, email, nome]);
+            String id = uuid.Uuid().v4();
+            studentMap[id] =
+                UserModel(id, code: matricula, email: email, name: nome);
+          }
+        }
+      }
+    }
+    print(studentList);
+    return studentMap;
   }
 }
