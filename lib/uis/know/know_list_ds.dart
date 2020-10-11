@@ -42,7 +42,7 @@ class KnowListDS extends StatelessWidget {
                     subtitle: Text('${know.toString()}'),
                   ),
                 ),
-                SelectableText(json.encode(know.toMap()).toString()),
+                // SelectableText(json.encode(know.toMap()).toString()),
                 IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () async {

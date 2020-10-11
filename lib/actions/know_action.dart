@@ -316,7 +316,9 @@ class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
     this.isAddOrRemove,
   });
   @override
-  AppState reduce() {
+  Future<AppState> reduce() async {
+    Firestore firestore = Firestore.instance;
+
     Folder folder;
     folder = state.knowState.folderCurrent;
     if (folder.situationRefMap == null)
@@ -331,6 +333,11 @@ class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
     KnowModel knowModel = KnowModel(state.knowState.knowCurrent.id)
         .fromMap(state.knowState.knowCurrent.toMap());
     knowModel.folderMap[folder.id] = folder;
+    await firestore
+        .collection(KnowModel.collection)
+        .document(knowModel.id)
+        .updateData(knowModel.toMap());
+
     return state.copyWith(
       knowState: state.knowState.copyWith(
         knowCurrent: knowModel,
@@ -338,7 +345,7 @@ class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
     );
   }
 
-  @override
-  void after() => dispatch(UpdateDocKnowCurrentAsyncKnowAction());
+  // @override
+  // void after() => dispatch(UpdateDocKnowCurrentAsyncKnowAction());
 }
 //--- Actions Sync for Folder
