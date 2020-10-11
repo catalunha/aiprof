@@ -258,7 +258,8 @@ class UpdateStudentMapTempAsyncStudentAction extends ReduxAction<AppState> {
             .fromMap(state.classroomState.classroomCurrent.toMap());
     StudentsToImport _studentsToImport = StudentsToImport(studentListString);
 
-    classroomModel.studentUserRefMap = _studentsToImport.studentStringToMap();
+    classroomModel.studentUserRefMapTemp =
+        _studentsToImport.studentStringToMap();
 
     await firestore
         .collection(ClassroomModel.collection)

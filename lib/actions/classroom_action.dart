@@ -119,11 +119,22 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
             .fromMap(classroomModelTemp.toMap());
       }
     }
-
+    List<UserModel> studentList = [];
+    if (state.classroomState?.classroomCurrent?.studentUserRefMap != null) {
+      for (var item
+          in state.classroomState.classroomCurrent.studentUserRefMap.entries) {
+        studentList.add(UserModel(item.key).fromMap(item.value.toMap()));
+      }
+      // print(studentList);
+      studentList.sort((a, b) => a.name.compareTo(b.name));
+    }
     return state.copyWith(
       classroomState: state.classroomState.copyWith(
         classroomList: classroomList,
         classroomCurrent: classroomModel,
+      ),
+      studentState: state.studentState.copyWith(
+        studentList: studentList,
       ),
     );
   }

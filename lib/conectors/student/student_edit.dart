@@ -19,6 +19,7 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(UpdateStudentMapTempAsyncStudentAction(
               studentListString: studentsToImport));
           dispatch(NavigateAction.pop());
+          dispatch(NavigateAction.pop());
         },
       );
 }

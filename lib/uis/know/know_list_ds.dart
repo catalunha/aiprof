@@ -1,6 +1,7 @@
 import 'package:aiprof/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/models/know_model.dart';
+import 'dart:convert';
 
 class KnowListDS extends StatelessWidget {
   final List<KnowModel> knowList;
@@ -37,10 +38,11 @@ class KnowListDS extends StatelessWidget {
                 Container(
                   width: 500,
                   child: ListTile(
-                    title: Text('${know.name}'),
+                    title: Text('${know.name}...'),
                     subtitle: Text('${know.toString()}'),
                   ),
                 ),
+                SelectableText(json.encode(know.toMap()).toString()),
                 IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () async {
