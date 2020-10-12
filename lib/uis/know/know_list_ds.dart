@@ -19,7 +19,7 @@ class KnowListDS extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#Know Conhecimento (${knowList?.length})'),
+        title: Text('Conhecimento (${knowList?.length})'),
         actions: [
           IconButton(
               icon: Icon(Icons.fact_check_outlined),
@@ -38,7 +38,7 @@ class KnowListDS extends StatelessWidget {
                 Container(
                   width: 500,
                   child: ListTile(
-                    title: Text('${know.name}...'),
+                    title: Text('${know.name}'),
                     subtitle: Text('${know.toString()}'),
                   ),
                 ),

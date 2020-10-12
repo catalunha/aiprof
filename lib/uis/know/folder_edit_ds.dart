@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FolderEditDS extends StatefulWidget {
   final String name;
   final String description;
-  final bool isCreateOrUpdate;
+  final bool isAddOrUpdate;
   final Function(String, String) onCreate;
   final Function(String, String, bool) onUpdate;
 
@@ -11,7 +11,7 @@ class FolderEditDS extends StatefulWidget {
     Key key,
     this.name,
     this.description,
-    this.isCreateOrUpdate,
+    this.isAddOrUpdate,
     this.onCreate,
     this.onUpdate,
   }) : super(key: key);
@@ -21,16 +21,18 @@ class FolderEditDS extends StatefulWidget {
 
 class _FolderEditDSState extends State<FolderEditDS> {
   final formKey = GlobalKey<FormState>();
+  bool isInvisibilityDelete = true;
+
   String _name;
   String _description;
-  bool _remover = false;
+  bool _isDelete = false;
 
   void validateData() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      widget.isCreateOrUpdate
+      widget.isAddOrUpdate
           ? widget.onCreate(_name, _description)
-          : widget.onUpdate(_name, _description, _remover);
+          : widget.onUpdate(_name, _description, _isDelete);
     } else {
       setState(() {});
     }
@@ -45,7 +47,7 @@ class _FolderEditDSState extends State<FolderEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isCreateOrUpdate
+        title: Text(widget.isAddOrUpdate
             ? 'Criar #folder Pasta'
             : 'Editar #folder Pasta'),
       ),
@@ -93,17 +95,39 @@ class _FolderEditDSState extends State<FolderEditDS> {
             //   return null;
             // },
           ),
-          widget.isCreateOrUpdate
+          widget.isAddOrUpdate
               ? Container()
-              : SwitchListTile(
-                  value: _remover,
-                  title: Text(
-                      'Remover este folder e todos abaixo. Isto não remove as situações.'),
-                  onChanged: (value) {
-                    setState(() {
-                      _remover = value;
-                    });
-                  },
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isInvisibilityDelete
+                        ? Container()
+                        : SwitchListTile(
+                            value: _isDelete,
+                            title: _isDelete
+                                ? Text('Pasta será apagada.')
+                                : Text(
+                                    'Remover esta pasta e seu conteúdo ? Isto não remove as situações originais.'),
+                            onChanged: (value) {
+                              setState(() {
+                                _isDelete = value;
+                              });
+                            },
+                          ),
+                    IconButton(
+                      tooltip: 'Liberar opção para apagar este item',
+                      color: Colors.grey[400],
+                      icon: const Icon(
+                        Icons.delete,
+                        // size: 22.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isInvisibilityDelete = !isInvisibilityDelete;
+                        });
+                      },
+                    ),
+                  ],
                 ),
         ],
       ),

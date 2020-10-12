@@ -12,7 +12,7 @@ class ViewModel extends BaseModel<AppState> {
   bool isActive;
   bool isAddOrUpdate;
   Function(String, String, String, String) onAdd;
-  Function(String, String, String, String, bool) onUpdate;
+  Function(String, String, String, String, bool, bool) onUpdate;
   ViewModel();
   ViewModel.build({
     @required this.area,
@@ -59,6 +59,7 @@ class ViewModel extends BaseModel<AppState> {
           String description,
           String url,
           bool isActive,
+          bool isDelete,
         ) {
           dispatch(UpdateDocSituationCurrentAsyncSituationAction(
             area: area,
@@ -66,6 +67,7 @@ class ViewModel extends BaseModel<AppState> {
             description: description,
             url: url,
             isActive: isActive,
+            isDelete: isDelete,
           ));
           dispatch(NavigateAction.pop());
         },

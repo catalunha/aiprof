@@ -45,14 +45,14 @@ class SetKnowFilterSyncKnowAction extends ReduxAction<AppState> {
     );
   }
 
-  void after() => dispatch(GetDocsKnowListAsyncKnowAction());
+  // void after() => dispatch(GetDocsKnowListAsyncKnowAction());
 }
 
 // +++ Actions Async
-class GetDocsKnowListAsyncKnowAction extends ReduxAction<AppState> {
+class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
-    print('GetDocsKnowListAsyncKnowAction...');
+    print('StreamColExameAsyncExameAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
 
@@ -67,16 +67,41 @@ class GetDocsKnowListAsyncKnowAction extends ReduxAction<AppState> {
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: false);
     }
-    final docsSnapNew = await collRef.getDocuments();
+    Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
-    List<KnowModel> listDocs = docsSnapNew.documents
-        .map((docSnapNew) =>
-            KnowModel(docSnapNew.documentID).fromMap(docSnapNew.data))
-        .toList();
+    Stream<List<KnowModel>> streamList = streamQuerySnapshot.map(
+        (querySnapshot) => querySnapshot.documents
+            .map((docSnapshot) =>
+                KnowModel(docSnapshot.documentID).fromMap(docSnapshot.data))
+            .toList());
+    streamList.listen((List<KnowModel> knowList) {
+      dispatch(GetDocsKnowListAsyncKnowAction(knowList));
+    });
 
+    // final docsSnapNew = await collRef.getDocuments();
+
+    // List<KnowModel> listDocs = docsSnapNew.documents
+    //     .map((docSnapNew) =>
+    //         KnowModel(docSnapNew.documentID).fromMap(docSnapNew.data))
+    //     .toList();
+
+    // return state.copyWith(
+    //   knowState: state.knowState.copyWith(
+    //     knowList: listDocs,
+    //   ),
+    // );
+  }
+}
+
+class GetDocsKnowListAsyncKnowAction extends ReduxAction<AppState> {
+  final List<KnowModel> knowList;
+
+  GetDocsKnowListAsyncKnowAction(this.knowList);
+  @override
+  AppState reduce() {
     return state.copyWith(
       knowState: state.knowState.copyWith(
-        knowList: listDocs,
+        knowList: knowList,
       ),
     );
   }
@@ -104,8 +129,8 @@ class AddDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
     return null;
   }
 
-  @override
-  void after() => dispatch(GetDocsKnowListAsyncKnowAction());
+  // @override
+  // void after() => dispatch(GetDocsKnowListAsyncKnowAction());
 }
 
 class UpdateDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
@@ -140,8 +165,8 @@ class UpdateDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
     return null;
   }
 
-  @override
-  void after() => dispatch(GetDocsKnowListAsyncKnowAction());
+  // @override
+  // void after() => dispatch(GetDocsKnowListAsyncKnowAction());
 }
 
 //+++ Actions Sync for Folder
@@ -205,18 +230,19 @@ class CreateFolderSyncKnowAction extends ReduxAction<AppState> {
   // @override
   // Object wrapError(error) => UserException("ATENÇÃO1:", cause: error);
   @override
-  void after() => dispatch(UpdateDocKnowCurrentAsyncKnowAction());
+  void after() =>
+      dispatch(UpdateDocKnowCurrentAsyncKnowAction(isDelete: false));
 }
 
 class UpdateFolderSyncKnowAction extends ReduxAction<AppState> {
   final String name;
   final String description;
-  final bool isRemove;
+  final bool isDelete;
 
   UpdateFolderSyncKnowAction({
     this.name,
     this.description,
-    this.isRemove,
+    this.isDelete,
   });
   // String removeRecursiveFolderBack(String folderId) {
   //   print('folderId:$folderId');
@@ -270,7 +296,7 @@ class UpdateFolderSyncKnowAction extends ReduxAction<AppState> {
 
     KnowModel knowModel = KnowModel(state.knowState.knowCurrent.id)
         .fromMap(state.knowState.knowCurrent.toMap());
-    if (isRemove) {
+    if (isDelete) {
       List<String> removeParent = [folder.id];
       List<String> removeChild = [];
       bool goBack;
@@ -305,7 +331,8 @@ class UpdateFolderSyncKnowAction extends ReduxAction<AppState> {
   // @override
   // Object wrapError(error) => UserException("ATENÇÃO2:", cause: error);
   @override
-  void after() => dispatch(UpdateDocKnowCurrentAsyncKnowAction());
+  void after() =>
+      dispatch(UpdateDocKnowCurrentAsyncKnowAction(isDelete: false));
 }
 
 class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
@@ -316,8 +343,8 @@ class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
     this.isAddOrRemove,
   });
   @override
-  Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
+  AppState reduce() {
+    // Firestore firestore = Firestore.instance;
 
     Folder folder;
     folder = state.knowState.folderCurrent;
@@ -333,10 +360,10 @@ class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
     KnowModel knowModel = KnowModel(state.knowState.knowCurrent.id)
         .fromMap(state.knowState.knowCurrent.toMap());
     knowModel.folderMap[folder.id] = folder;
-    await firestore
-        .collection(KnowModel.collection)
-        .document(knowModel.id)
-        .updateData(knowModel.toMap());
+    // await firestore
+    //     .collection(KnowModel.collection)
+    //     .document(knowModel.id)
+    //     .updateData(knowModel.toMap());
 
     return state.copyWith(
       knowState: state.knowState.copyWith(
@@ -345,7 +372,8 @@ class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
     );
   }
 
-  // @override
-  // void after() => dispatch(UpdateDocKnowCurrentAsyncKnowAction());
+  @override
+  void after() =>
+      dispatch(UpdateDocKnowCurrentAsyncKnowAction(isDelete: false));
 }
 //--- Actions Sync for Folder

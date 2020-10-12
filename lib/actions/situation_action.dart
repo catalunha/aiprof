@@ -295,6 +295,7 @@ class UpdateDocSituationCurrentAsyncSituationAction
   final String description;
   final String url;
   final bool isActive;
+  final bool isDelete;
 
   UpdateDocSituationCurrentAsyncSituationAction({
     this.area,
@@ -302,6 +303,7 @@ class UpdateDocSituationCurrentAsyncSituationAction
     this.description,
     this.url,
     this.isActive,
+    this.isDelete,
   });
   @override
   Future<AppState> reduce() async {
@@ -310,32 +312,39 @@ class UpdateDocSituationCurrentAsyncSituationAction
     SituationModel situationModel =
         SituationModel(state.situationState.situationCurrent.id)
             .fromMap(state.situationState.situationCurrent.toMap());
-    situationModel.area = area;
-    situationModel.name = name;
-    situationModel.description = description;
-    situationModel.url = url;
-    // if (situationModel.isActive != isActive && isActive) {
-    //   await firestore
-    //       .collection(UserModel.collection)
-    //       .document(state.loggedState.userModelLogged.id)
-    //       .updateData({
-    //     'situationId': FieldValue.arrayUnion([situationModel.id])
-    //   });
-    // }
-    // if (situationModel.isActive != isActive && !isActive) {
-    //   await firestore
-    //       .collection(UserModel.collection)
-    //       .document(state.loggedState.userModelLogged.id)
-    //       .updateData({
-    //     'situationId': FieldValue.arrayRemove([situationModel.id])
-    //   });
-    // }
-    situationModel.isActive = isActive;
+    if (isDelete) {
+      await firestore
+          .collection(SituationModel.collection)
+          .document(situationModel.id)
+          .delete();
+    } else {
+      situationModel.area = area;
+      situationModel.name = name;
+      situationModel.description = description;
+      situationModel.url = url;
+      // if (situationModel.isActive != isActive && isActive) {
+      //   await firestore
+      //       .collection(UserModel.collection)
+      //       .document(state.loggedState.userModelLogged.id)
+      //       .updateData({
+      //     'situationId': FieldValue.arrayUnion([situationModel.id])
+      //   });
+      // }
+      // if (situationModel.isActive != isActive && !isActive) {
+      //   await firestore
+      //       .collection(UserModel.collection)
+      //       .document(state.loggedState.userModelLogged.id)
+      //       .updateData({
+      //     'situationId': FieldValue.arrayRemove([situationModel.id])
+      //   });
+      // }
+      situationModel.isActive = isActive;
 
-    await firestore
-        .collection(SituationModel.collection)
-        .document(situationModel.id)
-        .updateData(situationModel.toMap());
+      await firestore
+          .collection(SituationModel.collection)
+          .document(situationModel.id)
+          .updateData(situationModel.toMap());
+    }
     return null;
   }
 

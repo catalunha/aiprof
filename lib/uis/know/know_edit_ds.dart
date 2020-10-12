@@ -48,8 +48,8 @@ class _KnowEditDSState extends State<KnowEditDS> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.isAddOrUpdate
-            ? 'Criar #Know conhecimento'
-            : 'Editar #Know conhecimento'),
+            ? 'Criar conhecimento'
+            : 'Editar conhecimento'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -105,8 +105,8 @@ class _KnowEditDSState extends State<KnowEditDS> {
                         : SwitchListTile(
                             value: _isDelete,
                             title: _isDelete
-                                ? Text('Simulação será apagada.')
-                                : Text('Remover esta simulação ?'),
+                                ? Text('Área será apagada.')
+                                : Text('Remover esta área ?'),
                             onChanged: (value) {
                               setState(() {
                                 _isDelete = value;

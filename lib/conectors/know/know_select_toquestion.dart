@@ -33,7 +33,7 @@ class KnowSelectToQuestion extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       model: ViewModel(),
-      onInit: (store) => store.dispatch(GetDocsKnowListAsyncKnowAction()),
+      onInit: (store) => store.dispatch(StreamColExameAsyncExameAction()),
       builder: (context, viewModel) => KnowSelectToQuestionDS(
         knowList: viewModel.knowList,
         onFolderList: viewModel.onFolderList,

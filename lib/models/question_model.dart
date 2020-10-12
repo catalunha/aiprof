@@ -110,7 +110,7 @@ class QuestionModel extends FirestoreModel {
     _return = _return +
         ' Avaliação: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
     _return = _return +
-        '\nSituação: ${situationRef.name} (${situationRef.id.substring(0, 4)})';
+        '\nSituação: ${situationRef?.name} (${situationRef?.id?.substring(0, 4)})';
 
     // _return = _return + '\nuserRef.name: ${userRef.name}';
     // _return = _return + '\nclassroomRef.name: ${classroomRef.name}';

@@ -24,7 +24,7 @@ class _ExameListDSState extends State<ExameListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#Exame Avaliação (${widget.exameList.length})'),
+        title: Text('Exames (${widget.exameList.length})'),
         actions: [
           // LogoutButton(),
         ],

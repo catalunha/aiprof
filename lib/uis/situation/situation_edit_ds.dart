@@ -8,7 +8,7 @@ class SituationEditDS extends StatefulWidget {
   final bool isActive;
   final bool isAddOrUpdate;
   final Function(String, String, String, String) onAdd;
-  final Function(String, String, String, String, bool) onUpdate;
+  final Function(String, String, String, String, bool, bool) onUpdate;
 
   const SituationEditDS({
     Key key,
@@ -27,17 +27,21 @@ class SituationEditDS extends StatefulWidget {
 
 class _SituationEditDSState extends State<SituationEditDS> {
   final formKey = GlobalKey<FormState>();
+  bool isInvisibilityDelete = true;
+
   String _area;
   String _name;
   String _description;
   String _url;
   bool _isActive;
+  bool _isDelete = false;
   void validateData() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
       widget.isAddOrUpdate
           ? widget.onAdd(_area, _name, _description, _url)
-          : widget.onUpdate(_area, _name, _description, _url, _isActive);
+          : widget.onUpdate(
+              _area, _name, _description, _url, _isActive, _isDelete);
     } else {
       setState(() {});
     }
@@ -142,8 +146,41 @@ class _SituationEditDSState extends State<SituationEditDS> {
                     });
                   },
                 ),
+          widget.isAddOrUpdate
+              ? Container()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isInvisibilityDelete
+                        ? Container()
+                        : SwitchListTile(
+                            value: _isDelete,
+                            title: _isDelete
+                                ? Text('Situação será apagada.')
+                                : Text('Remover esta situação ?'),
+                            onChanged: (value) {
+                              setState(() {
+                                _isDelete = value;
+                              });
+                            },
+                          ),
+                    IconButton(
+                      tooltip: 'Liberar opção para apagar este item',
+                      color: Colors.grey[400],
+                      icon: const Icon(
+                        Icons.delete,
+                        // size: 22.0,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isInvisibilityDelete = !isInvisibilityDelete;
+                        });
+                      },
+                    ),
+                  ],
+                ),
           Container(
-            height: 50,
+            height: 100,
           ),
         ],
       ),

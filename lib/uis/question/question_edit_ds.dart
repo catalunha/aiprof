@@ -96,10 +96,9 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldState,
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate
-            ? 'Criar #Question Questão'
-            : 'Editar #Question Questão'),
+        title: Text(widget.isAddOrUpdate ? 'Criar questão' : 'Editar questão'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -117,6 +116,23 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
                   context, 'Data e hora do fim antes do início.');
             } else {
               liberated = true;
+            }
+          }
+          if (liberated) {
+            if (widget.situationRef == null) {
+              liberated = false;
+              showSnackBarHandler(
+                  context, 'Favor definir uma situação para esta questão.');
+            } else {
+              liberated = true;
+            }
+          }
+          if (liberated) {
+            if (_scoreQuestion != null && _scoreQuestion >= 1) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(context, 'Verifique a nota');
             }
           }
           if (liberated) {
@@ -164,6 +180,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             //   return null;
             // },
           ),
+          Text('>>> $_scoreQuestion'),
           TextFormField(
             initialValue: widget.scoreQuestion == null
                 ? '1'
@@ -174,7 +191,15 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             decoration: InputDecoration(
               labelText: 'Nota ou peso da questão (>=1):',
             ),
-            onSaved: (newValue) => _scoreQuestion = int.parse(newValue),
+            onChanged: (value) {
+              setState(() {
+                _scoreQuestion = int.parse(value);
+              });
+            },
+            onSaved: (newValue) {
+              _scoreQuestion = int.parse(newValue);
+              setState(() {});
+            },
             validator: (value) {
               if (value.isEmpty) {
                 return 'Informe o que se pede.';

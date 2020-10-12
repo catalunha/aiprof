@@ -38,7 +38,7 @@ class KnowList extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       model: ViewModel(),
-      onInit: (store) => store.dispatch(GetDocsKnowListAsyncKnowAction()),
+      onInit: (store) => store.dispatch(StreamColExameAsyncExameAction()),
       builder: (context, viewModel) => KnowListDS(
         knowList: viewModel.knowList,
         onEditKnowCurrent: viewModel.onEditKnowCurrent,

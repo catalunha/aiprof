@@ -31,7 +31,7 @@ class _FolderListDSState extends State<FolderListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#folder Pasta de situações para ${widget.knowModel.name}'),
+        title: Text('Pasta de situações para ${widget.knowModel.name}'),
         actions: [
           // widget.knowModel.setorRef != null
           //     ? IconButton(
@@ -61,7 +61,7 @@ class _FolderListDSState extends State<FolderListDS> {
   Widget folderContent(Folder folder) {
     return Row(
       children: [
-        Text('${folder.name}  (${folder.id.substring(0, 3)})'),
+        Text('${folder.name}  (${folder.id.substring(0, 4)})'),
         SizedBox(
           height: 5,
         ),
@@ -88,7 +88,7 @@ class _FolderListDSState extends State<FolderListDS> {
         IconButton(
           tooltip: 'Acrescentar situação',
           icon: Icon(
-            Icons.add_comment,
+            Icons.fact_check_outlined,
             size: 15,
           ),
           onPressed: () {
@@ -149,25 +149,37 @@ class _FolderListDSState extends State<FolderListDS> {
       folder.situationRefMap.forEach((key, value) {
         _itensTree.add(TreeNode(content: infoCodeContent(value, folder)));
       });
-      for (var folderParentItem in folderParent) {
+      var folderParentList = folderParent.toList();
+      folderParentList.sort((a, b) => a.name.compareTo(b.name));
+      for (var folderParentItem in folderParentList) {
         treeNode.children.add(_treeNode(folderParentItem));
       }
       treeNode.children.addAll(_itensTree);
       return treeNode;
     } else {
       List<TreeNode> _itensTree = [];
-      folder.situationRefMap.forEach((key, value) {
-        _itensTree.add(TreeNode(content: infoCodeContent(value, folder)));
+      List<SituationModel> situationList =
+          folder.situationRefMap.values.toList();
+      situationList.sort((a, b) => a.name.compareTo(b.name));
+      situationList.forEach((element) {
+        _itensTree.add(TreeNode(content: infoCodeContent(element, folder)));
       });
+
+      // folder.situationRefMap.forEach((key, value) {
+      //   _itensTree.add(TreeNode(content: infoCodeContent(value, folder)));
+      // });
       return TreeNode(content: folderContent(folder), children: _itensTree);
     }
   }
 
   Widget buildTree() {
     List<TreeNode> _nodes = [];
-    Iterable<Folder> folderidParentNull =
+    Iterable<Folder> folderIdParentNull =
         widget.folderMap.values.where((element) => element.idParent == null);
-    for (var folderKV in folderidParentNull) {
+    var folderIdParentNullList = folderIdParentNull.toList();
+    folderIdParentNullList.sort((a, b) => a.name.compareTo(b.name));
+
+    for (var folderKV in folderIdParentNullList) {
       _nodes.add(_treeNode(folderKV));
     }
     return TreeView(

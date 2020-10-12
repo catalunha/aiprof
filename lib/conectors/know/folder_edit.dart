@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class ViewModel extends BaseModel<AppState> {
   String name;
   String description;
-  bool isCreateOrUpdate;
+  bool isAddOrUpdate;
   Function(String, String) onCreate;
   Function(String, String, bool) onUpdate;
 
@@ -15,17 +15,17 @@ class ViewModel extends BaseModel<AppState> {
   ViewModel.build({
     @required this.name,
     @required this.description,
-    @required this.isCreateOrUpdate,
+    @required this.isAddOrUpdate,
     @required this.onCreate,
     @required this.onUpdate,
   }) : super(equals: [
           name,
           description,
-          isCreateOrUpdate,
+          isAddOrUpdate,
         ]);
   @override
   ViewModel fromStore() => ViewModel.build(
-        isCreateOrUpdate: state.knowState.folderCurrent.id == null,
+        isAddOrUpdate: state.knowState.folderCurrent.id == null,
         name: state.knowState.folderCurrent.name,
         description: state.knowState.folderCurrent.description,
         onCreate: (String name, String description) {
@@ -35,11 +35,11 @@ class ViewModel extends BaseModel<AppState> {
           ));
           dispatch(NavigateAction.pop());
         },
-        onUpdate: (String name, String description, bool isRemove) {
+        onUpdate: (String name, String description, bool isDelete) {
           dispatch(UpdateFolderSyncKnowAction(
             name: name,
             description: description,
-            isRemove: isRemove,
+            isDelete: isDelete,
           ));
           dispatch(NavigateAction.pop());
         },
@@ -53,7 +53,7 @@ class FolderEdit extends StatelessWidget {
       //debug: this,
       model: ViewModel(),
       builder: (context, viewModel) => FolderEditDS(
-        isCreateOrUpdate: viewModel.isCreateOrUpdate,
+        isAddOrUpdate: viewModel.isAddOrUpdate,
         name: viewModel.name,
         description: viewModel.description,
         onCreate: viewModel.onCreate,

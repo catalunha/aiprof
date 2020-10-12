@@ -81,10 +81,9 @@ class _ExameEditDSState extends State<ExameEditDS> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldState,
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate
-            ? 'Criar #Exame Avaliação'
-            : 'Editar #Exame Avaliação'),
+        title: Text(widget.isAddOrUpdate ? 'Criar exame' : 'Editar exame'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -200,7 +199,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
             },
           ),
           TextFormField(
-            initialValue: widget.error == null ? '3' : widget.error.toString(),
+            initialValue: widget.error == null ? '10' : widget.error.toString(),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
             maxLines: null,

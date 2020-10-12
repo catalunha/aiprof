@@ -80,7 +80,7 @@ class KnowModel extends FirestoreModel {
         }
       }
     _return = _return + '\nPastas: ${qdeFolder}';
-    _return = _return + '. Situações: ${qdeSituation}';
+    _return = _return + '\nSituações: ${qdeSituation}';
     _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }
