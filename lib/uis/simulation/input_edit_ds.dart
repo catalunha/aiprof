@@ -52,9 +52,7 @@ class _InputEditDSState extends State<InputEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate
-            ? 'Criar #input entrada'
-            : 'Editar #input entrada'),
+        title: Text(widget.isAddOrUpdate ? 'Criar entrada' : 'Editar entrada'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),

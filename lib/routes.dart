@@ -19,6 +19,7 @@ import 'package:aiprof/conectors/situation/situation_list.dart';
 import 'package:aiprof/conectors/student/student_edit.dart';
 import 'package:aiprof/conectors/student/student_list.dart';
 import 'package:aiprof/conectors/student/student_select_toexame.dart';
+import 'package:aiprof/conectors/task/task_answer_text.dart';
 import 'package:aiprof/conectors/task/task_edit.dart';
 import 'package:aiprof/conectors/task/task_list.dart';
 import 'package:aiprof/conectors/welcome.dart';
@@ -51,6 +52,7 @@ class Routes {
   static final questionStudentSelect = '/questionStudentSelect';
   static final taskList = '/taskList';
   static final taskEdit = '/taskEdit';
+  static final taskAnswerText = '/taskAnswerText';
 
   static final routes = {
     welcome: (BuildContext context) => UserExceptionDialog<AppState>(
@@ -80,6 +82,7 @@ class Routes {
     questionStudentSelect: (BuildContext context) => StudentSelectToExame(),
     taskList: (BuildContext context) => TaskList(),
     taskEdit: (BuildContext context) => TaskEdit(),
+    taskAnswerText: (BuildContext context) => TaskAnswerText(),
   };
 }
 

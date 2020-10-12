@@ -117,10 +117,9 @@ class QuestionModel extends FirestoreModel {
     // _return = _return + '\nexameRef.name: ${exameRef.name}';
     _return = _return + '\nInício: $start';
     _return = _return + '\nFim: $end';
-    _return = _return + '\nPeso: $scoreQuestion.';
-    _return = _return + ' Tentativa: $attempt';
-    _return = _return + '\nTempo: $time h.';
-    _return = _return + ' Erro: $error%';
+    _return = _return +
+        '\nPeso da questão: ${scoreQuestion == null ? "0" : scoreQuestion}. Tempo: ${time == null ? "0" : time}h. Tentativa: ${attempt == null ? "0" : attempt}. Erro: ${error == null ? "0" : error}%.';
+
     _return = _return + '\nAplicada: ${isDelivered ? "Sim" : "Não"}';
     // _return = _return + '\nsituationRef.name: ${situationRef?.name}';
     // _return = _return + '\nsimulationRef.name: ${simulationRef.id}';

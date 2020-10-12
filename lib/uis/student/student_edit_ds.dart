@@ -33,7 +33,7 @@ class _StudentEditDSState extends State<StudentEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Importando #student estudantes'),
+        title: Text('Importando estudantes'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),

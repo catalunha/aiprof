@@ -53,9 +53,8 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate
-            ? 'Criar #simulation simulação'
-            : 'Editar #simulation simulação'),
+        title:
+            Text(widget.isAddOrUpdate ? 'Criar simulação' : 'Editar simulação'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -175,7 +174,9 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
               onPressed: () => widget.onEditInput(input.id)),
           Text('${input.name}'),
           Text(' = '),
-          Text('${input.value}'),
+          input.type == 'texto' || input.type == 'url'
+              ? Text('...')
+              : Text('${input.value}'),
           Container(
             width: 10,
           ),
@@ -228,7 +229,9 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
               onPressed: () => widget.onEditOutput(output.id)),
           Text('${output.name}'),
           Text(' = '),
-          Text('${output.value}'),
+          output.type == 'texto' || output.type == 'url'
+              ? Text('...')
+              : Text('${output.value}'),
           Container(
             width: 10,
           ),

@@ -28,7 +28,7 @@ class _FolderSelectToQuestionDSState extends State<FolderSelectToQuestionDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#folder Pasta de situações para ${widget.knowModel.name}'),
+        title: Text('Pasta de situações para ${widget.knowModel.name}'),
         actions: [
           // widget.knowModel.setorRef != null
           //     ? IconButton(

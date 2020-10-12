@@ -91,6 +91,10 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
     super.initState();
     _start = widget.start != null ? widget.start : DateTime.now();
     _end = widget.end != null ? widget.end : DateTime.now();
+    _attempt = widget.attempt;
+    _time = widget.time;
+    _error = widget.error;
+    _scoreQuestion = widget.scoreQuestion;
   }
 
   @override
@@ -128,11 +132,37 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             }
           }
           if (liberated) {
-            if (_scoreQuestion != null && _scoreQuestion >= 1) {
+            if (_scoreQuestion >= 1) {
               liberated = true;
             } else {
               liberated = false;
-              showSnackBarHandler(context, 'Verifique a nota');
+              showSnackBarHandler(
+                  context, 'Verifique o valor da nota/peso da questão');
+            }
+          }
+          if (liberated) {
+            if (_attempt >= 1) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(context, 'Verifique o valor da tentativa');
+            }
+          }
+          if (liberated) {
+            if (_time >= 1) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(context, 'Verifique o valor do tempo');
+            }
+          }
+          if (liberated) {
+            if (_error >= 1 && _error < 100) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(
+                  context, 'Verifique o valor do erro relativo');
             }
           }
           if (liberated) {
@@ -180,7 +210,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             //   return null;
             // },
           ),
-          Text('>>> $_scoreQuestion'),
+          // Text('>>> $_scoreQuestion $_time $_attempt $_error'),
           TextFormField(
             initialValue: widget.scoreQuestion == null
                 ? '1'
@@ -192,13 +222,10 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
               labelText: 'Nota ou peso da questão (>=1):',
             ),
             onChanged: (value) {
-              setState(() {
-                _scoreQuestion = int.parse(value);
-              });
+              _scoreQuestion = int.parse(value);
             },
             onSaved: (newValue) {
               _scoreQuestion = int.parse(newValue);
-              setState(() {});
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -208,13 +235,14 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             },
           ),
           TextFormField(
-            initialValue: widget.time == null ? '3' : widget.time.toString(),
+            initialValue: widget.time == null ? '2' : widget.time.toString(),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
               labelText: 'Horas para resolução após aberta a tarefa (>=1):',
             ),
+            onChanged: (newValue) => _time = int.parse(newValue),
             onSaved: (newValue) => _time = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {
@@ -232,6 +260,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             decoration: InputDecoration(
               labelText: 'Número de tentativas no envio das respostas (>=1):',
             ),
+            onChanged: (newValue) => _attempt = int.parse(newValue),
             onSaved: (newValue) => _attempt = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {
@@ -241,13 +270,14 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             },
           ),
           TextFormField(
-            initialValue: widget.error == null ? '3' : widget.error.toString(),
+            initialValue: widget.error == null ? '10' : widget.error.toString(),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
               labelText: 'Erro relativo na correção numérica (>=1 e <100):',
             ),
+            onChanged: (newValue) => _error = int.parse(newValue),
             onSaved: (newValue) => _error = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {

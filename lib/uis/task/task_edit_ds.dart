@@ -26,6 +26,7 @@ class TaskEditDS extends StatefulWidget {
           dynamic, dynamic, int, int, int, int, int, bool, int, bool, bool)
       onUpdateTask;
   final Function(String, bool) onUpdateOutput;
+  final Function() onSeeTextTask;
 
   const TaskEditDS({
     Key key,
@@ -43,6 +44,7 @@ class TaskEditDS extends StatefulWidget {
     this.onUpdateTask,
     this.onUpdateOutput,
     this.id,
+    this.onSeeTextTask,
   }) : super(key: key);
   @override
   _TaskEditDSState createState() => _TaskEditDSState();
@@ -88,8 +90,7 @@ class _TaskEditDSState extends State<TaskEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Editar #task ${widget.id.substring(0, 3)} - ${widget.simulationInput.length}'),
+        title: Text('Editar tarefa ${widget.id.substring(0, 4)}'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -127,6 +128,22 @@ class _TaskEditDSState extends State<TaskEditDS> {
             },
           ),
           TextFormField(
+            initialValue: widget.time == null ? '3' : widget.time.toString(),
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.number,
+            maxLines: null,
+            decoration: InputDecoration(
+              labelText: 'Horas para resolução após aberta a tarefa (>=1):',
+            ),
+            onSaved: (newValue) => _time = int.parse(newValue),
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Informe o que se pede.';
+              }
+              return null;
+            },
+          ),
+          TextFormField(
             initialValue:
                 widget.attempt == null ? '3' : widget.attempt.toString(),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -136,22 +153,6 @@ class _TaskEditDSState extends State<TaskEditDS> {
               labelText: 'Número de tentativas no envio das respostas (>=1):',
             ),
             onSaved: (newValue) => _attempt = int.parse(newValue),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Informe o que se pede.';
-              }
-              return null;
-            },
-          ),
-          TextFormField(
-            initialValue: widget.time == null ? '3' : widget.time.toString(),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            keyboardType: TextInputType.number,
-            maxLines: null,
-            decoration: InputDecoration(
-              labelText: 'Horas para resolução após aberta a tarefa (>=1):',
-            ),
-            onSaved: (newValue) => _time = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {
                 return 'Informe o que se pede.';
@@ -308,7 +309,14 @@ class _TaskEditDSState extends State<TaskEditDS> {
       } else if (simulationInput.type == 'palavra') {
         icone = Icon(Icons.text_format);
       } else if (simulationInput.type == 'texto') {
-        icone = Icon(Icons.text_fields);
+        // icone = Icon(Icons.text_fields);
+        icone = IconButton(
+          tooltip: 'ver textos desta tarefa',
+          icon: Icon(Icons.text_fields),
+          onPressed: () {
+            widget.onSeeTextTask();
+          },
+        );
       } else if (simulationInput.type == 'url') {
         icone = IconButton(
           tooltip: 'Um link ao um site ou arquivo',
@@ -326,7 +334,9 @@ class _TaskEditDSState extends State<TaskEditDS> {
         children: [
           Text('${simulationInput.name}'),
           Text(' = '),
-          Text('${simulationInput.value}'),
+          simulationInput.type == 'texto' || simulationInput.type == 'url'
+              ? Text('(${simulationInput.value.length}c)')
+              : Text('${simulationInput.value}'),
           Container(
             width: 10,
           ),
@@ -347,7 +357,13 @@ class _TaskEditDSState extends State<TaskEditDS> {
       } else if (simulationOutput.type == 'palavra') {
         icone = Icon(Icons.text_format);
       } else if (simulationOutput.type == 'texto') {
-        icone = Icon(Icons.text_fields);
+        icone = IconButton(
+          tooltip: 'ver textos desta tarefa',
+          icon: Icon(Icons.text_fields),
+          onPressed: () {
+            widget.onSeeTextTask();
+          },
+        );
       } else if (simulationOutput.type == 'url' ||
           simulationOutput.type == 'urlimagem') {
         icone = IconButton(
@@ -379,7 +395,9 @@ class _TaskEditDSState extends State<TaskEditDS> {
         children: [
           Text('${simulationOutput.name}'),
           Text(' = '),
-          Text('${simulationOutput.value}'),
+          simulationOutput.type == 'texto' || simulationOutput.type == 'url'
+              ? Text('(${simulationOutput.value.length}c)')
+              : Text('${simulationOutput.value}'),
           Container(
             width: 10,
           ),

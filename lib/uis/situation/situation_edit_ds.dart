@@ -57,9 +57,8 @@ class _SituationEditDSState extends State<SituationEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate
-            ? 'Criar #situation situação'
-            : 'Editar #situation situação'),
+        title:
+            Text(widget.isAddOrUpdate ? 'Criar situação' : 'Editar situação'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),

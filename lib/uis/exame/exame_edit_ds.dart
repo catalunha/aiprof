@@ -76,6 +76,11 @@ class _ExameEditDSState extends State<ExameEditDS> {
     _start = widget.start != null ? widget.start : DateTime.now();
     _end = widget.end != null ? widget.end : DateTime.now();
     isInvisibilityDelete = true;
+    _attempt = widget.attempt == null ? 3 : widget.attempt;
+    _time = widget.time == null ? 2 : widget.time;
+    _error = widget.error == null ? 10 : widget.error;
+    _scoreQuestion = widget.scoreQuestion == null ? 1 : widget.scoreQuestion;
+    _scoreExame = widget.scoreExame == null ? 1 : widget.scoreExame;
   }
 
   @override
@@ -101,6 +106,49 @@ class _ExameEditDSState extends State<ExameEditDS> {
                   context, 'Data e hora do fim antes do início.');
             } else {
               liberated = true;
+            }
+          }
+          if (liberated) {
+            if (_scoreExame >= 1) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(
+                  context, 'Verifique o valor da nota/peso do exame');
+            }
+          }
+          if (liberated) {
+            if (_scoreQuestion >= 1) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(
+                  context, 'Verifique o valor da nota/peso da questão');
+            }
+          }
+          if (liberated) {
+            if (_attempt >= 1) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(context, 'Verifique o valor da tentativa');
+            }
+          }
+          if (liberated) {
+            if (_time >= 1) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(context, 'Verifique o valor do tempo');
+            }
+          }
+          if (liberated) {
+            if (_error >= 1 && _error < 100) {
+              liberated = true;
+            } else {
+              liberated = false;
+              showSnackBarHandler(
+                  context, 'Verifique o valor do erro relativo');
             }
           }
           if (liberated) {
@@ -148,6 +196,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
             //   return null;
             // },
           ),
+          // Text('>>> $_scoreExame $_scoreQuestion $_time $_attempt $_error'),
           TextFormField(
             initialValue:
                 widget.scoreExame == null ? '1' : widget.scoreExame.toString(),
@@ -157,6 +206,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
             decoration: InputDecoration(
               labelText: 'Nota ou peso da avaliação (>=1):',
             ),
+            onChanged: (newValue) => _scoreExame = int.parse(newValue),
             onSaved: (newValue) => _scoreExame = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {
@@ -166,13 +216,14 @@ class _ExameEditDSState extends State<ExameEditDS> {
             },
           ),
           TextFormField(
-            initialValue: widget.time == null ? '3' : widget.time.toString(),
+            initialValue: widget.time == null ? '2' : widget.time.toString(),
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
               labelText: 'Horas para resolução após aberta a tarefa (>=1):',
             ),
+            onChanged: (newValue) => _time = int.parse(newValue),
             onSaved: (newValue) => _time = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {
@@ -190,6 +241,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
             decoration: InputDecoration(
               labelText: 'Número de tentativas no envio das respostas (>=1):',
             ),
+            onChanged: (newValue) => _attempt = int.parse(newValue),
             onSaved: (newValue) => _attempt = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {
@@ -206,6 +258,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
             decoration: InputDecoration(
               labelText: 'Erro relativo na correção numérica (>=1 e <100):',
             ),
+            onChanged: (newValue) => _error = int.parse(newValue),
             onSaved: (newValue) => _error = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {
@@ -224,6 +277,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
             decoration: InputDecoration(
               labelText: 'Nota ou peso das questões (>=1):',
             ),
+            onChanged: (newValue) => _scoreQuestion = int.parse(newValue),
             onSaved: (newValue) => _scoreQuestion = int.parse(newValue),
             validator: (value) {
               if (value.isEmpty) {

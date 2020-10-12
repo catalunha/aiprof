@@ -292,7 +292,7 @@ class DeleteStudentInExameCurrentAndTaskAsyncExameAction
         .document(exameModel.id)
         .updateData(exameModel.toMap());
 
-// Deletando todas as tasks relacionadas. Pois taks para este student ja foi aplicada
+    //+++ Deletando todas as tasks relacionadas. Pois taks para este student ja foi aplicada
     Query collRef;
     collRef = firestore
         .collection('task')
@@ -306,6 +306,7 @@ class DeleteStudentInExameCurrentAndTaskAsyncExameAction
     for (var id in listDocs) {
       await firestore.collection('task').document(id).delete();
     }
+    //---
     return state.copyWith(
       exameState: state.exameState.copyWith(
         exameCurrent: exameModel,
@@ -316,10 +317,7 @@ class DeleteStudentInExameCurrentAndTaskAsyncExameAction
   @override
   void before() => dispatch(WaitAction.add(this));
   @override
-  void after() {
-    // dispatch(StreamColExameAsyncExameAction());
-    dispatch(WaitAction.remove(this));
-  }
+  void after() => dispatch(WaitAction.remove(this));
 }
 
 class UpdateDocsSetStudentListInExameCurrentAsyncExameAction

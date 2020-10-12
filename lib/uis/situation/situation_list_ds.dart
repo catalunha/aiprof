@@ -24,7 +24,7 @@ class _SituationListDSState extends State<SituationListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#situation Situações (${widget.situationList.length})'),
+        title: Text('Situações (${widget.situationList.length})'),
         actions: [
           // LogoutButton(),
         ],

@@ -22,7 +22,7 @@ class _StudentListDSState extends State<StudentListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#Student Estudantes (${widget.studentList.length})'),
+        title: Text('Estudantes (${widget.studentList.length})'),
         actions: [
           // LogoutButton(),
         ],

@@ -15,7 +15,7 @@ class KnowSelectToQuestionDS extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#Know Conhecimento (${knowList.length})'),
+        title: Text('Conhecimentos (${knowList.length})'),
       ),
       body: ListView.builder(
         itemCount: knowList.length,

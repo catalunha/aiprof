@@ -60,9 +60,7 @@ class _ClassroomEditDSState extends State<ClassroomEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate
-            ? 'Criar #Classroom Turma'
-            : 'Editar Classroom/Turma'),
+        title: Text(widget.isAddOrUpdate ? 'Criar Turma' : 'Editar Turma'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),

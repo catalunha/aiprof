@@ -23,17 +23,17 @@ class HomePageDS extends StatelessWidget {
         children: [
           ListTile(
             leading: Icon(Icons.people),
-            title: Text('#Classroom Turmas ou Classes'),
+            title: Text('Turmas'),
             onTap: () => Navigator.pushNamed(context, Routes.classroomList),
           ),
           // ListTile(
           //   leading: Icon(Icons.fact_check_outlined),
-          //   title: Text('#Situation Situações ou Problemas'),
+          //   title: Text('Situações ou Problemas'),
           //   onTap: () => Navigator.pushNamed(context, Routes.situationList),
           // ),
           ListTile(
             leading: Icon(Icons.line_style),
-            title: Text('#Know Conhecimentos ou Componentes'),
+            title: Text('Conhecimentos'),
             onTap: () => Navigator.pushNamed(context, Routes.knowList),
           ),
         ],

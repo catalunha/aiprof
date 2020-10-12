@@ -20,7 +20,7 @@ class _TaskListDSState extends State<TaskListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#Task Tarefas (${widget.taskList.length})'),
+        title: Text('Tarefas (${widget.taskList.length})'),
         actions: [
           // LogoutButton(),
         ],

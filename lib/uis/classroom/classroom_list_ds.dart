@@ -36,7 +36,7 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('#Classroom Turma (${widget.classroomList.length})'),
+        title: Text('Turmas (${widget.classroomList.length})'),
         actions: [
           IconButton(
               icon: Icon(Icons.line_style),

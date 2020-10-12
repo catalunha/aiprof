@@ -103,7 +103,12 @@ class SimulationModel {
       _inputList.sort((a, b) => a.name.compareTo(b.name));
     }
     for (var item in _inputList) {
-      _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+      if (item.type == 'texto' || item.type == 'url') {
+        _return =
+            _return + '\n${item.name}=... [${item.type}=${item.value.length}c]';
+      } else {
+        _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+      }
     }
     _return = _return + '\n ** Saídas ** ';
     List<Output> _outputList = [];
@@ -114,7 +119,12 @@ class SimulationModel {
       _outputList.sort((a, b) => a.name.compareTo(b.name));
     }
     for (var item in _outputList) {
-      _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+      if (item.type == 'texto' || item.type == 'url') {
+        _return =
+            _return + '\n${item.name}=... [${item.type}=${item.value.length}c]';
+      } else {
+        _return = _return + '\n${item.name}=${item.value} [${item.type}]';
+      }
     }
 
     return _return;

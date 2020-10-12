@@ -1,5 +1,6 @@
 import 'package:aiprof/actions/task_action.dart';
 import 'package:aiprof/models/simulation_model.dart';
+import 'package:aiprof/routes.dart';
 import 'package:aiprof/uis/task/task_edit_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/states/app_state.dart';
@@ -26,6 +27,7 @@ class ViewModel extends BaseModel<AppState> {
   Function(dynamic, dynamic, int, int, int, int, int, bool, int, bool, bool)
       onUpdateTask;
   Function(String, bool) onUpdateOutput;
+  Function() onSeeTextTask;
 
   ViewModel();
   ViewModel.build({
@@ -43,6 +45,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.simulationOutput,
     @required this.onUpdateTask,
     @required this.onUpdateOutput,
+    @required this.onSeeTextTask,
   }) : super(equals: [
           id,
           start,
@@ -127,6 +130,9 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(UpdateOutputAsyncTaskAction(
               taskSimulationOutputId: id, isTruOrFalse: isTruOrFalse));
         },
+        onSeeTextTask: () {
+          dispatch(NavigateAction.pushNamed(Routes.taskAnswerText));
+        },
       );
 }
 
@@ -151,6 +157,7 @@ class TaskEdit extends StatelessWidget {
         isOpen: viewModel.isOpen,
         onUpdateTask: viewModel.onUpdateTask,
         onUpdateOutput: viewModel.onUpdateOutput,
+        onSeeTextTask: viewModel.onSeeTextTask,
       ),
     );
   }
