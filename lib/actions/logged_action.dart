@@ -229,20 +229,38 @@ class GetDocsUserModelAsyncLoggedAction extends ReduxAction<AppState> {
 
     final docRef = firestore.collection(UserModel.collection).document(id);
     final docSnap = await docRef.get();
-
     if (docSnap.exists) {
-      dispatch(CurrentUserModelSyncLoggedAction(
-          userModel: UserModel(docSnap.documentID).fromMap(docSnap.data)));
+      if (docSnap.data['isTeacher']) {
+        print('É professor liberar acesso.');
+        dispatch(CurrentUserModelSyncLoggedAction(
+            userModel: UserModel(docSnap.documentID).fromMap(docSnap.data)));
+        store.dispatch(AuthenticationStatusSyncLoggedAction(
+            authenticationStatusLogged:
+                AuthenticationStatusLogged.authenticated));
+      } else {
+        print('É aluno bloquear acesso.');
+        dispatch(LogoutAsyncLoggedAction());
+      }
     } else {
-      dispatch(CurrentUserModelSyncLoggedAction(
-          userModel: UserModel(id)
-              .fromMap({'email': state.loggedState.firebaseUserLogged.email})));
+      // dispatch(CurrentUserModelSyncLoggedAction(
+      //     userModel: UserModel(id)
+      //         .fromMap({'email': state.loggedState.firebaseUserLogged.email})));
 
-      // authenticationStatusLogged: AuthenticationStatusLogged.authenticated,
-
+      dispatch(LogoutAsyncLoggedAction());
     }
-    store.dispatch(AuthenticationStatusSyncLoggedAction(
-        authenticationStatusLogged: AuthenticationStatusLogged.authenticated));
+    // if (docSnap.exists) {
+    //   dispatch(CurrentUserModelSyncLoggedAction(
+    //       userModel: UserModel(docSnap.documentID).fromMap(docSnap.data)));
+    // } else {
+    //   dispatch(CurrentUserModelSyncLoggedAction(
+    //       userModel: UserModel(id)
+    //           .fromMap({'email': state.loggedState.firebaseUserLogged.email})));
+
+    //   // authenticationStatusLogged: AuthenticationStatusLogged.authenticated,
+
+    // }
+    // store.dispatch(AuthenticationStatusSyncLoggedAction(
+    //     authenticationStatusLogged: AuthenticationStatusLogged.authenticated));
     return null;
   }
 }
