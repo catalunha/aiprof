@@ -159,6 +159,7 @@ class Input {
 
   Map<dynamic, dynamic> toMap() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
+    data['id'] = this.id;
     if (name != null) data['name'] = this.name;
     if (type != null) data['type'] = this.type;
     if (value != null) data['value'] = this.value;
@@ -202,6 +203,7 @@ class Output {
 
   Map<dynamic, dynamic> toMap() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
+    data['id'] = this.id;
     if (name != null) data['name'] = this.name;
     if (type != null) data['type'] = this.type;
     if (value != null) data['value'] = this.value;

@@ -31,7 +31,8 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
       children: [
         Scaffold(
           appBar: AppBar(
-            title: Text('Alunos neste exame (${widget.studentList.length})'),
+            title:
+                Text('Estudantes neste exame (${widget.studentList.length})'),
             actions: [
               IconButton(
                 tooltip: 'Marcar todos os possíveis',
@@ -73,7 +74,7 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
                             child: InkWell(
                               child: Tooltip(
                                 message:
-                                    'Deleta este aluno desta avaliação e todas as suas tarefas nesta avaliação',
+                                    'Deleta este estudante desta avaliação e todas as suas tarefas nesta avaliação',
                                 child: Icon(
                                   Icons.delete,
                                   size: 15,

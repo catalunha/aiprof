@@ -36,7 +36,7 @@ class _StudentListDSState extends State<StudentListDS> {
               title: Text('${student.name}'),
               subtitle: Text('${student.toString()}'),
               trailing: IconButton(
-                tooltip: 'Remover este aluno desta turma.',
+                tooltip: 'Remover este estudante desta turma.',
                 icon: Icon(Icons.delete),
                 onPressed: () {
                   widget.onRemoveStudent(student.id);

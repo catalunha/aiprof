@@ -56,7 +56,7 @@ class _StudentEditDSState extends State<StudentEditDS> {
           Padding(
               padding: EdgeInsets.all(5.0),
               child: Text(
-                'Informe a lista de alunos a serem cadastrados.\nUsando o ponto e vírgula para separar as informações.\nUse o formato:\nmatricula ; email ; nome completo do aluno',
+                'Informe a lista de estudantes a serem cadastrados.\nUsando o ponto e vírgula para separar as informações.\nUse o formato:\nmatricula ; email ; nome completo do estudante',
                 style: TextStyle(fontSize: 15, color: Colors.blue),
               )),
           TextFormField(

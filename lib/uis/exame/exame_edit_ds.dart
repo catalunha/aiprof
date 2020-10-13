@@ -319,8 +319,8 @@ class _ExameEditDSState extends State<ExameEditDS> {
               : SwitchListTile(
                   value: _isDelivered,
                   title: _isDelivered
-                      ? Text('Avaliação será distribuída.')
-                      : Text('Distribuir avaliação ?'),
+                      ? Text('Exame será distribuído.')
+                      : Text('Distribuir este exame ?'),
                   onChanged: (value) {
                     setState(() {
                       _isDelivered = value;

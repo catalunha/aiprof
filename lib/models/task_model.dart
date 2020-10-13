@@ -168,8 +168,8 @@ class TaskModel extends FirestoreModel {
     _return = _return +
         '\nTurma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
     // _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
-    _return = _return +
-        ' Avaliação: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
+    _return =
+        _return + ' Exame: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
     // _return = _return + '\nexameRef.name: ${exameRef.name}';
     _return = _return +
         '\nQuestão: ${questionRef.name} (${questionRef.id.substring(0, 4)}).';
@@ -178,7 +178,7 @@ class TaskModel extends FirestoreModel {
         ' Situação: ${situationRef.name} (${situationRef.id.substring(0, 4)})';
     // _return = _return + '\nsituationRef.name: ${situationRef.name}';
     _return = _return +
-        '\nAluno: ${studentUserRef.name.split(' ')[0]} (${studentUserRef.id.substring(0, 4)})';
+        '\nEstudante: ${studentUserRef.name.split(' ')[0]} (${studentUserRef.id.substring(0, 4)})';
     // _return = _return + '\nstudentUserRef.name: ${studentUserRef.name}';
 
     _return = _return + '\nInício: $start';

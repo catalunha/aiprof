@@ -238,7 +238,7 @@ class GetDocsUserModelAsyncLoggedAction extends ReduxAction<AppState> {
             authenticationStatusLogged:
                 AuthenticationStatusLogged.authenticated));
       } else {
-        print('É aluno bloquear acesso.');
+        print('É estudante bloquear acesso.');
         dispatch(LogoutAsyncLoggedAction());
       }
     } else {
