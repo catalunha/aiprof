@@ -33,7 +33,8 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Turmas (${widget.classroomList.length})'),
+        title: Text(
+            'Olá ${widget.userLogged.name.split(' ')[0]}. Turmas (${widget.classroomList.length})'),
         actions: [
           IconButton(
               icon: Icon(Icons.line_style),
