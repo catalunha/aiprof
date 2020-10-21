@@ -51,9 +51,14 @@ class _KnowEditDSState extends State<KnowEditDS> {
             ? 'Criar conhecimento'
             : 'Editar conhecimento'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: form(),
+      body: Center(
+        child: Container(
+          width: 600,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: form(),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.cloud_upload),

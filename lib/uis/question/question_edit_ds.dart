@@ -104,9 +104,14 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
       appBar: AppBar(
         title: Text(widget.isAddOrUpdate ? 'Criar questão' : 'Editar questão'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: form(),
+      body: Center(
+        child: Container(
+          width: 600,
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: form(),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.cloud_upload),

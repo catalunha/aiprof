@@ -56,9 +56,14 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
         title:
             Text(widget.isAddOrUpdate ? 'Criar simulação' : 'Editar simulação'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: form(),
+      body: Center(
+        child: Container(
+          width: 600,
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: form(),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.cloud_upload),

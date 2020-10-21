@@ -27,29 +27,35 @@ class SimulationListDSState extends State<SimulationListDS> {
           // LogoutButton(),
         ],
       ),
-      body: ListView.builder(
-        itemCount: widget.simulationList.length,
-        itemBuilder: (context, index) {
-          final simulation = widget.simulationList[index];
-          return Card(
-            child: ListTile(
-              selected: widget.simulationIncosistent.contains(simulation.id),
-              title: widget.simulationIncosistent.contains(simulation.id)
-                  ? Text(
-                      '${simulation.name} - (${simulation.id.substring(0, 4)}) - ERRO na entrada ou saída')
-                  : Text(
-                      '${simulation.name} - (${simulation.id.substring(0, 4)})'),
-              subtitle: Text('${simulation.toString()}'),
-              trailing: IconButton(
-                tooltip: 'Editar esta situação',
-                icon: Icon(Icons.edit),
-                onPressed: () async {
-                  widget.onEditSimulation(simulation.id);
-                },
-              ),
-            ),
-          );
-        },
+      body: Center(
+        child: Container(
+          width: 600,
+          child: ListView.builder(
+            itemCount: widget.simulationList.length,
+            itemBuilder: (context, index) {
+              final simulation = widget.simulationList[index];
+              return Card(
+                child: ListTile(
+                  selected:
+                      widget.simulationIncosistent.contains(simulation.id),
+                  title: widget.simulationIncosistent.contains(simulation.id)
+                      ? Text(
+                          '${simulation.name} - (${simulation.id.substring(0, 4)}) - ERRO na entrada ou saída')
+                      : Text(
+                          '${simulation.name} - (${simulation.id.substring(0, 4)})'),
+                  subtitle: Text('${simulation.toString()}'),
+                  trailing: IconButton(
+                    tooltip: 'Editar esta situação',
+                    icon: Icon(Icons.edit),
+                    onPressed: () async {
+                      widget.onEditSimulation(simulation.id);
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

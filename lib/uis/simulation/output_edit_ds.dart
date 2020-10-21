@@ -50,9 +50,14 @@ class _OutputEditDSState extends State<OutputEditDS> {
       appBar: AppBar(
         title: Text(widget.isAddOrUpdate ? 'Criar saída' : 'Editar saída'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: form(),
+      body: Center(
+        child: Container(
+          width: 600,
+          child: Padding(
+            padding: EdgeInsets.all(8),
+            child: form(),
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.cloud_upload),

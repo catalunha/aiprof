@@ -27,24 +27,29 @@ class _StudentListDSState extends State<StudentListDS> {
           // LogoutButton(),
         ],
       ),
-      body: ListView.builder(
-        itemCount: widget.studentList.length,
-        itemBuilder: (context, index) {
-          final student = widget.studentList[index];
-          return Card(
-            child: ListTile(
-              title: Text('${student.name}'),
-              subtitle: Text('${student.toString()}'),
-              trailing: IconButton(
-                tooltip: 'Remover este estudante desta turma.',
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  widget.onRemoveStudent(student.id);
-                },
-              ),
-            ),
-          );
-        },
+      body: Center(
+        child: Container(
+          width: 600,
+          child: ListView.builder(
+            itemCount: widget.studentList.length,
+            itemBuilder: (context, index) {
+              final student = widget.studentList[index];
+              return Card(
+                child: ListTile(
+                  title: Text('${student.name}'),
+                  subtitle: Text('${student.toString()}'),
+                  trailing: IconButton(
+                    tooltip: 'Remover este estudante desta turma.',
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      widget.onRemoveStudent(student.id);
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

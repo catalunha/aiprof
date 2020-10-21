@@ -11,8 +11,7 @@ class ClassroomListDS extends StatefulWidget {
   final Function(String) onEditClassroomCurrent;
   final Function(String) onStudentList;
   final Function(String) onExameList;
-  // final Function() onSituationList;
-  // final Function() onKnowList;
+
   final Function(int oldIndex, int newIndex) onChangeClassroomListOrder;
 
   const ClassroomListDS({
@@ -23,8 +22,6 @@ class ClassroomListDS extends StatefulWidget {
     this.onExameList,
     this.onChangeClassroomListOrder,
     this.userLogged,
-    // this.onSituationList,
-    // this.onKnowList,
   }) : super(key: key);
 
   @override
@@ -55,75 +52,6 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
           ),
         ],
       ),
-      // body: ListView.builder(
-      //   itemCount: widget.classroomList.length,
-      //   itemBuilder: (context, index) {
-      //     final classroom = widget.classroomList[index];
-      //     return Card(
-      //       color: !classroom.isActive
-      //           ? Colors.brown
-      //           : Theme.of(context).cardColor,
-      //       child: Wrap(
-      //         alignment: WrapAlignment.spaceEvenly,
-      //         children: [
-      //           Container(
-      //             width: 500,
-      //             child: ListTile(
-      //               title: Text('${classroom.name}'),
-      //               subtitle: Text('${classroom.toString()}'),
-      //             ),
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.edit),
-      //             onPressed: () async {
-      //               widget.onEditClassroomCurrent(classroom.id);
-      //             },
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.link),
-      //             onPressed: () async {
-      //               if (classroom?.urlProgram != null) {
-      //                 if (await canLaunch(classroom.urlProgram)) {
-      //                   await launch(classroom.urlProgram);
-      //                 }
-      //               }
-      //             },
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.people),
-      //             onPressed: () async {
-      //               widget.onStudentList(classroom.id);
-      //             },
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.today),
-      //             onPressed: () async {
-      //               // onStudentList(classroom.id);
-      //             },
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.report_situation),
-      //             onPressed: () async {
-      //               // onStudentList(classroom.id);
-      //             },
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.folder_open),
-      //             onPressed: () async {
-      //               // onStudentList(classroom.id);
-      //             },
-      //           ),
-      //           IconButton(
-      //             icon: Icon(Icons.assignment),
-      //             onPressed: () async {
-      //               // onStudentList(classroom.id);
-      //             },
-      //           ),
-      //         ],
-      //       ),
-      //     );
-      //   },
-      // ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
@@ -145,7 +73,7 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
             alignment: WrapAlignment.spaceEvenly,
             children: [
               Container(
-                width: 500,
+                width: 400,
                 child: ListTile(
                   title: Text('${classroom.name}'),
                   subtitle: Text('${classroom.toString()}'),

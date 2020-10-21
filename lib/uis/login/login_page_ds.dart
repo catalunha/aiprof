@@ -49,69 +49,74 @@ class LoginPageDSState extends State<LoginPageDS> {
         appBar: AppBar(
           title: Center(child: Text('AI Prof - Acessar')),
         ),
-        body: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Form(
-            key: formKey,
-            child: ListView(
-              children: <Widget>[
-                Text('Informe os dados'),
-                TextFormField(
-                  initialValue: 'catalunha.mj@gmail.com',
-                  decoration: InputDecoration(
-                    labelText: 'Email:',
-                  ),
-                  onSaved: (value) => _userName = value,
+        body: Center(
+          child: Container(
+            width: 350,
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Form(
+                key: formKey,
+                child: ListView(
+                  children: <Widget>[
+                    Text('Informe os dados'),
+                    TextFormField(
+                      initialValue: 'catalunha.mj@gmail.com',
+                      decoration: InputDecoration(
+                        labelText: 'Email:',
+                      ),
+                      onSaved: (value) => _userName = value,
+                    ),
+                    TextFormField(
+                      initialValue: 'aiprof',
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: 'Senha:',
+                      ),
+                      onSaved: (value) => _password = value,
+                    ),
+                    ListTile(
+                      title: Center(child: Text('Acessar com email e senha')),
+                      trailing: Icon(Icons.verified_user),
+                      onTap: () {
+                        validateInputsLogin();
+                      },
+                    ),
+                    ListTile(
+                      title: Center(child: Text('Pedir nova senha por email.')),
+                      trailing: Icon(Icons.settings_backup_restore),
+                      onTap: () {
+                        validateInputsResetPassword();
+                      },
+                    ),
+                    widget.authenticationStatusLogged ==
+                            AuthenticationStatusLogged.authenticating
+                        ? Center(child: CircularProgressIndicator())
+                        : Container(),
+                    widget.authenticationStatusLogged ==
+                            AuthenticationStatusLogged.unAuthenticated
+                        ? Center(
+                            child: Text(
+                                'Obs.: Verifique Email e a Senha por favor.'))
+                        : Container(),
+                    widget.authenticationStatusLogged ==
+                            AuthenticationStatusLogged.unInitialized
+                        ? Center(
+                            child: Text(
+                                'Obs.: Estamos aguardando você informar email e senha.'))
+                        : Container(),
+                    widget.authenticationStatusLogged ==
+                            AuthenticationStatusLogged.authenticated
+                        ? Center(child: Text('Obs.: Acesso liberado.'))
+                        : Container(),
+                    widget.authenticationStatusLogged ==
+                            AuthenticationStatusLogged.sendPasswordReset
+                        ? Center(
+                            child:
+                                Text('Obs.: Veja seu email para nova senha.'))
+                        : Container(),
+                  ],
                 ),
-                TextFormField(
-                  initialValue: 'aiprof',
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Senha:',
-                  ),
-                  onSaved: (value) => _password = value,
-                ),
-                ListTile(
-                  title:
-                      Center(child: Text('Solicitar acesso com email e senha')),
-                  trailing: Icon(Icons.verified_user),
-                  onTap: () {
-                    validateInputsLogin();
-                  },
-                ),
-                ListTile(
-                  title: Center(child: Text('Pedir nova senha por email.')),
-                  trailing: Icon(Icons.settings_backup_restore),
-                  onTap: () {
-                    validateInputsResetPassword();
-                  },
-                ),
-                widget.authenticationStatusLogged ==
-                        AuthenticationStatusLogged.authenticating
-                    ? Center(child: CircularProgressIndicator())
-                    : Container(),
-                widget.authenticationStatusLogged ==
-                        AuthenticationStatusLogged.unAuthenticated
-                    ? Center(
-                        child:
-                            Text('Obs.: Verifique Email e a Senha por favor.'))
-                    : Container(),
-                widget.authenticationStatusLogged ==
-                        AuthenticationStatusLogged.unInitialized
-                    ? Center(
-                        child: Text(
-                            'Obs.: Estamos aguardando você informar email e senha.'))
-                    : Container(),
-                widget.authenticationStatusLogged ==
-                        AuthenticationStatusLogged.authenticated
-                    ? Center(child: Text('Obs.: Acesso liberado.'))
-                    : Container(),
-                widget.authenticationStatusLogged ==
-                        AuthenticationStatusLogged.sendPasswordReset
-                    ? Center(
-                        child: Text('Obs.: Veja seu email para nova senha.'))
-                    : Container(),
-              ],
+              ),
             ),
           ),
         ));

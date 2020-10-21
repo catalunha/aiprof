@@ -51,96 +51,102 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
               //   height: 500.0,
               //   width: 400.0,
               //   child:
-              ListView.builder(
-            itemCount: widget.studentList.length,
-            itemBuilder: (context, index) {
-              final student = widget.studentList[index];
-              bool isStudentInExame = widget.exameCurrent.studentMap != null &&
-                  widget.exameCurrent.studentMap.isNotEmpty &&
-                  widget.exameCurrent.studentMap.containsKey(student.id);
-              bool isStudentInExameWithTaskAplly = isStudentInExame &&
-                  widget.exameCurrent.studentMap[student.id];
-              return Card(
-                child: Row(
-                  children: [
-                    // widget.exameCurrent.studentMap != null &&
-                    //         widget.exameCurrent.studentMap.isNotEmpty &&
-                    //         widget.exameCurrent.studentMap
-                    //             .containsKey(student.id) &&
-                    //         widget.exameCurrent.studentMap[student.id]
-                    isStudentInExameWithTaskAplly
-                        ? Expanded(
-                            flex: 1,
-                            child: InkWell(
-                              child: Tooltip(
-                                message:
-                                    'Deleta este estudante desta avaliação e todas as suas tarefas nesta avaliação',
-                                child: Icon(
-                                  Icons.delete,
-                                  size: 15,
-                                ),
-                              ),
-                              onDoubleTap: () {
-                                widget
-                                    .onDeleteStudentInExameCurrent(student.id);
-                              },
-                            ),
-                          )
-                        : Container(),
-                    Expanded(
-                      flex: 8,
-                      child: ListTile(
-                        // enabled: widget.exameCurrent.studentMap != null &&
+              Center(
+            child: Container(
+              width: 600,
+              child: ListView.builder(
+                itemCount: widget.studentList.length,
+                itemBuilder: (context, index) {
+                  final student = widget.studentList[index];
+                  bool isStudentInExame = widget.exameCurrent.studentMap !=
+                          null &&
+                      widget.exameCurrent.studentMap.isNotEmpty &&
+                      widget.exameCurrent.studentMap.containsKey(student.id);
+                  bool isStudentInExameWithTaskAplly = isStudentInExame &&
+                      widget.exameCurrent.studentMap[student.id];
+                  return Card(
+                    child: Row(
+                      children: [
+                        // widget.exameCurrent.studentMap != null &&
                         //         widget.exameCurrent.studentMap.isNotEmpty &&
                         //         widget.exameCurrent.studentMap
-                        //             .containsKey(student.id)
-                        //     ? !widget.exameCurrent.studentMap[student.id]
-                        //     : true,
-                        enabled: !isStudentInExameWithTaskAplly,
-                        // selected: widget.exameCurrent.studentMap != null &&
-                        //         widget.exameCurrent.studentMap.isNotEmpty
-                        //     ? widget.exameCurrent.studentMap
-                        //         .containsKey(student.id)
-                        //     : false,
-                        selected: isStudentInExame,
-                        title: Text('${student.name}'),
-                        subtitle: Text('${student.toString()}'),
-                        // subtitle: Text(
-                        //     '${student.id.substring(0, 4)} - ${widget.exameCurrent.studentMap[student.id]}'),
-                        onTap: () {
-                          widget.onSetStudentInExameCurrent(
-                              student, !isStudentInExame
-                              // !(widget.exameCurrent.studentMap != null &&
-                              //         widget.exameCurrent.studentMap.isNotEmpty
-                              //     ? widget.exameCurrent.studentMap
-                              //         .containsKey(student.id)
-                              //     : false),
-                              );
-                          setState(() {});
-                        },
-                      ),
+                        //             .containsKey(student.id) &&
+                        //         widget.exameCurrent.studentMap[student.id]
+                        isStudentInExameWithTaskAplly
+                            ? Expanded(
+                                flex: 1,
+                                child: InkWell(
+                                  child: Tooltip(
+                                    message:
+                                        'Deleta este estudante desta avaliação e todas as suas tarefas nesta avaliação',
+                                    child: Icon(
+                                      Icons.delete,
+                                      size: 15,
+                                    ),
+                                  ),
+                                  onDoubleTap: () {
+                                    widget.onDeleteStudentInExameCurrent(
+                                        student.id);
+                                  },
+                                ),
+                              )
+                            : Container(),
+                        Expanded(
+                          flex: 8,
+                          child: ListTile(
+                            // enabled: widget.exameCurrent.studentMap != null &&
+                            //         widget.exameCurrent.studentMap.isNotEmpty &&
+                            //         widget.exameCurrent.studentMap
+                            //             .containsKey(student.id)
+                            //     ? !widget.exameCurrent.studentMap[student.id]
+                            //     : true,
+                            enabled: !isStudentInExameWithTaskAplly,
+                            // selected: widget.exameCurrent.studentMap != null &&
+                            //         widget.exameCurrent.studentMap.isNotEmpty
+                            //     ? widget.exameCurrent.studentMap
+                            //         .containsKey(student.id)
+                            //     : false,
+                            selected: isStudentInExame,
+                            title: Text('${student.name}'),
+                            subtitle: Text('${student.toString()}'),
+                            // subtitle: Text(
+                            //     '${student.id.substring(0, 4)} - ${widget.exameCurrent.studentMap[student.id]}'),
+                            onTap: () {
+                              widget.onSetStudentInExameCurrent(
+                                  student, !isStudentInExame
+                                  // !(widget.exameCurrent.studentMap != null &&
+                                  //         widget.exameCurrent.studentMap.isNotEmpty
+                                  //     ? widget.exameCurrent.studentMap
+                                  //         .containsKey(student.id)
+                                  //     : false),
+                                  );
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                        // widget.exameCurrent.studentMap != null &&
+                        //         widget.exameCurrent.studentMap.isNotEmpty &&
+                        //         widget.exameCurrent.studentMap
+                        //             .containsKey(student.id) &&
+                        //         widget.exameCurrent.studentMap[student.id]
+                        isStudentInExameWithTaskAplly
+                            ? Expanded(
+                                flex: 1,
+                                child: IconButton(
+                                  onPressed: () {
+                                    widget.onSetStudentSelected(student.id);
+                                  },
+                                  icon: Icon(Icons.art_track_sharp),
+                                  tooltip: 'Lista suas tarefas nesta avaliação',
+                                ),
+                              )
+                            : Container(),
+                      ],
                     ),
-                    // widget.exameCurrent.studentMap != null &&
-                    //         widget.exameCurrent.studentMap.isNotEmpty &&
-                    //         widget.exameCurrent.studentMap
-                    //             .containsKey(student.id) &&
-                    //         widget.exameCurrent.studentMap[student.id]
-                    isStudentInExameWithTaskAplly
-                        ? Expanded(
-                            flex: 1,
-                            child: IconButton(
-                              onPressed: () {
-                                widget.onSetStudentSelected(student.id);
-                              },
-                              icon: Icon(Icons.art_track_sharp),
-                              tooltip: 'Lista suas tarefas nesta avaliação',
-                            ),
-                          )
-                        : Container(),
-                  ],
-                ),
-              );
-            },
+                  );
+                },
+              ),
+            ),
           ),
         ),
         if (widget.waiting)
