@@ -14,7 +14,7 @@ description: A new Flutter application.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.5.2 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,49 +22,26 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  pdf: ^1.3.20
-  provider: ^2.0.1
-  firebase_storage: ^3.0.1
-  file_picker: ^1.3.5
-  flutter_markdown: ^0.2.0
-  mime: ^0.9.6+3
-  url_launcher: ^5.0.3
-  rxdart: ^0.22.0
-  uuid: 2.0.1
-  validators: ^2.0.0+1
-  firestore_wrapper_flutter:
-    git:
-      url: https://github.com/paulorobertocruz/firestore_wrapper.git
-      path: packages/firestore_wrapper_flutter
-  firestore_wrapper_web:
-    git:
-      url: https://github.com/paulorobertocruz/firestore_wrapper.git
-      path: packages/firestore_wrapper_web
-  firebaseauth_wrapper_flutter:
-    git:
-      url: https://github.com/paulorobertocruz/firebaseauth_wrapper.git
-      path: firebaseauth_wrapper_flutter
-  firebaseauth_wrapper_web:
-    git:
-      url: https://github.com/paulorobertocruz/firebaseauth_wrapper.git
-      path: firebaseauth_wrapper_web
-  location: ^2.3.5
-  image_picker: ^0.6.0+17
-  image: ^2.1.4
-  path_provider: ^1.1.4
-  csv: ^4.0.3
-  open_file: ^2.0.3
-  markdown: ^2.0.3
-  flutter_html_to_pdf: ^0.4.3
-  permission_handler: ^3.2.1+1
-  queries: ^0.1.12
-  firebase_messaging: ^6.0.9
-  flutter_local_notifications: 0.7.1
-  fixnum: ^0.10.9
-  universal_io: ^0.8.4
-  intl: ^0.16.0
-  webview_flutter: ">=0.3.3"
+  cupertino_icons: ^0.1.3
+
+  async_redux: ^3.0.0
+
+  cloud_firestore: ^0.13.7
+  firebase_auth: ^0.16.1
+
+  meta: ^1.1.7
+  uuid: ^2.2.0
+  intl: ^0.16.1
+  convert: ^2.1.1
+  url_launcher: ^5.5.0
+
+  flutter_markdown: ^0.4.3
+  clipboard: ^0.1.2+8
+
+  material_design_icons_flutter: ^4.0.5555
+
+  flutter_simple_treeview: ^2.0.1
+
 
 dev_dependencies:
   flutter_test:

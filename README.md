@@ -1,16 +1,30 @@
 # aiprof
 
-A new Flutter application.
+Avaliador Individual de Conhecimento 
+TIK
+## Detalhes
 
-## Getting Started
+* User
+* classroom
+* know
+    >
+* situation
+    > .
+* simulation
+    > .
+* exame
+  > a function se encarrega gerar task quando exame.isDelivery=true
+  * question
+    >: Add: atualiza em exame.questionMap[questionId]=false. pede para reaplicar exame
+    >: Update: Se question.isDelivered=true a function atualiza as tasks relacionadas a ela.
+    >: Delete: Se question.isDelivered=true apaga todas as tasks relacionados a ela. atualiza exame.questionMap.
+  * student
+    > Add: atualiza em exame.studentMap[studentId]=false. pede para reaplicar exame.
+    > delete: Se exame.studentMap=true apaga todas as tasks relacionados a ela. atualiza exame.studentMap.
+* task
+    > é juntar as questões de um exame com os estudantes e gerar uma task
 
-This project is a starting point for a Flutter application.
+calnum
+infoeng
+modmat
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
