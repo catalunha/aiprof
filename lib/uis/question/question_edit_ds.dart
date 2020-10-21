@@ -215,11 +215,13 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             initialValue: widget.scoreQuestion == null
                 ? '1'
                 : widget.scoreQuestion.toString(),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+            ],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
-              labelText: 'Nota ou peso da questão (>=1):',
+              labelText: 'Nota ou peso da questão (>=0):',
             ),
             onChanged: (value) {
               _scoreQuestion = int.parse(value);

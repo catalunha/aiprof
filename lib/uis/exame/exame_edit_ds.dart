@@ -109,7 +109,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
             }
           }
           if (liberated) {
-            if (_scoreExame >= 1) {
+            if (_scoreExame >= 0) {
               liberated = true;
             } else {
               liberated = false;
@@ -118,7 +118,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
             }
           }
           if (liberated) {
-            if (_scoreQuestion >= 1) {
+            if (_scoreQuestion >= 0) {
               liberated = true;
             } else {
               liberated = false;
@@ -200,11 +200,13 @@ class _ExameEditDSState extends State<ExameEditDS> {
           TextFormField(
             initialValue:
                 widget.scoreExame == null ? '1' : widget.scoreExame.toString(),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+            ],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
-              labelText: 'Nota ou peso da avaliação (>=1):',
+              labelText: 'Nota ou peso da avaliação (>=0):',
             ),
             onChanged: (newValue) => _scoreExame = int.parse(newValue),
             onSaved: (newValue) => _scoreExame = int.parse(newValue),
@@ -271,11 +273,13 @@ class _ExameEditDSState extends State<ExameEditDS> {
             initialValue: widget.scoreQuestion == null
                 ? '1'
                 : widget.scoreQuestion.toString(),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+            ],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
-              labelText: 'Nota ou peso das questões (>=1):',
+              labelText: 'Nota ou peso das questões (>=0):',
             ),
             onChanged: (newValue) => _scoreQuestion = int.parse(newValue),
             onSaved: (newValue) => _scoreQuestion = int.parse(newValue),

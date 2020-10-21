@@ -113,11 +113,13 @@ class _TaskEditDSState extends State<TaskEditDS> {
           TextFormField(
             initialValue:
                 widget.scoreExame == null ? '1' : widget.scoreExame.toString(),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+            ],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
-              labelText: 'Nota ou peso da avaliação (>=1):',
+              labelText: 'Nota ou peso da avaliação (>=0):',
             ),
             onSaved: (newValue) => _scoreExame = int.parse(newValue),
             validator: (value) {
@@ -180,7 +182,9 @@ class _TaskEditDSState extends State<TaskEditDS> {
             initialValue: widget.scoreQuestion == null
                 ? '1'
                 : widget.scoreQuestion.toString(),
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+            ],
             keyboardType: TextInputType.number,
             maxLines: null,
             decoration: InputDecoration(
