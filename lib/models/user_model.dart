@@ -75,6 +75,8 @@ class UserModel extends FirestoreModel {
     final Map<String, dynamic> data = Map<String, dynamic>();
     if (id != null) data['id'] = this.id;
     if (name != null) data['name'] = this.name;
+    if (code != null) data['code'] = this.code;
+    if (email != null) data['email'] = this.email;
     return data;
   }
 

@@ -60,14 +60,14 @@ class LoginPageDSState extends State<LoginPageDS> {
                   children: <Widget>[
                     Text('Informe os dados'),
                     TextFormField(
-                      initialValue: 'catalunha.mj@gmail.com',
+                      // initialValue: 'catalunha.mj@gmail.com',
                       decoration: InputDecoration(
                         labelText: 'Email:',
                       ),
                       onSaved: (value) => _userName = value,
                     ),
                     TextFormField(
-                      initialValue: 'aiprof',
+                      // initialValue: 'aiprof',
                       obscureText: true,
                       decoration: InputDecoration(
                         labelText: 'Senha:',

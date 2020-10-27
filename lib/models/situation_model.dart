@@ -96,7 +96,7 @@ class SituationModel extends FirestoreModel {
   String toString() {
     String _return = '';
     _return = _return +
-        '\nSimulações: ${simulationModel?.length != null && simulationModel.length > 0 ? simulationModel.length : "NENHUMA"} com situação: ${isSimulationConsistent != null && isSimulationConsistent ? "consistente" : "INconsistente"}';
+        '\nSimulações: ${simulationModel?.length != null && simulationModel.length > 0 ? simulationModel.length : "NENHUMA"}. Situação: ${isSimulationConsistent != null && isSimulationConsistent ? "consistente" : "INconsistente"}';
     _return = _return + '\nArea: $area';
     _return = _return + '\nDescrição: $description';
     _return = _return +

@@ -74,13 +74,13 @@ class ClassroomModel extends FirestoreModel {
     if (studentUserRefMapTemp != null && studentUserRefMapTemp is Map) {
       data["studentUserRefMapTemp"] = Map<String, dynamic>();
       for (var item in studentUserRefMapTemp.entries) {
-        data["studentUserRefMapTemp"][item.key] = item.value.toMap();
+        data["studentUserRefMapTemp"][item.key] = item.value.toMapRef();
       }
     }
     if (studentUserRefMap != null && studentUserRefMap is Map) {
       data["studentUserRefMap"] = Map<String, dynamic>();
       for (var item in studentUserRefMap.entries) {
-        data["studentUserRefMap"][item.key] = item.value.toMap();
+        data["studentUserRefMap"][item.key] = item.value.toMapRef();
       }
     }
     return data;

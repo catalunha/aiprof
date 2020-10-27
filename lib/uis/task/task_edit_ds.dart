@@ -256,11 +256,22 @@ class _TaskEditDSState extends State<TaskEditDS> {
           SwitchListTile(
             value: _nullStarted,
             title: _nullStarted
-                ? Text('Tarefa será reiniciada.')
-                : Text('Reinicia a tarefa?'),
+                ? Text('Inicio será limpo.')
+                : Text('Limpar inicio da tarefa?'),
             onChanged: (value) {
               setState(() {
-                _isDelete = value;
+                _nullStarted = value;
+              });
+            },
+          ),
+          SwitchListTile(
+            value: _isOpen,
+            title: _isOpen
+                ? Text('Tarefa será aberta.')
+                : Text('Abrir da tarefa?'),
+            onChanged: (value) {
+              setState(() {
+                _isOpen = value;
               });
             },
           ),
@@ -408,7 +419,9 @@ class _TaskEditDSState extends State<TaskEditDS> {
           icone,
           IconButton(
             color: simulationOutput?.right != null
-                ? simulationOutput.right ? Colors.green : Colors.red
+                ? simulationOutput.right
+                    ? Colors.green
+                    : Colors.red
                 : Colors.black,
             icon: simulationOutput?.right != null
                 ? simulationOutput.right
@@ -422,7 +435,9 @@ class _TaskEditDSState extends State<TaskEditDS> {
             onPressed: () {
               bool _right;
               _right = simulationOutput?.right != null
-                  ? simulationOutput.right ? true : false
+                  ? simulationOutput.right
+                      ? true
+                      : false
                   : false;
               widget.onUpdateOutput(simulationOutput.id, !_right);
             },

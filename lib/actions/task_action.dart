@@ -148,9 +148,10 @@ class UpdateDocTaskCurrentAsyncTaskAction extends ReduxAction<AppState> {
       taskModel.error = error;
       taskModel.scoreQuestion = scoreQuestion;
       taskModel.attempted = attempted;
-      // taskModel.isOpen = isOpen;
+      taskModel.isOpen = isOpen;
       if (nullStarted) {
         taskModel.started = null;
+        taskModel.lastSendAnswer = null;
       }
       await firestore
           .collection(TaskModel.collection)

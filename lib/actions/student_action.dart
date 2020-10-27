@@ -233,6 +233,10 @@ class RemoveStudentForClassroomAsyncStudentAction
       'classroomId':
           FieldValue.arrayRemove([state.classroomState.classroomCurrent.id])
     });
+    await firestore
+        .collection(ClassroomModel.collection)
+        .document(state.classroomState.classroomCurrent.id)
+        .updateData({'studentUserRefMap.$studentId': FieldValue.delete()});
 
     return null;
   }
