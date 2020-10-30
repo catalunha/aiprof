@@ -385,9 +385,9 @@ class _TaskEditDSState extends State<TaskEditDS> {
           tooltip: 'Um link ou URL ao um site ou arquivo',
           icon: Icon(Icons.link),
           onPressed: () async {
-            if (simulationOutput.value != null) {
-              if (await canLaunch(simulationOutput.value)) {
-                await launch(simulationOutput.value);
+            if (simulationOutput.answer != null) {
+              if (await canLaunch(simulationOutput.answer)) {
+                await launch(simulationOutput.answer);
               }
             }
           },
