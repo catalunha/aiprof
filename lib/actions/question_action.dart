@@ -184,6 +184,8 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
   final int time;
   final int error;
   final bool isDelete;
+  final bool resetTask;
+
   UpdateDocQuestionCurrentAsyncQuestionAction({
     this.name,
     this.description,
@@ -194,6 +196,7 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
     this.time,
     this.error,
     this.isDelete,
+    this.resetTask,
   });
   @override
   Future<AppState> reduce() async {
@@ -211,6 +214,7 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
     questionModel.time = time;
     questionModel.error = error;
     questionModel.scoreQuestion = scoreQuestion;
+    questionModel.resetTask = resetTask;
 
     if (isDelete) {
       await firestore

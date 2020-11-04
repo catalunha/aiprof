@@ -412,7 +412,7 @@ class _TaskEditDSState extends State<TaskEditDS> {
           Text(' = '),
           simulationOutput.type == 'texto' || simulationOutput.type == 'url'
               ? Text('(${simulationOutput.value.length}c)')
-              : Text('${simulationOutput.value}'),
+              : Text('${simulationOutput.value} (${simulationOutput.answer})'),
           Container(
             width: 10,
           ),

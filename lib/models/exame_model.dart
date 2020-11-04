@@ -138,6 +138,8 @@ class ExameModel extends FirestoreModel {
         '\nQuestões: ${questionMap?.length == null ? "0" : questionMap.length}';
     _return = _return +
         '\nEstudantes: ${studentMap?.length == null ? "0" : studentMap.length}';
+    _return = _return + '\nInício: $start';
+    _return = _return + '\nFim: $end';
     _return = _return +
         '\nPeso do exame: ${scoreExame == null ? "0" : scoreExame}. Peso da questão: ${scoreQuestion == null ? "0" : scoreQuestion}. Tempo: ${time == null ? "0" : time}h. Tentativa: ${attempt == null ? "0" : attempt}. Erro: ${error == null ? "0" : error}%.';
 

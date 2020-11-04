@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class QuestionEditDS extends StatefulWidget {
+  final String id;
   final String name;
   final String description;
   final dynamic start;
@@ -18,7 +19,8 @@ class QuestionEditDS extends StatefulWidget {
   final Function() onSituationSelect;
 
   final Function(String, String, dynamic, dynamic, int, int, int, int) onAdd;
-  final Function(String, String, dynamic, dynamic, int, int, int, int, bool)
+  final Function(
+          String, String, dynamic, dynamic, int, int, int, int, bool, bool)
       onUpdate;
 
   const QuestionEditDS({
@@ -37,6 +39,7 @@ class QuestionEditDS extends StatefulWidget {
     this.situationRef,
     this.onSituationSelect,
     this.isDelivered,
+    this.id,
   }) : super(key: key);
   @override
   _QuestionEditDSState createState() => _QuestionEditDSState();
@@ -56,6 +59,8 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
   int _time;
   int _error;
   bool _isDelete = false;
+  bool _resetTask = false;
+
   void validateData() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
@@ -80,6 +85,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
               _error,
               _scoreQuestion,
               _isDelete,
+              _resetTask,
             );
     } else {
       setState(() {});
@@ -102,7 +108,9 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
     return Scaffold(
       key: scaffoldState,
       appBar: AppBar(
-        title: Text(widget.isAddOrUpdate ? 'Criar questão' : 'Editar questão'),
+        title: Text(
+            '${widget.isAddOrUpdate ? 'Criar' : 'Editar'} questão ${widget.isAddOrUpdate ? '' : "(${widget.id.substring(0, 4)})"}'),
+        // title: Text(widget.isAddOrUpdate ? 'Criar questão' : 'Editar questão'),
       ),
       body: Center(
         child: Container(
@@ -329,6 +337,20 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
               },
             ),
           ),
+          widget.isAddOrUpdate
+              ? Container()
+              : SwitchListTile(
+                  value: _resetTask,
+                  title: _resetTask
+                      ? Text('Tarefas aplicadas serão reabertas.')
+                      : Text('Reabrir tarefas ja aplicadas ?'),
+                  onChanged: (value) {
+                    setState(() {
+                      _resetTask = value;
+                    });
+                  },
+                ),
+
           widget.isAddOrUpdate
               ? Container()
               : Column(

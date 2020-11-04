@@ -8,6 +8,7 @@ import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
 class ViewModel extends BaseModel<AppState> {
+  String id;
   String name;
   String description;
   dynamic start;
@@ -22,9 +23,11 @@ class ViewModel extends BaseModel<AppState> {
   bool isAddOrUpdate;
   Function() onSituationSelect;
   Function(String, String, dynamic, dynamic, int, int, int, int) onAdd;
-  Function(String, String, dynamic, dynamic, int, int, int, int, bool) onUpdate;
+  Function(String, String, dynamic, dynamic, int, int, int, int, bool, bool)
+      onUpdate;
   ViewModel();
   ViewModel.build({
+    @required this.id,
     @required this.name,
     @required this.description,
     @required this.start,
@@ -40,6 +43,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.onAdd,
     @required this.onUpdate,
   }) : super(equals: [
+          id,
           name,
           description,
           start,
@@ -55,6 +59,7 @@ class ViewModel extends BaseModel<AppState> {
   @override
   ViewModel fromStore() => ViewModel.build(
       isAddOrUpdate: state.questionState.questionCurrent.id == null,
+      id: state.questionState.questionCurrent.id,
       name: state.questionState.questionCurrent.name,
       description: state.questionState.questionCurrent.description,
       start: state.questionState.questionCurrent.start,
@@ -97,6 +102,7 @@ class ViewModel extends BaseModel<AppState> {
         int error,
         int scoreQuestion,
         bool isDelete,
+        bool resetTask,
       ) {
         dispatch(UpdateDocQuestionCurrentAsyncQuestionAction(
           name: name,
@@ -108,6 +114,7 @@ class ViewModel extends BaseModel<AppState> {
           error: error,
           scoreQuestion: scoreQuestion,
           isDelete: isDelete,
+          resetTask: resetTask,
         ));
         dispatch(NavigateAction.pop());
       },
@@ -124,6 +131,7 @@ class QuestionEdit extends StatelessWidget {
       model: ViewModel(),
       builder: (context, viewModel) => QuestionEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
+        id: viewModel.id,
         name: viewModel.name,
         description: viewModel.description,
         start: viewModel.start,

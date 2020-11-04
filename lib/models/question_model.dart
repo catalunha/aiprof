@@ -19,6 +19,7 @@ class QuestionModel extends FirestoreModel {
   int time;
   int error;
   bool isDelivered;
+  bool resetTask;
 
   QuestionModel(
     String id, {
@@ -35,6 +36,7 @@ class QuestionModel extends FirestoreModel {
     this.userRef,
     this.name,
     this.description,
+    this.resetTask,
   }) : super(id);
 
   @override
@@ -90,6 +92,8 @@ class QuestionModel extends FirestoreModel {
     if (error != null) data['error'] = this.error;
     if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
     if (isDelivered != null) data['isDelivered'] = this.isDelivered;
+    if (resetTask != null) data['resetTask'] = this.resetTask;
+
     return data;
   }
 
