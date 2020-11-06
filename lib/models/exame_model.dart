@@ -20,8 +20,8 @@ class ExameModel extends FirestoreModel {
   // function
   bool isDelivered;
   bool isProcess;
-  Map<String, bool> studentMap;
   Map<String, bool> questionMap;
+  Map<String, bool> studentMap;
 
   ExameModel(
     String id, {
