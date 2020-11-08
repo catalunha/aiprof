@@ -161,7 +161,7 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
     exameModel.isDelivered = false;
-    exameModel.isProcess = false;
+    exameModel.isInProcess = false;
     await firestore.collection(ExameModel.collection).add(exameModel.toMap());
 
     return null;
@@ -248,12 +248,16 @@ class UpdateDocSetStudentInExameCurrentAsyncExameAction
 
     if (exameModel.studentMap == null)
       exameModel.studentMap = Map<String, bool>();
+    if (exameModel.studentUserRefMap == null)
+      exameModel.studentUserRefMap = Map<String, UserModel>();
     if (isAddOrRemove) {
       if (!exameModel.studentMap.containsKey(studentModel.id)) {
         exameModel.studentMap.addAll({studentModel.id: false});
+        exameModel.studentUserRefMap.addAll({studentModel.id: studentModel});
       }
     } else {
       exameModel.studentMap.remove(studentModel.id);
+      exameModel.studentUserRefMap.remove(studentModel.id);
     }
     await firestore
         .collection(ExameModel.collection)
@@ -335,15 +339,19 @@ class UpdateDocsSetStudentListInExameCurrentAsyncExameAction
         .fromMap(state.exameState.exameCurrent.toMap());
     if (exameModel.studentMap == null)
       exameModel.studentMap = Map<String, bool>();
+    if (exameModel.studentUserRefMap == null)
+      exameModel.studentUserRefMap = Map<String, UserModel>();
     for (UserModel student in state.studentState.studentList) {
       if (isAddOrRemove) {
         if (!exameModel.studentMap.containsKey(student.id)) {
           exameModel.studentMap.addAll({student.id: false});
+          exameModel.studentUserRefMap.addAll({student.id: student});
         }
       } else {
         if (exameModel.studentMap.containsKey(student.id) &&
             exameModel.studentMap[student.id] == false) {
           exameModel.studentMap.remove(student.id);
+          exameModel.studentUserRefMap.remove(student.id);
         }
       }
     }

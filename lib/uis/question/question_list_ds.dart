@@ -62,10 +62,10 @@ class _QuestionListDSState extends State<QuestionListDS> {
                             tooltip: 'URL para a situação',
                             icon: Icon(Icons.local_library),
                             onPressed: () async {
-                              if (question.situationRef?.url != null) {
+                              if (question.situationModel?.url != null) {
                                 if (await canLaunch(
-                                    question.situationRef.url)) {
-                                  await launch(question.situationRef.url);
+                                    question.situationModel.url)) {
+                                  await launch(question.situationModel.url);
                                 }
                               }
                             },

@@ -9,7 +9,7 @@ class QuestionModel extends FirestoreModel {
   UserModel userRef;
   ClassroomModel classroomRef;
   ExameModel exameRef;
-  SituationModel situationRef;
+  SituationModel situationModel;
   String name;
   String description;
   dynamic start;
@@ -25,7 +25,7 @@ class QuestionModel extends FirestoreModel {
     String id, {
     this.classroomRef,
     this.exameRef,
-    this.situationRef,
+    this.situationModel,
     this.start,
     this.end,
     this.scoreQuestion,
@@ -48,9 +48,9 @@ class QuestionModel extends FirestoreModel {
           .fromMap(map['classroomRef']);
     if (map.containsKey('exameRef') && map['exameRef'] != null)
       exameRef = ExameModel(map['exameRef']['id']).fromMap(map['exameRef']);
-    if (map.containsKey('situationRef') && map['situationRef'] != null)
-      situationRef = SituationModel(map['situationRef']['id'])
-          .fromMap(map['situationRef']);
+    if (map.containsKey('situationModel') && map['situationModel'] != null)
+      situationModel = SituationModel(map['situationModel']['id'])
+          .fromMap(map['situationModel']);
     if (map.containsKey('name')) name = map['name'];
     if (map.containsKey('description')) description = map['description'];
     start = map.containsKey('start') && map['start'] != null
@@ -80,8 +80,8 @@ class QuestionModel extends FirestoreModel {
     if (this.exameRef != null) {
       data['exameRef'] = this.exameRef.toMapRef();
     }
-    if (this.situationRef != null) {
-      data['situationRef'] = this.situationRef.toMapRef();
+    if (this.situationModel != null) {
+      data['situationModel'] = this.situationModel.toMap();
     }
     if (name != null) data['name'] = this.name;
     if (description != null) data['description'] = this.description;
@@ -114,7 +114,7 @@ class QuestionModel extends FirestoreModel {
     _return =
         _return + ' Exame: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
     _return = _return +
-        '\nSituação: ${situationRef?.name} (${situationRef?.id?.substring(0, 4)})';
+        '\nSituação: ${situationModel?.name} (${situationModel?.id?.substring(0, 4)})';
 
     // _return = _return + '\nuserRef.name: ${userRef.name}';
     // _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
@@ -125,7 +125,7 @@ class QuestionModel extends FirestoreModel {
         '\nPeso da questão: ${scoreQuestion == null ? "0" : scoreQuestion}. Tempo: ${time == null ? "0" : time}h. Tentativa: ${attempt == null ? "0" : attempt}. Erro: ${error == null ? "0" : error}%.';
 
     _return = _return + '\nAplicada: ${isDelivered ? "Sim" : "Não"}';
-    // _return = _return + '\nsituationRef.name: ${situationRef?.name}';
+    // _return = _return + '\nsituationModel.name: ${situationModel?.name}';
     // _return = _return + '\nsimulationRef.name: ${simulationRef.id}';
     _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;

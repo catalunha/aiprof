@@ -1,5 +1,4 @@
 import 'package:aiprof/actions/question_action.dart';
-import 'package:aiprof/models/simulation_model.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/states/app_state.dart';
@@ -17,7 +16,7 @@ class ViewModel extends BaseModel<AppState> {
   int time;
   int error;
   int scoreQuestion;
-  SituationModel situationRef;
+  SituationModel situationModel;
   bool isDelivered;
 
   bool isAddOrUpdate;
@@ -36,7 +35,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.time,
     @required this.error,
     @required this.scoreQuestion,
-    @required this.situationRef,
+    @required this.situationModel,
     @required this.isDelivered,
     @required this.isAddOrUpdate,
     @required this.onSituationSelect,
@@ -52,7 +51,7 @@ class ViewModel extends BaseModel<AppState> {
           time,
           error,
           scoreQuestion,
-          situationRef,
+          situationModel,
           isDelivered,
           isAddOrUpdate,
         ]);
@@ -68,7 +67,7 @@ class ViewModel extends BaseModel<AppState> {
       time: state.questionState.questionCurrent.time,
       error: state.questionState.questionCurrent.error,
       scoreQuestion: state.questionState.questionCurrent.scoreQuestion,
-      situationRef: state.questionState.questionCurrent.situationRef,
+      situationModel: state.questionState.questionCurrent.situationModel,
       isDelivered: state.questionState.questionCurrent.isDelivered,
       onAdd: (
         String name,
@@ -140,7 +139,7 @@ class QuestionEdit extends StatelessWidget {
         time: viewModel.time,
         error: viewModel.error,
         scoreQuestion: viewModel.scoreQuestion,
-        situationRef: viewModel.situationRef,
+        situationModel: viewModel.situationModel,
         isDelivered: viewModel.isDelivered,
         onSituationSelect: viewModel.onSituationSelect,
         onAdd: viewModel.onAdd,

@@ -37,7 +37,7 @@ class ViewModel extends BaseModel<AppState> {
         exameCurrent: state.exameState.exameCurrent,
         onSetStudentInExameCurrent:
             (UserModel studentModel, bool isAddOrRemove) {
-          print('id:${studentModel.id} isAddOrRemove:$isAddOrRemove');
+          // print('id:${studentModel.id} isAddOrRemove:$isAddOrRemove');
           dispatch(UpdateDocSetStudentInExameCurrentAsyncExameAction(
             studentModel: studentModel,
             isAddOrRemove: isAddOrRemove,

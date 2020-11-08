@@ -13,7 +13,7 @@ class QuestionEditDS extends StatefulWidget {
   final int time;
   final int error;
   final int scoreQuestion;
-  final SituationModel situationRef;
+  final SituationModel situationModel;
   final bool isDelivered;
   final bool isAddOrUpdate;
   final Function() onSituationSelect;
@@ -36,7 +36,7 @@ class QuestionEditDS extends StatefulWidget {
     this.isAddOrUpdate,
     this.onAdd,
     this.onUpdate,
-    this.situationRef,
+    this.situationModel,
     this.onSituationSelect,
     this.isDelivered,
     this.id,
@@ -136,7 +136,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             }
           }
           if (liberated) {
-            if (widget.situationRef == null) {
+            if (widget.situationModel == null) {
               liberated = false;
               showSnackBarHandler(
                   context, 'Favor definir uma situação para esta questão.');
@@ -304,7 +304,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
           widget?.isDelivered != null && !widget.isDelivered
               ? ListTile(
                   title: Text('Selecione uma situação ou problema :'),
-                  subtitle: Text('${widget.situationRef?.name}'),
+                  subtitle: Text('${widget.situationModel?.name}'),
                   trailing: Icon(Icons.search),
                   onTap: () => widget.onSituationSelect(),
                 )

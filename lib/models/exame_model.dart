@@ -19,9 +19,10 @@ class ExameModel extends FirestoreModel {
   int scoreQuestion;
   // function
   bool isDelivered;
-  bool isProcess;
+  bool isInProcess;
   Map<String, bool> questionMap;
   Map<String, bool> studentMap;
+  Map<String, UserModel> studentUserRefMap;
 
   ExameModel(
     String id, {
@@ -34,7 +35,7 @@ class ExameModel extends FirestoreModel {
     this.error,
     this.scoreQuestion,
     this.isDelivered,
-    this.isProcess,
+    this.isInProcess,
     this.studentMap,
     this.questionMap,
     this.userRef,
@@ -67,7 +68,7 @@ class ExameModel extends FirestoreModel {
     if (map.containsKey('scoreQuestion')) scoreQuestion = map['scoreQuestion'];
     // functions
     if (map.containsKey('isDelivered')) isDelivered = map['isDelivered'];
-    if (map.containsKey('isProcess')) isProcess = map['isProcess'];
+    if (map.containsKey('isProcess')) isInProcess = map['isProcess'];
     if (map["studentMap"] is Map) {
       studentMap = Map<String, bool>();
       for (var item in map["studentMap"].entries) {
@@ -78,6 +79,12 @@ class ExameModel extends FirestoreModel {
       questionMap = Map<String, bool>();
       for (var item in map["questionMap"].entries) {
         questionMap[item.key] = item.value;
+      }
+    }
+    if (map["studentUserRefMap"] is Map) {
+      studentUserRefMap = Map<String, UserModel>();
+      for (var item in map["studentUserRefMap"].entries) {
+        studentUserRefMap[item.key] = UserModel(item.key).fromMap(item.value);
       }
     }
     return this;
@@ -104,7 +111,7 @@ class ExameModel extends FirestoreModel {
     if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
     //function
     if (isDelivered != null) data['isDelivered'] = this.isDelivered;
-    if (isProcess != null) data['isProcess'] = this.isProcess;
+    if (isInProcess != null) data['isProcess'] = this.isInProcess;
     if (studentMap != null && studentMap is Map) {
       data["studentMap"] = Map<String, dynamic>();
       for (var item in studentMap.entries) {
@@ -115,6 +122,12 @@ class ExameModel extends FirestoreModel {
       data["questionMap"] = Map<String, dynamic>();
       for (var item in questionMap.entries) {
         data["questionMap"][item.key] = item.value;
+      }
+    }
+    if (studentUserRefMap != null && studentUserRefMap is Map) {
+      data["studentUserRefMap"] = Map<String, dynamic>();
+      for (var item in studentUserRefMap.entries) {
+        data["studentUserRefMap"][item.key] = item.value.toMapRef();
       }
     }
     return data;

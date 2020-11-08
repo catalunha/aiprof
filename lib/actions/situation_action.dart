@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:aiprof/actions/simulation_action.dart';
 import 'package:aiprof/models/question_model.dart';
+import 'package:aiprof/models/simulation_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:aiprof/models/situation_model.dart';
@@ -90,24 +94,22 @@ class SetSituationInQuestionCurrentSyncSituationAction
   SetSituationInQuestionCurrentSyncSituationAction(this.situationRef);
 
   @override
-  AppState reduce() {
-    print('id2:${situationRef?.id}');
+  Future<AppState> reduce() async {
+    print(
+        'SetSituationInQuestionCurrentSyncSituationAction: ${situationRef?.id}');
     if (situationRef.id != null) {
       QuestionModel questionCurrent =
           QuestionModel(state.questionState.questionCurrent.id)
               .fromMap(state.questionState.questionCurrent.toMap());
-      questionCurrent.situationRef = situationRef;
-      // //Coletando simulação
-      // dispatch(GetDocsSimulationListAsyncSimulationAction());
-      // // QuestionModel questionCurrent =
-      // //     QuestionModel(state.questionState.questionCurrent.id)
-      // //         .fromMap(state.questionState.questionCurrent.toMap());
-      // Random random = new Random();
-      // int simulationLenght = state.simulationState.simulationList.length;
-      // int randomNumber = random.nextInt(simulationLenght);
-      // SimulationModel simulationModelTemp =
-      //     state.simulationState.simulationList[randomNumber];
-      // questionCurrent.simulationRef = simulationModelTemp;
+
+      Firestore firestore = Firestore.instance;
+      final situationSnap = await firestore
+          .collection(SituationModel.collection)
+          .document(situationRef.id)
+          .get();
+
+      questionCurrent.situationModel =
+          SituationModel(situationSnap.documentID).fromMap(situationSnap.data);
 
       return state.copyWith(
         questionState: state.questionState.copyWith(
