@@ -291,6 +291,7 @@ class DeleteStudentInExameCurrentAndTaskAsyncExameAction
         .fromMap(state.exameState.exameCurrent.toMap());
 
     exameModel.studentMap.remove(studentId);
+    exameModel.studentUserRefMap.remove(studentId);
     await firestore
         .collection(ExameModel.collection)
         .document(exameModel.id)

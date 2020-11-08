@@ -65,6 +65,7 @@ class SituationModel extends FirestoreModel {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     // _updateAll();
+    if (id != null) data['id'] = this.id;
     if (isActive != null) data['isActive'] = this.isActive;
     if (isSimulationConsistent != null)
       data['isSimulationConsistent'] = this.isSimulationConsistent;

@@ -114,6 +114,7 @@ class TaskModel extends FirestoreModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (id != null) data['id'] = this.id;
     if (this.teacherUserRef != null) {
       data['teacherUserRef'] = this.teacherUserRef.toMapRef();
     }

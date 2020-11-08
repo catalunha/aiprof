@@ -38,6 +38,7 @@ class ExameModel extends FirestoreModel {
     this.isInProcess,
     this.studentMap,
     this.questionMap,
+    this.studentUserRefMap,
     this.userRef,
     this.name,
     this.description,
@@ -93,6 +94,7 @@ class ExameModel extends FirestoreModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (id != null) data['id'] = this.id;
     if (this.userRef != null) {
       data['userRef'] = this.userRef.toMapRef();
     }

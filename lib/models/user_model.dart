@@ -54,6 +54,7 @@ class UserModel extends FirestoreModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (id != null) data['id'] = this.id;
     if (name != null) data['name'] = this.name;
     // if (nickname != null) data['nickname'] = this.nickname;
     if (code != null) data['code'] = this.code;
