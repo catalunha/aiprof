@@ -164,35 +164,26 @@ class TaskModel extends FirestoreModel {
   String toString() {
     String _return = '';
     _return = _return +
-        '\nProfessor: ${teacherUserRef.name.split(' ')[0]} (${teacherUserRef.id.substring(0, 4)})';
-    // _return = _return + '\nteacherUserRef.name: ${teacherUserRef.name}';
-    _return = _return +
-        '\nTurma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
-    // _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
+        'Turma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
     _return =
-        _return + ' Exame: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
-    // _return = _return + '\nexameRef.name: ${exameRef.name}';
+        _return + '\nExame: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
     _return = _return +
         '\nQuestão: ${questionRef.name} (${questionRef.id.substring(0, 4)}).';
-    // _return = _return + '\nquestionRef.name: ${questionRef.name}';
     _return = _return +
-        ' Situação: ${situationRef.name} (${situationRef.id.substring(0, 4)})';
-    // _return = _return + '\nsituationRef.name: ${situationRef.name}';
+        '\nSituação: ${situationRef.name} (${situationRef.id.substring(0, 4)})';
     _return = _return +
-        '\nEstudante: ${studentUserRef.name.split(' ')[0]} (${studentUserRef.id.substring(0, 4)})';
-    // _return = _return + '\nstudentUserRef.name: ${studentUserRef.name}';
-
+        '\nProfessor: ${teacherUserRef.name.split(' ')[0]} (${teacherUserRef.id.substring(0, 4)})';
+    _return = _return +
+        '\nEstudante: ${studentUserRef.name} (${studentUserRef.id.substring(0, 4)})';
     _return = _return + '\nInício: $start';
     _return = _return + '\nIniciou: $started';
     _return = _return + '\nÚltimo envio: $lastSendAnswer';
     _return = _return + '\nFim: $end';
-    _return =
-        _return + '\nPeso avaliação-tarefa: $scoreExame - $scoreQuestion.';
-    // _return = _return + '\nscoreQuestion: $scoreQuestion';
-    _return = _return + ' Tentativa: $attempted de $attempt';
-    // _return = _return + '\nattempted: $attempted';
-    _return = _return + '\nTempo de resolução: $time h. Erro relativo: $error%';
-    // _return = _return + '\nerror: $error';
+    _return = _return + '\nPeso do exame: $scoreExame.';
+    _return = _return + ' Peso da questão:$scoreQuestion.';
+    _return = _return + ' Tentativa: $attempted de $attempt.';
+    _return = _return + ' Tempo de resolução: $time h.';
+    _return = _return + ' Erro relativo: $error%.';
     _return = _return + '\nAberta: $isOpen';
 
     _return = _return + '\n ** Entrada: ${simulationInput.length} ** ';
@@ -219,13 +210,15 @@ class TaskModel extends FirestoreModel {
       _outputList.sort((a, b) => a.name.compareTo(b.name));
     }
     for (var item in _outputList) {
-      if (item.type == 'texto' || item.type == 'url') {
-        _return = _return +
-            '\n${item.name}=... [${item.type}=${item.value.length}c] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
-      } else {
-        _return = _return +
-            '\n${item.name}=${item.value} (${item.answer}) [${item.type}] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
-      }
+      _return = _return +
+          '\n${item.name}=${item.value} (R.: ${item.answer}) [${item.type}] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
+      // if (item.type == 'texto' || item.type == 'url') {
+      //   _return = _return +
+      //       '\n${item.name}=... [${item.type}=${item.value.length}c] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
+      // } else {
+      //   _return = _return +
+      //       '\n${item.name}=${item.value} (R.: ${item.answer}) [${item.type}] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
+      // }
     }
 
     return _return;

@@ -1,17 +1,25 @@
+import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/models/exame_model.dart';
 import 'package:aiprof/models/question_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class QuestionListDS extends StatefulWidget {
+  final ClassroomModel classroomRef;
+  final ExameModel exameRef;
   final List<QuestionModel> questionList;
   final Function(String) onEditQuestionCurrent;
   final Function(String) onSituationSelect;
+  final Function(String) onStudentList;
 
   const QuestionListDS({
     Key key,
     this.questionList,
     this.onEditQuestionCurrent,
     this.onSituationSelect,
+    this.onStudentList,
+    this.classroomRef,
+    this.exameRef,
   }) : super(key: key);
 
   @override
@@ -23,7 +31,8 @@ class _QuestionListDSState extends State<QuestionListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Questões (${widget.questionList.length})'),
+        title: Text(
+            '/${widget.classroomRef.name}/${widget.exameRef.name}: com ${widget.questionList.length} questões.'),
         actions: [
           // LogoutButton(),
         ],
@@ -68,6 +77,13 @@ class _QuestionListDSState extends State<QuestionListDS> {
                                   await launch(question.situationModel.url);
                                 }
                               }
+                            },
+                          ),
+                          IconButton(
+                            tooltip: 'Lista de estudantes',
+                            icon: Icon(Icons.person),
+                            onPressed: () async {
+                              widget.onStudentList(question.id);
                             },
                           ),
                         ],

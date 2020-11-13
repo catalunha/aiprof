@@ -63,20 +63,20 @@ class SetQuestionSelectedSyncExameAction extends ReduxAction<AppState> {
   }
 }
 
-class SetStudentSelectedSyncExameAction extends ReduxAction<AppState> {
-  final String studentIdSelected;
+// class SetStudentSelectedSyncExameAction extends ReduxAction<AppState> {
+//   final String studentIdSelected;
 
-  SetStudentSelectedSyncExameAction(this.studentIdSelected);
+//   SetStudentSelectedSyncExameAction(this.studentIdSelected);
 
-  @override
-  AppState reduce() {
-    return state.copyWith(
-      exameState: state.exameState.copyWith(
-        studentIdSelected: studentIdSelected,
-      ),
-    );
-  }
-}
+//   @override
+//   AppState reduce() {
+//     return state.copyWith(
+//       exameState: state.exameState.copyWith(
+//         studentIdSelected: studentIdSelected,
+//       ),
+//     );
+//   }
+// }
 
 // +++ Actions Async
 class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
@@ -160,8 +160,6 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.time = time;
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
-    exameModel.isDelivered = false;
-    exameModel.isInProcess = false;
     await firestore.collection(ExameModel.collection).add(exameModel.toMap());
 
     return null;
@@ -211,7 +209,6 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.time = time;
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
-    exameModel.isDelivered = isDelivered;
 
     if (isDelete) {
       await firestore
@@ -229,151 +226,6 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
 
   // @override
   // void after() => dispatch(StreamColExameAsyncExameAction());
-}
-
-class UpdateDocSetStudentInExameCurrentAsyncExameAction
-    extends ReduxAction<AppState> {
-  final UserModel studentModel;
-  final bool isAddOrRemove;
-  UpdateDocSetStudentInExameCurrentAsyncExameAction({
-    this.studentModel,
-    this.isAddOrRemove,
-  });
-  @override
-  Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
-
-    ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
-        .fromMap(state.exameState.exameCurrent.toMap());
-
-    if (exameModel.studentMap == null)
-      exameModel.studentMap = Map<String, bool>();
-    if (exameModel.studentUserRefMap == null)
-      exameModel.studentUserRefMap = Map<String, UserModel>();
-    if (isAddOrRemove) {
-      if (!exameModel.studentMap.containsKey(studentModel.id)) {
-        exameModel.studentMap.addAll({studentModel.id: false});
-        exameModel.studentUserRefMap.addAll({studentModel.id: studentModel});
-      }
-    } else {
-      exameModel.studentMap.remove(studentModel.id);
-      exameModel.studentUserRefMap.remove(studentModel.id);
-    }
-    await firestore
-        .collection(ExameModel.collection)
-        .document(exameModel.id)
-        .updateData(exameModel.toMap());
-    return state.copyWith(
-      exameState: state.exameState.copyWith(
-        exameCurrent: exameModel,
-      ),
-    );
-  }
-
-  @override
-  void before() => dispatch(WaitAction.add(this));
-  @override
-  void after() {
-    // dispatch(StreamColExameAsyncExameAction());
-    dispatch(WaitAction.remove(this));
-  }
-}
-
-class DeleteStudentInExameCurrentAndTaskAsyncExameAction
-    extends ReduxAction<AppState> {
-  final String studentId;
-  DeleteStudentInExameCurrentAndTaskAsyncExameAction(this.studentId);
-  @override
-  Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
-
-    ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
-        .fromMap(state.exameState.exameCurrent.toMap());
-
-    exameModel.studentMap.remove(studentId);
-    exameModel.studentUserRefMap.remove(studentId);
-    await firestore
-        .collection(ExameModel.collection)
-        .document(exameModel.id)
-        .updateData(exameModel.toMap());
-
-    //+++ Deletando todas as tasks relacionadas. Pois taks para este student ja foi aplicada
-    Query collRef;
-    collRef = firestore
-        .collection('task')
-        .where('exameRef.id', isEqualTo: exameModel.id)
-        .where('studentUserRef.id', isEqualTo: studentId);
-    final docsSnap = await collRef.getDocuments();
-
-    List<String> listDocs =
-        docsSnap.documents.map((docSnap) => docSnap.documentID).toList();
-    print(listDocs);
-    for (var id in listDocs) {
-      await firestore.collection('task').document(id).delete();
-    }
-    //---
-    return state.copyWith(
-      exameState: state.exameState.copyWith(
-        exameCurrent: exameModel,
-      ),
-    );
-  }
-
-  @override
-  void before() => dispatch(WaitAction.add(this));
-  @override
-  void after() => dispatch(WaitAction.remove(this));
-}
-
-class UpdateDocsSetStudentListInExameCurrentAsyncExameAction
-    extends ReduxAction<AppState> {
-  final bool isAddOrRemove;
-
-  UpdateDocsSetStudentListInExameCurrentAsyncExameAction({
-    this.isAddOrRemove,
-  });
-  @override
-  Future<AppState> reduce() async {
-    print('BatchedDocsWorkerListOnBoardAsyncWorkerAction...');
-    Firestore firestore = Firestore.instance;
-    ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
-        .fromMap(state.exameState.exameCurrent.toMap());
-    if (exameModel.studentMap == null)
-      exameModel.studentMap = Map<String, bool>();
-    if (exameModel.studentUserRefMap == null)
-      exameModel.studentUserRefMap = Map<String, UserModel>();
-    for (UserModel student in state.studentState.studentList) {
-      if (isAddOrRemove) {
-        if (!exameModel.studentMap.containsKey(student.id)) {
-          exameModel.studentMap.addAll({student.id: false});
-          exameModel.studentUserRefMap.addAll({student.id: student});
-        }
-      } else {
-        if (exameModel.studentMap.containsKey(student.id) &&
-            exameModel.studentMap[student.id] == false) {
-          exameModel.studentMap.remove(student.id);
-          exameModel.studentUserRefMap.remove(student.id);
-        }
-      }
-    }
-    await firestore
-        .collection(ExameModel.collection)
-        .document(exameModel.id)
-        .updateData(exameModel.toMap());
-    return state.copyWith(
-      exameState: state.exameState.copyWith(
-        exameCurrent: exameModel,
-      ),
-    );
-  }
-
-  @override
-  void before() => dispatch(WaitAction.add(this));
-  @override
-  void after() {
-    // dispatch(StreamColExameAsyncExameAction());
-    dispatch(WaitAction.remove(this));
-  }
 }
 
 class UpdateDocSetQuestionInExameCurrentAsyncExameAction

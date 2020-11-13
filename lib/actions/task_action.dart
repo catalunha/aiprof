@@ -50,11 +50,23 @@ class StreamColTaskAsyncTaskAction extends ReduxAction<AppState> {
     print('StreamColTaskAsyncTaskAction...');
     Firestore firestore = Firestore.instance;
     Query collRef;
-    collRef = firestore
-        .collection(TaskModel.collection)
-        .where('exameRef.id', isEqualTo: state.exameState.exameCurrent.id)
-        .where('studentUserRef.id',
-            isEqualTo: state.exameState.studentIdSelected);
+    if (state.taskState.taskFilter == TaskFilter.whereClassroomAndStudent) {
+      collRef = firestore
+          .collection(TaskModel.collection)
+          .where('classroomRef.id',
+              isEqualTo: state.classroomState.classroomCurrent.id)
+          .where('studentUserRef.id',
+              isEqualTo: state.studentState.studentCurrent.id);
+    } else if (state.taskState.taskFilter ==
+        TaskFilter.whereQuestionAndStudent) {
+      collRef = firestore
+          .collection(TaskModel.collection)
+          .where('questionRef.id',
+              isEqualTo: state.questionState.questionCurrent.id)
+          .where('studentUserRef.id',
+              isEqualTo: state.studentState.studentCurrent.id);
+    }
+
     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
     Stream<List<TaskModel>> streamList = streamQuerySnapshot.map(

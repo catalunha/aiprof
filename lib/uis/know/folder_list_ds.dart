@@ -3,6 +3,7 @@ import 'package:aiprof/models/know_model.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FolderListDS extends StatefulWidget {
   final Map<String, Folder> folderMap;
@@ -123,6 +124,24 @@ class _FolderListDSState extends State<FolderListDS> {
         ),
         Text(
             ' ${situationModel.name} - (${situationModel.id.substring(0, 4)})'),
+        IconButton(
+          tooltip: 'URL para a situação',
+          icon: Icon(Icons.link),
+          onPressed: () async {
+            if (situationModel?.url != null) {
+              if (await canLaunch(situationModel.url)) {
+                await launch(situationModel.url);
+              }
+            }
+          },
+        ),
+        IconButton(
+          tooltip: 'Ver simulações',
+          icon: Icon(Icons.format_list_numbered),
+          onPressed: () {
+            // widget.onSimulationList(situation.id);
+          },
+        ),
         // containSituation
         //     ? IconButton(
         //         tooltip: 'Editar situação',

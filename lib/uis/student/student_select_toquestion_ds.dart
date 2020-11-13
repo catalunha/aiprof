@@ -1,19 +1,19 @@
-import 'package:aiprof/models/exame_model.dart';
+import 'package:aiprof/models/question_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:flutter/material.dart';
 
-class StudentSelectToExameDS extends StatefulWidget {
+class StudentSelectToQuestionDS extends StatefulWidget {
   final bool waiting;
   final List<UserModel> studentList;
-  final ExameModel exameCurrent;
+  final QuestionModel questionCurrent;
   final Function(UserModel, bool) onSetStudentInExameCurrent;
   final Function(String) onSetStudentSelected;
   final Function(String) onDeleteStudentInExameCurrent;
   final Function(bool) onSetStudentListInExameCurrent;
-  const StudentSelectToExameDS({
+  const StudentSelectToQuestionDS({
     Key key,
     this.studentList,
-    this.exameCurrent,
+    this.questionCurrent,
     this.onSetStudentInExameCurrent,
     this.waiting,
     this.onSetStudentListInExameCurrent,
@@ -21,18 +21,19 @@ class StudentSelectToExameDS extends StatefulWidget {
     this.onSetStudentSelected,
   }) : super(key: key);
   @override
-  _StudentSelectToExameDSState createState() => _StudentSelectToExameDSState();
+  _StudentSelectToQuestionDSState createState() =>
+      _StudentSelectToQuestionDSState();
 }
 
-class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
+class _StudentSelectToQuestionDSState extends State<StudentSelectToQuestionDS> {
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Scaffold(
           appBar: AppBar(
-            title:
-                Text('Estudantes neste exame (${widget.studentList.length})'),
+            title: Text(
+                '/${widget.questionCurrent.classroomRef.name}/${widget.questionCurrent.exameRef.name}/${widget.questionCurrent.name}: com ${widget.studentList.length} estudantes.'),
             actions: [
               IconButton(
                 tooltip: 'Marcar todos os possíveis',
@@ -58,21 +59,33 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
                 itemCount: widget.studentList.length,
                 itemBuilder: (context, index) {
                   final student = widget.studentList[index];
-                  bool isStudentInExame = widget.exameCurrent.studentMap !=
-                          null &&
-                      widget.exameCurrent.studentMap.isNotEmpty &&
-                      widget.exameCurrent.studentMap.containsKey(student.id);
-                  bool isStudentInExameWithTaskAplly = isStudentInExame &&
-                      widget.exameCurrent.studentMap[student.id];
+                  // bool isStudentInExame = widget.questionCurrent.studentMap !=
+                  //         null &&
+                  //     widget.questionCurrent.studentMap.isNotEmpty &&
+                  //     widget.questionCurrent.studentMap.containsKey(student.id);
+                  bool isStudentInExame =
+                      widget.questionCurrent?.studentUserRefMap != null
+                          ? widget.questionCurrent.studentUserRefMap
+                              .containsKey(student.id)
+                          : false;
+                  bool isStudentInExameWithTaskAplly =
+                      widget.questionCurrent?.studentUserRefMap != null
+                          ? (widget.questionCurrent.studentUserRefMap
+                                  .containsKey(student.id) &&
+                              widget.questionCurrent
+                                  ?.studentUserRefMap[student.id].status)
+                          : false;
+                  // bool isStudentInExameWithTaskAplly = isStudentInExame &&
+                  //     widget.questionCurrent.studentMap[student.id];
                   return Card(
                     child: Row(
                       children: [
-                        // widget.exameCurrent.studentMap != null &&
-                        //         widget.exameCurrent.studentMap.isNotEmpty &&
-                        //         widget.exameCurrent.studentMap
+                        // widget.questionCurrent.studentMap != null &&
+                        //         widget.questionCurrent.studentMap.isNotEmpty &&
+                        //         widget.questionCurrent.studentMap
                         //             .containsKey(student.id) &&
-                        //         widget.exameCurrent.studentMap[student.id]
-                        isStudentInExameWithTaskAplly
+                        //         widget.questionCurrent.studentMap[student.id]
+                        isStudentInExame
                             ? Expanded(
                                 flex: 1,
                                 child: InkWell(
@@ -94,29 +107,28 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
                         Expanded(
                           flex: 8,
                           child: ListTile(
-                            // enabled: widget.exameCurrent.studentMap != null &&
-                            //         widget.exameCurrent.studentMap.isNotEmpty &&
-                            //         widget.exameCurrent.studentMap
+                            // enabled: widget.questionCurrent.studentMap != null &&
+                            //         widget.questionCurrent.studentMap.isNotEmpty &&
+                            //         widget.questionCurrent.studentMap
                             //             .containsKey(student.id)
-                            //     ? !widget.exameCurrent.studentMap[student.id]
+                            //     ? !widget.questionCurrent.studentMap[student.id]
                             //     : true,
-                            enabled: !isStudentInExameWithTaskAplly,
-                            // selected: widget.exameCurrent.studentMap != null &&
-                            //         widget.exameCurrent.studentMap.isNotEmpty
-                            //     ? widget.exameCurrent.studentMap
+                            enabled: !isStudentInExame,
+                            // selected: widget.questionCurrent.studentMap != null &&
+                            //         widget.questionCurrent.studentMap.isNotEmpty
+                            //     ? widget.questionCurrent.studentMap
                             //         .containsKey(student.id)
                             //     : false,
                             selected: isStudentInExame,
                             title: Text('${student.name}'),
                             subtitle: Text('${student.toString()}'),
                             // subtitle: Text(
-                            //     '${student.id.substring(0, 4)} - ${widget.exameCurrent.studentMap[student.id]}'),
+                            //     '${student.id.substring(0, 4)} - ${widget.questionCurrent.studentMap[student.id]}'),
                             onTap: () {
-                              widget.onSetStudentInExameCurrent(
-                                  student, !isStudentInExame
-                                  // !(widget.exameCurrent.studentMap != null &&
-                                  //         widget.exameCurrent.studentMap.isNotEmpty
-                                  //     ? widget.exameCurrent.studentMap
+                              widget.onSetStudentInExameCurrent(student, true
+                                  // !(widget.questionCurrent.studentMap != null &&
+                                  //         widget.questionCurrent.studentMap.isNotEmpty
+                                  //     ? widget.questionCurrent.studentMap
                                   //         .containsKey(student.id)
                                   //     : false),
                                   );
@@ -124,11 +136,11 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
                             },
                           ),
                         ),
-                        // widget.exameCurrent.studentMap != null &&
-                        //         widget.exameCurrent.studentMap.isNotEmpty &&
-                        //         widget.exameCurrent.studentMap
+                        // widget.questionCurrent.studentMap != null &&
+                        //         widget.questionCurrent.studentMap.isNotEmpty &&
+                        //         widget.questionCurrent.studentMap
                         //             .containsKey(student.id) &&
-                        //         widget.exameCurrent.studentMap[student.id]
+                        //         widget.questionCurrent.studentMap[student.id]
                         isStudentInExameWithTaskAplly
                             ? Expanded(
                                 flex: 1,
@@ -137,7 +149,7 @@ class _StudentSelectToExameDSState extends State<StudentSelectToExameDS> {
                                     widget.onSetStudentSelected(student.id);
                                   },
                                   icon: Icon(Icons.art_track_sharp),
-                                  tooltip: 'Lista suas tarefas nesta avaliação',
+                                  tooltip: 'Listar as tarefas deste estudante',
                                 ),
                               )
                             : Container(),

@@ -1,7 +1,9 @@
+import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/exame_model.dart';
 import 'package:flutter/material.dart';
 
 class ExameListDS extends StatefulWidget {
+  final ClassroomModel classroomRef;
   final List<ExameModel> exameList;
   final Function(String) onEditExameCurrent;
   final Function(String) onQuestionList;
@@ -13,6 +15,7 @@ class ExameListDS extends StatefulWidget {
     this.onEditExameCurrent,
     this.onQuestionList,
     this.onStudentList,
+    this.classroomRef,
   }) : super(key: key);
 
   @override
@@ -24,7 +27,8 @@ class _ExameListDSState extends State<ExameListDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Exames (${widget.exameList.length})'),
+        title: Text(
+            '/${widget.classroomRef.name}: com ${widget.exameList.length} exames.'),
         actions: [
           // LogoutButton(),
         ],
@@ -43,38 +47,35 @@ class _ExameListDSState extends State<ExameListDS> {
                     Expanded(
                       flex: 6,
                       child: ListTile(
-                        selected: exame.isDelivered,
                         title: Text('${exame.name}'),
                         subtitle: Text('${exame.toString()}'),
                       ),
                     ),
-                    exame.isDelivered
-                        ? Expanded(flex: 2, child: Container())
-                        : Expanded(
-                            flex: 2,
-                            child: Column(children: [
-                              IconButton(
-                                tooltip: 'Editar esta avaliação',
-                                icon: Icon(Icons.edit),
-                                onPressed: () async {
-                                  widget.onEditExameCurrent(exame.id);
-                                },
-                              ),
-                              IconButton(
-                                tooltip: 'Lista de questões',
-                                icon: Icon(Icons.format_list_numbered),
-                                onPressed: () async {
-                                  widget.onQuestionList(exame.id);
-                                },
-                              ),
-                              IconButton(
-                                tooltip: 'Lista de estudantes',
-                                icon: Icon(Icons.person),
-                                onPressed: () async {
-                                  widget.onStudentList(exame.id);
-                                },
-                              ),
-                            ])),
+                    Expanded(
+                        flex: 2,
+                        child: Column(children: [
+                          IconButton(
+                            tooltip: 'Editar esta avaliação',
+                            icon: Icon(Icons.edit),
+                            onPressed: () async {
+                              widget.onEditExameCurrent(exame.id);
+                            },
+                          ),
+                          IconButton(
+                            tooltip: 'Lista de questões',
+                            icon: Icon(Icons.format_list_numbered),
+                            onPressed: () async {
+                              widget.onQuestionList(exame.id);
+                            },
+                          ),
+                          // IconButton(
+                          //   tooltip: 'Lista de estudantes',
+                          //   icon: Icon(Icons.person),
+                          //   onPressed: () async {
+                          //     widget.onStudentList(exame.id);
+                          //   },
+                          // ),
+                        ])),
                   ],
                 ),
               );

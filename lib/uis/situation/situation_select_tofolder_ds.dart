@@ -58,8 +58,7 @@ class _SituationSelectToFolderDSState extends State<SituationSelectToFolderDS> {
                             .containsKey(situation.id)
                         : false,
                     title: Text('${situation.name}'),
-                    // subtitle: Text(
-                    //     '${situation.name}\nUnidade: ${situation.unit}\nOrganizador: ${situation.infoIndOwnerRef.name}'),
+                    subtitle: Text('${situation.area}'),
                     onTap: () {
                       widget.onSetSituationInKnow(
                           situation,

@@ -94,6 +94,8 @@ enum QuestionOrder {
 enum TaskFilter {
   isActive,
   isNotActive,
+  whereClassroomAndStudent,
+  whereQuestionAndStudent,
 }
 enum TaskOrder {
   name,

@@ -89,7 +89,7 @@ class _OutputEditDSState extends State<OutputEditDS> {
           Container(
             height: 10,
           ),
-          Text('Tipo da saída * $_type'),
+          Text('Tipo da saída *'),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Column(
                 mainAxisAlignment: MainAxisAlignment.center,

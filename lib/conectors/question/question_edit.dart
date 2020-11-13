@@ -18,12 +18,14 @@ class ViewModel extends BaseModel<AppState> {
   int scoreQuestion;
   SituationModel situationModel;
   bool isDelivered;
+  bool withStudent;
+  bool withTask;
 
   bool isAddOrUpdate;
   Function() onSituationSelect;
   Function(String, String, dynamic, dynamic, int, int, int, int) onAdd;
-  Function(String, String, dynamic, dynamic, int, int, int, int, bool, bool)
-      onUpdate;
+  Function(String, String, dynamic, dynamic, int, int, int, int, bool, bool,
+      bool) onUpdate;
   ViewModel();
   ViewModel.build({
     @required this.id,
@@ -37,6 +39,8 @@ class ViewModel extends BaseModel<AppState> {
     @required this.scoreQuestion,
     @required this.situationModel,
     @required this.isDelivered,
+    @required this.withStudent,
+    @required this.withTask,
     @required this.isAddOrUpdate,
     @required this.onSituationSelect,
     @required this.onAdd,
@@ -53,8 +57,36 @@ class ViewModel extends BaseModel<AppState> {
           scoreQuestion,
           situationModel,
           isDelivered,
+          withStudent,
+          withTask,
           isAddOrUpdate,
         ]);
+  bool _withStudentWithoutTask() {
+    bool _return = false;
+    if (state.questionState.questionCurrent.studentUserRefMap != null) {
+      for (var item
+          in state.questionState.questionCurrent.studentUserRefMap.values) {
+        if (!item.status) {
+          _return = true;
+        }
+      }
+    }
+    return _return;
+  }
+
+  bool _withTask() {
+    bool _return = false;
+    if (state.questionState.questionCurrent.studentUserRefMap != null) {
+      for (var item
+          in state.questionState.questionCurrent.studentUserRefMap.values) {
+        if (item.status) {
+          _return = true;
+        }
+      }
+    }
+    return _return;
+  }
+
   @override
   ViewModel fromStore() => ViewModel.build(
       isAddOrUpdate: state.questionState.questionCurrent.id == null,
@@ -68,6 +100,8 @@ class ViewModel extends BaseModel<AppState> {
       error: state.questionState.questionCurrent.error,
       scoreQuestion: state.questionState.questionCurrent.scoreQuestion,
       situationModel: state.questionState.questionCurrent.situationModel,
+      withStudent: _withStudentWithoutTask(),
+      withTask: _withTask(),
       isDelivered: state.questionState.questionCurrent.isDelivered,
       onAdd: (
         String name,
@@ -100,6 +134,7 @@ class ViewModel extends BaseModel<AppState> {
         int time,
         int error,
         int scoreQuestion,
+        bool isDelivered,
         bool isDelete,
         bool resetTask,
       ) {
@@ -112,6 +147,7 @@ class ViewModel extends BaseModel<AppState> {
           time: time,
           error: error,
           scoreQuestion: scoreQuestion,
+          isDelivered: isDelivered,
           isDelete: isDelete,
           resetTask: resetTask,
         ));
@@ -140,6 +176,8 @@ class QuestionEdit extends StatelessWidget {
         error: viewModel.error,
         scoreQuestion: viewModel.scoreQuestion,
         situationModel: viewModel.situationModel,
+        withStudent: viewModel.withStudent,
+        withTask: viewModel.withTask,
         isDelivered: viewModel.isDelivered,
         onSituationSelect: viewModel.onSituationSelect,
         onAdd: viewModel.onAdd,

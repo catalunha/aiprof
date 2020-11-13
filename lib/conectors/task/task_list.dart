@@ -8,18 +8,36 @@ import 'package:flutter/material.dart';
 
 class ViewModel extends BaseModel<AppState> {
   List<TaskModel> taskList;
+  int nota;
   Function(String) onEditTaskCurrent;
 
   ViewModel();
   ViewModel.build({
     @required this.taskList,
+    @required this.nota,
     @required this.onEditTaskCurrent,
   }) : super(equals: [
           taskList,
         ]);
+  int _nota(List<TaskModel> _taskList) {
+    int _nota = 0;
+    int _notaOutput;
+    for (var task in _taskList) {
+      _notaOutput = 0;
+      for (var output in task.simulationOutput.values) {
+        if (output?.right != null && output.right) {
+          _notaOutput++;
+        }
+      }
+      _nota = _nota + (task.scoreExame * task.scoreQuestion * _notaOutput);
+    }
+    return _nota;
+  }
+
   @override
   ViewModel fromStore() => ViewModel.build(
         taskList: state.taskState.taskList,
+        nota: _nota(state.taskState.taskList),
         onEditTaskCurrent: (String id) {
           dispatch(SetTaskCurrentSyncTaskAction(id));
           dispatch(NavigateAction.pushNamed(Routes.taskEdit));
@@ -36,6 +54,7 @@ class TaskList extends StatelessWidget {
       onInit: (store) => store.dispatch(StreamColTaskAsyncTaskAction()),
       builder: (context, viewModel) => TaskListDS(
         taskList: viewModel.taskList,
+        nota: viewModel.nota,
         onEditTaskCurrent: viewModel.onEditTaskCurrent,
       ),
     );

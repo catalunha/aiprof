@@ -18,7 +18,7 @@ import 'package:aiprof/conectors/situation/situation_edit.dart';
 import 'package:aiprof/conectors/situation/situation_list.dart';
 import 'package:aiprof/conectors/student/student_edit.dart';
 import 'package:aiprof/conectors/student/student_list.dart';
-import 'package:aiprof/conectors/student/student_select_toexame.dart';
+import 'package:aiprof/conectors/student/student_select_toquestion.dart';
 import 'package:aiprof/conectors/task/task_answer_text.dart';
 import 'package:aiprof/conectors/task/task_edit.dart';
 import 'package:aiprof/conectors/task/task_list.dart';
@@ -79,7 +79,7 @@ class Routes {
     knowSelectToQuestion: (BuildContext context) => KnowSelectToQuestion(),
     folderSelectToQuestion: (BuildContext context) =>
         FolderSelectToQuestionList(),
-    questionStudentSelect: (BuildContext context) => StudentSelectToExame(),
+    questionStudentSelect: (BuildContext context) => StudentSelectToQuestion(),
     taskList: (BuildContext context) => TaskList(),
     taskEdit: (BuildContext context) => TaskEdit(),
     taskAnswerText: (BuildContext context) => TaskAnswerText(),
