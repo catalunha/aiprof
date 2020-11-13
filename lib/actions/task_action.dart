@@ -90,6 +90,7 @@ class GetDocsTaskListAsyncTaskAction extends ReduxAction<AppState> {
   AppState reduce() {
     TaskModel taskModel;
     print('Get2DocsTaskListAsyncTaskAction... ${taskList.length}');
+    taskList.sort((a, b) => a.exameRef.name.compareTo(b.exameRef.name));
 
     if (state.taskState.taskCurrent != null) {
       int index = taskList.indexWhere(
@@ -176,10 +177,12 @@ class UpdateDocTaskCurrentAsyncTaskAction extends ReduxAction<AppState> {
 
 class UpdateOutputAsyncTaskAction extends ReduxAction<AppState> {
   //dados do exame
+  final String taskId;
   final String taskSimulationOutputId;
   final bool isTruOrFalse;
 
   UpdateOutputAsyncTaskAction({
+    this.taskId,
     this.taskSimulationOutputId,
     this.isTruOrFalse,
   });
@@ -187,12 +190,10 @@ class UpdateOutputAsyncTaskAction extends ReduxAction<AppState> {
   Future<AppState> reduce() async {
     print('UpdateDocQuestionCurrentAsyncQuestionAction...');
     Firestore firestore = Firestore.instance;
-    TaskModel taskModel = TaskModel(state.taskState.taskCurrent.id)
-        .fromMap(state.taskState.taskCurrent.toMap());
 
     await firestore
         .collection(TaskModel.collection)
-        .document(taskModel.id)
+        .document(taskId)
         .updateData(
             {'simulationOutput.$taskSimulationOutputId.right': isTruOrFalse});
 

@@ -201,25 +201,25 @@ class TaskModel extends FirestoreModel {
         _return = _return + '\n${item.name}=${item.value} [${item.type}]';
       }
     }
-    _return = _return + '\n ** Saída: ${simulationOutput.length} ** ';
-    List<Output> _outputList = [];
-    if (simulationOutput != null) {
-      for (var item in simulationOutput.entries) {
-        _outputList.add(Output(item.key).fromMap(item.value.toMap()));
-      }
-      _outputList.sort((a, b) => a.name.compareTo(b.name));
-    }
-    for (var item in _outputList) {
-      _return = _return +
-          '\n${item.name}=${item.value} (R.: ${item.answer}) [${item.type}] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
-      // if (item.type == 'texto' || item.type == 'url') {
-      //   _return = _return +
-      //       '\n${item.name}=... [${item.type}=${item.value.length}c] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
-      // } else {
-      //   _return = _return +
-      //       '\n${item.name}=${item.value} (R.: ${item.answer}) [${item.type}] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
-      // }
-    }
+    // _return = _return + '\n ** Saída: ${simulationOutput.length} ** ';
+    // List<Output> _outputList = [];
+    // if (simulationOutput != null) {
+    //   for (var item in simulationOutput.entries) {
+    //     _outputList.add(Output(item.key).fromMap(item.value.toMap()));
+    //   }
+    //   _outputList.sort((a, b) => a.name.compareTo(b.name));
+    // }
+    // for (var item in _outputList) {
+    //   _return = _return +
+    //       '\n${item.name}=${item.value} (R.: ${item.answer}) [${item.type}] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
+    //   // if (item.type == 'texto' || item.type == 'url') {
+    //   //   _return = _return +
+    //   //       '\n${item.name}=... [${item.type}=${item.value.length}c] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
+    //   // } else {
+    //   //   _return = _return +
+    //   //       '\n${item.name}=${item.value} (R.: ${item.answer}) [${item.type}] ${item?.right != null ? item.right ? "Confere" : "Não Confere" : "Não corrigido"}';
+    //   // }
+    // }
 
     return _return;
   }

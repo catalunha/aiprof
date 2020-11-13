@@ -1,4 +1,5 @@
 import 'package:aiprof/actions/know_action.dart';
+import 'package:aiprof/actions/situation_action.dart';
 import 'package:aiprof/models/know_model.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:aiprof/routes.dart';
@@ -13,6 +14,8 @@ class ViewModel extends BaseModel<AppState> {
   Function(String, bool) onSetFolderCurrent;
   Function(String, bool) onEditFolderCurrent;
   Function(SituationModel) onSetSituationInFolderSyncKnowAction;
+  Function(String) onEditSituation;
+  Function(String) onSimulationList;
 
   ViewModel();
   ViewModel.build({
@@ -21,6 +24,8 @@ class ViewModel extends BaseModel<AppState> {
     @required this.onEditFolderCurrent,
     @required this.onSetFolderCurrent,
     @required this.onSetSituationInFolderSyncKnowAction,
+    @required this.onEditSituation,
+    @required this.onSimulationList,
   }) : super(equals: [folderMap, knowModel]);
   @override
   ViewModel fromStore() => ViewModel.build(
@@ -42,6 +47,16 @@ class ViewModel extends BaseModel<AppState> {
             isAddOrRemove: false,
           ));
         },
+        onEditSituation: (String id) {
+          dispatchFuture(SetSituationCurrentASyncSituationAction(id)).then(
+              (value) =>
+                  dispatch(NavigateAction.pushNamed(Routes.situationEdit)));
+        },
+        onSimulationList: (String id) {
+          dispatchFuture(SetSituationCurrentASyncSituationAction(id)).then(
+              (value) =>
+                  dispatch(NavigateAction.pushNamed(Routes.simulationList)));
+        },
       );
 }
 
@@ -57,6 +72,8 @@ class FolderList extends StatelessWidget {
         onSetFolderCurrent: viewModel.onSetFolderCurrent,
         onSetSituationInFolderSyncKnowAction:
             viewModel.onSetSituationInFolderSyncKnowAction,
+        onEditSituation: viewModel.onEditSituation,
+        onSimulationList: viewModel.onSimulationList,
       ),
     );
   }

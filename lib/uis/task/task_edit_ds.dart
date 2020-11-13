@@ -35,7 +35,7 @@ class TaskEditDS extends StatefulWidget {
   final Function(
           dynamic, dynamic, int, int, int, int, int, bool, int, bool, bool)
       onUpdateTask;
-  final Function(String, bool) onUpdateOutput;
+  final Function(String, String, bool) onUpdateOutput;
   final Function() onSeeTextTask;
 
   const TaskEditDS({
@@ -149,7 +149,8 @@ class _TaskEditDSState extends State<TaskEditDS> {
             Text(
                 'Saídas do desenvolvimento: ${widget.simulationOutput.length}'),
           ]),
-          ...simulationOutputBuilder(context, widget.simulationOutput),
+          ...simulationOutputBuilder(
+              context, widget.id, widget.simulationOutput),
           TextFormField(
             initialValue:
                 widget.scoreExame == null ? '1' : widget.scoreExame.toString(),
@@ -412,7 +413,7 @@ class _TaskEditDSState extends State<TaskEditDS> {
   }
 
   List<Widget> simulationOutputBuilder(
-      BuildContext context, List<Output> simulationOutputList) {
+      BuildContext context, String taskId, List<Output> simulationOutputList) {
     List<Widget> itemList = [];
     for (Output simulationOutput in simulationOutputList) {
       Widget icone = Icon(Icons.question_answer);
@@ -459,9 +460,10 @@ class _TaskEditDSState extends State<TaskEditDS> {
         children: [
           Text('${simulationOutput.name}'),
           Text(' = '),
-          simulationOutput.type == 'texto' || simulationOutput.type == 'url'
-              ? Text('(${simulationOutput.value.length}c)')
-              : Text('${simulationOutput.value} (${simulationOutput.answer})'),
+          // simulationOutput.type == 'texto' || simulationOutput.type == 'url'
+          //     ? Text('(${simulationOutput.value.length}c)')
+          //     :
+          Text('${simulationOutput.value} (${simulationOutput.answer})'),
           Container(
             width: 10,
           ),
@@ -488,7 +490,7 @@ class _TaskEditDSState extends State<TaskEditDS> {
                       ? true
                       : false
                   : false;
-              widget.onUpdateOutput(simulationOutput.id, !_right);
+              widget.onUpdateOutput(taskId, simulationOutput.id, !_right);
             },
           ),
           // IconButton(

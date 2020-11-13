@@ -11,11 +11,10 @@ import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
 
 // +++ Actions Sync
-class SetSituationCurrentLocalSyncSituationAction
-    extends ReduxAction<AppState> {
+class SetSituationCurrentSyncSituationAction extends ReduxAction<AppState> {
   final String id;
 
-  SetSituationCurrentLocalSyncSituationAction(this.id);
+  SetSituationCurrentSyncSituationAction(this.id);
 
   @override
   AppState reduce() {
@@ -25,7 +24,6 @@ class SetSituationCurrentLocalSyncSituationAction
     } else {
       SituationModel situationModelTemp = state.situationState.situationList
           .firstWhere((element) => element.id == id);
-      // situationModel = SituationModel.clone(situationModelTemp);
       situationModel = SituationModel(situationModelTemp.id)
           .fromMap(situationModelTemp.toMap());
     }
@@ -37,31 +35,22 @@ class SetSituationCurrentLocalSyncSituationAction
   }
 }
 
-class SetSituationCurrentSyncSituationAction extends ReduxAction<AppState> {
+class SetSituationCurrentASyncSituationAction extends ReduxAction<AppState> {
   final String id;
 
-  SetSituationCurrentSyncSituationAction(this.id);
+  SetSituationCurrentASyncSituationAction(this.id);
 
   @override
   Future<AppState> reduce() async {
     SituationModel situationModel;
-    if (id == null) {
-      situationModel = SituationModel(null);
-    } else {
-      // Firestore firestore = Firestore.instance;
-      // //+++ old doc
-      // DocumentSnapshot docRef = await firestore
-      //     .collection(SituationModel.collection)
-      //     .document(id)
-      //     .get();
-      // situationModel = SituationModel(docRef.documentID).fromMap(docRef.data);
 
-      SituationModel situationModelTemp = state.situationState.situationList
-          .firstWhere((element) => element.id == id);
-      // situationModel = SituationModel.clone(situationModelTemp);
-      situationModel = SituationModel(situationModelTemp.id)
-          .fromMap(situationModelTemp.toMap());
-    }
+    Firestore firestore = Firestore.instance;
+    DocumentSnapshot docRef = await firestore
+        .collection(SituationModel.collection)
+        .document(id)
+        .get();
+    situationModel = SituationModel(docRef.documentID).fromMap(docRef.data);
+
     return state.copyWith(
       situationState: state.situationState.copyWith(
         situationCurrent: situationModel,

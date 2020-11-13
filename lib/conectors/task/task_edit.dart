@@ -36,7 +36,7 @@ class ViewModel extends BaseModel<AppState> {
 
   Function(dynamic, dynamic, int, int, int, int, int, bool, int, bool, bool)
       onUpdateTask;
-  Function(String, bool) onUpdateOutput;
+  Function(String, String, bool) onUpdateOutput;
   Function() onSeeTextTask;
 
   ViewModel();
@@ -152,9 +152,11 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(NavigateAction.pop());
           dispatch(NavigateAction.pop());
         },
-        onUpdateOutput: (String id, bool isTruOrFalse) {
+        onUpdateOutput: (String taskId, String outputId, bool isTruOrFalse) {
           dispatch(UpdateOutputAsyncTaskAction(
-              taskSimulationOutputId: id, isTruOrFalse: isTruOrFalse));
+              taskId: taskId,
+              taskSimulationOutputId: outputId,
+              isTruOrFalse: isTruOrFalse));
         },
         onSeeTextTask: () {
           dispatch(NavigateAction.pushNamed(Routes.taskAnswerText));
