@@ -112,22 +112,22 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
         mapping[id]
     ];
 
-    // ClassroomModel classroomModel;
     print('Get2DocsTaskListAsyncTaskAction... ${classroomList.length}');
     print('Get2DocsTaskListAsyncTaskAction... ${classroomListTemp.length}');
 
-    // if (state.classroomState.classroomCurrent != null) {
-    //   int index = classroomListTemp.indexWhere(
-    //       (element) => element.id == state.classroomState.classroomCurrent.id);
-    //   print(index);
-    //   if (index >= 0) {
-    //     ClassroomModel classroomModelTemp = classroomListTemp.firstWhere(
-    //         (element) =>
-    //             element.id == state.classroomState.classroomCurrent.id);
-    //     classroomModel = ClassroomModel(classroomModelTemp.id)
-    //         .fromMap(classroomModelTemp.toMap());
-    //   }
-    // }
+    ClassroomModel classroomModel;
+    if (state.classroomState.classroomCurrent != null) {
+      int index = classroomListTemp.indexWhere(
+          (element) => element.id == state.classroomState.classroomCurrent.id);
+      // print(index);
+      if (index >= 0) {
+        ClassroomModel classroomModelTemp = classroomListTemp.firstWhere(
+            (element) =>
+                element.id == state.classroomState.classroomCurrent.id);
+        classroomModel = ClassroomModel(classroomModelTemp.id)
+            .fromMap(classroomModelTemp.toMap());
+      }
+    }
     // List<UserModel> studentList = [];
     // if (state.classroomState?.classroomCurrent?.studentUserRefMap != null) {
     //   for (var item
@@ -140,7 +140,7 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
     return state.copyWith(
       classroomState: state.classroomState.copyWith(
         classroomList: classroomListTemp,
-        // classroomCurrent: classroomModel,
+        classroomCurrent: classroomModel,
       ),
       // studentState: state.studentState.copyWith(
       //   studentList: studentList,

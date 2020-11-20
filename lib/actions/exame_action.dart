@@ -111,9 +111,32 @@ class GetDocsExameListAsyncExameAction extends ReduxAction<AppState> {
   GetDocsExameListAsyncExameAction(this.exameList);
   @override
   AppState reduce() {
+    final Map<String, ExameModel> mapping = {
+      for (int i = 0; i < exameList.length; i++) exameList[i].id: exameList[i]
+    };
+
+    List<ExameModel> exameListOrdered = [];
+    if (state.classroomState.classroomCurrent?.exameId != null) {
+      for (String id in state.classroomState.classroomCurrent.exameId)
+        exameListOrdered.add(mapping[id]);
+    }
+
+    ExameModel exameModel;
+    if (state.exameState.exameCurrent != null) {
+      int index = exameListOrdered.indexWhere(
+          (element) => element.id == state.exameState.exameCurrent.id);
+      // print(index);
+      if (index >= 0) {
+        ExameModel exameModelTemp = exameListOrdered.firstWhere(
+            (element) => element.id == state.exameState.exameCurrent.id);
+        exameModel =
+            ExameModel(exameModelTemp.id).fromMap(exameModelTemp.toMap());
+      }
+    }
     return state.copyWith(
       exameState: state.exameState.copyWith(
-        exameList: exameList,
+        exameList: exameListOrdered,
+        exameCurrent: exameModel,
       ),
     );
   }
@@ -160,7 +183,31 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.time = time;
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
-    await firestore.collection(ExameModel.collection).add(exameModel.toMap());
+    var docRefExame = firestore.collection(ExameModel.collection).document();
+    print('Novo Exame: ${docRefExame.documentID}');
+    await firestore
+        .collection(ClassroomModel.collection)
+        .document(state.classroomState.classroomCurrent.id)
+        .updateData({
+      'exameId': FieldValue.arrayUnion([docRefExame.documentID])
+    }).then((value) async {
+      await firestore
+          .collection(ExameModel.collection)
+          .document(docRefExame.documentID)
+          .setData(exameModel.toMap());
+    });
+
+    // await firestore
+    //     .collection(ExameModel.collection)
+    //     .add(exameModel.toMap())
+    //     .then((exame) {
+    //   firestore
+    //       .collection(ClassroomModel.collection)
+    //       .document(state.classroomState.classroomCurrent.id)
+    //       .updateData({
+    //     'exameId': FieldValue.arrayUnion([exame.documentID])
+    //   });
+    // });
 
     return null;
   }
@@ -200,22 +247,35 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     Firestore firestore = Firestore.instance;
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
-    exameModel.name = name;
-    exameModel.description = description;
-    exameModel.start = start;
-    exameModel.end = end;
-    exameModel.scoreExame = scoreExame;
-    exameModel.attempt = attempt;
-    exameModel.time = time;
-    exameModel.error = error;
-    exameModel.scoreQuestion = scoreQuestion;
 
     if (isDelete) {
       await firestore
-          .collection(ExameModel.collection)
-          .document(exameModel.id)
-          .delete();
+          .collection(ClassroomModel.collection)
+          .document(state.classroomState.classroomCurrent.id)
+          .updateData({
+        'exameId': FieldValue.arrayRemove([exameModel.id])
+      }).then((value) {
+        firestore
+            .collection(ExameModel.collection)
+            .document(exameModel.id)
+            .delete();
+        return state.copyWith(
+          exameState: state.exameState.copyWith(
+            exameCurrent: null,
+          ),
+        );
+      });
     } else {
+      exameModel.name = name;
+      exameModel.description = description;
+      exameModel.start = start;
+      exameModel.end = end;
+      exameModel.scoreExame = scoreExame;
+      exameModel.attempt = attempt;
+      exameModel.time = time;
+      exameModel.error = error;
+      exameModel.scoreQuestion = scoreQuestion;
+
       await firestore
           .collection(ExameModel.collection)
           .document(exameModel.id)
@@ -272,4 +332,43 @@ class UpdateDocSetQuestionInExameCurrentAsyncExameAction
     // dispatch(StreamColExameAsyncExameAction());
     dispatch(WaitAction.remove(this));
   }
+}
+
+class UpdateOrderExameListAsyncExameAction extends ReduxAction<AppState> {
+  final int oldIndex;
+  final int newIndex;
+
+  UpdateOrderExameListAsyncExameAction({
+    this.oldIndex,
+    this.newIndex,
+  });
+  @override
+  Future<AppState> reduce() async {
+    print('UpdateOrderExameListInDocClassroomAsyncExameAction...');
+    Firestore firestore = Firestore.instance;
+    ClassroomModel classroomModel =
+        ClassroomModel(state.classroomState.classroomCurrent.id)
+            .fromMap(state.classroomState.classroomCurrent.toMap());
+    int _newIndex = newIndex;
+    if (newIndex > oldIndex) {
+      _newIndex -= 1;
+    }
+    dynamic exameOld = classroomModel.exameId[oldIndex];
+    classroomModel.exameId.removeAt(oldIndex);
+    classroomModel.exameId.insert(_newIndex, exameOld);
+
+    await firestore
+        .collection(ClassroomModel.collection)
+        .document(state.classroomState.classroomCurrent.id)
+        .updateData({'exameId': classroomModel.exameId});
+
+    return null;
+  }
+
+  // @override
+  // void after() {
+  //   // dispatch(StreamColClassroomAsyncClassroomAction());
+  //   dispatch(GetDocsUserModelAsyncLoggedAction(
+  //       id: state.loggedState.userModelLogged.id));
+  // }
 }

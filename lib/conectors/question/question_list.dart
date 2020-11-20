@@ -1,4 +1,3 @@
-import 'package:aiprof/actions/exame_action.dart';
 import 'package:aiprof/actions/question_action.dart';
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/exame_model.dart';
@@ -15,6 +14,8 @@ class ViewModel extends BaseModel<AppState> {
   List<QuestionModel> questionList;
   Function(String) onEditQuestionCurrent;
   Function(String) onStudentList;
+  Function(int, int) onChangeOrderQuestionList;
+
   ViewModel();
   ViewModel.build({
     @required this.classroomRef,
@@ -22,6 +23,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.questionList,
     @required this.onEditQuestionCurrent,
     @required this.onStudentList,
+    @required this.onChangeOrderQuestionList,
   }) : super(equals: [
           classroomRef,
           exameRef,
@@ -40,6 +42,12 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(SetQuestionCurrentSyncQuestionAction(id));
           dispatch(NavigateAction.pushNamed(Routes.questionStudentSelect));
         },
+        onChangeOrderQuestionList: (int oldIndex, int newIndex) {
+          dispatch(UpdateOrderQuestionListAsyncQuestionAction(
+            oldIndex: oldIndex,
+            newIndex: newIndex,
+          ));
+        },
       );
 }
 
@@ -56,6 +64,7 @@ class QuestionList extends StatelessWidget {
         questionList: viewModel.questionList,
         onEditQuestionCurrent: viewModel.onEditQuestionCurrent,
         onStudentList: viewModel.onStudentList,
+        onChangeOrderQuestionList: viewModel.onChangeOrderQuestionList,
       ),
     );
   }

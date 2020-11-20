@@ -13,6 +13,7 @@ class ViewModel extends BaseModel<AppState> {
   Function(String) onEditExameCurrent;
   Function(String) onQuestionList;
   Function(String) onStudentList;
+  Function(int, int) onChangeOrderExameList;
   ViewModel();
   ViewModel.build({
     @required this.classroomRef,
@@ -20,6 +21,7 @@ class ViewModel extends BaseModel<AppState> {
     @required this.onEditExameCurrent,
     @required this.onQuestionList,
     @required this.onStudentList,
+    @required this.onChangeOrderExameList,
   }) : super(equals: [
           exameList,
         ]);
@@ -39,6 +41,12 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(SetExameCurrentSyncExameAction(id));
           dispatch(NavigateAction.pushNamed(Routes.questionStudentSelect));
         },
+        onChangeOrderExameList: (int oldIndex, int newIndex) {
+          dispatch(UpdateOrderExameListAsyncExameAction(
+            oldIndex: oldIndex,
+            newIndex: newIndex,
+          ));
+        },
       );
 }
 
@@ -55,6 +63,7 @@ class ExameList extends StatelessWidget {
         onEditExameCurrent: viewModel.onEditExameCurrent,
         onQuestionList: viewModel.onQuestionList,
         onStudentList: viewModel.onStudentList,
+        onChangeOrderExameList: viewModel.onChangeOrderExameList,
       ),
     );
   }

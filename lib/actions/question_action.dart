@@ -102,11 +102,32 @@ class GetDocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
 
   @override
   AppState reduce() {
-    questionList.sort((a, b) => a.name.compareTo(b.name));
+    final Map<String, QuestionModel> mapping = {
+      for (int i = 0; i < questionList.length; i++)
+        questionList[i].id: questionList[i]
+    };
+    List<QuestionModel> questionListOrdered = [];
+    if (state.exameState.exameCurrent?.questionId != null) {
+      for (String id in state.exameState.exameCurrent.questionId)
+        questionListOrdered.add(mapping[id]);
+    }
+    QuestionModel questionModel;
+    if (state.exameState.exameCurrent != null) {
+      int index = questionListOrdered.indexWhere(
+          (element) => element.id == state.questionState.questionCurrent.id);
+      // print(index);
+      if (index >= 0) {
+        QuestionModel questionModelTemp = questionListOrdered.firstWhere(
+            (element) => element.id == state.questionState.questionCurrent.id);
+        questionModel = QuestionModel(questionModelTemp.id)
+            .fromMap(questionModelTemp.toMap());
+      }
+    }
 
     return state.copyWith(
       questionState: state.questionState.copyWith(
-        questionList: questionList,
+        questionList: questionListOrdered,
+        questionCurrent: questionModel,
       ),
     );
   }
@@ -155,26 +176,32 @@ class AddDocQuestionCurrentAsyncQuestionAction extends ReduxAction<AppState> {
     questionModel.error = error;
     questionModel.isDelivered = false;
     questionModel.scoreExame = state.exameState.exameCurrent.scoreExame;
-    // questionModel.studentUserRefMap =
-    //     state.exameState.exameCurrent.studentUserRefMap;
-
+    var docRefQuestion =
+        firestore.collection(QuestionModel.collection).document();
+    print('Novo Question: ${docRefQuestion.documentID}');
     await firestore
-        .collection(QuestionModel.collection)
-        .add(questionModel.toMap())
-        .then((value) =>
-            dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
-              questionId: value.documentID,
-              isAddOrRemove: true,
-            )));
-    // dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
-    //   questionId: questionModel.id,
-    //   isAddOrRemove: true,
-    // ));
+        .collection(ExameModel.collection)
+        .document(state.exameState.exameCurrent.id)
+        .updateData({
+      'questionId': FieldValue.arrayUnion([docRefQuestion.documentID])
+    }).then((value) async {
+      await firestore
+          .collection(QuestionModel.collection)
+          .document(docRefQuestion.documentID)
+          .setData(questionModel.toMap());
+    });
+
+    // await firestore
+    //     .collection(QuestionModel.collection)
+    //     .add(questionModel.toMap())
+    //     .then((value) =>
+    //         dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
+    //           questionId: value.documentID,
+    //           isAddOrRemove: true,
+    //         )));
+
     return null;
   }
-
-  // @override
-  // void after() => dispatch(StreamColQuestionAsyncQuestionAction());
 }
 
 class UpdateDocQuestionCurrentAsyncQuestionAction
@@ -211,28 +238,50 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
     QuestionModel questionModel =
         QuestionModel(state.questionState.questionCurrent.id)
             .fromMap(state.questionState.questionCurrent.toMap());
-    questionModel.name = name;
-    questionModel.description = description;
-    questionModel.start = start;
-    questionModel.end = end;
-    questionModel.scoreQuestion = scoreQuestion;
-    questionModel.attempt = attempt;
-    questionModel.time = time;
-    questionModel.error = error;
-    questionModel.scoreQuestion = scoreQuestion;
-    questionModel.isDelivered = isDelivered;
-    questionModel.resetTask = resetTask;
 
     if (isDelete) {
       await firestore
-          .collection(QuestionModel.collection)
-          .document(questionModel.id)
-          .delete();
-      dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
-        questionId: questionModel.id,
-        isAddOrRemove: false,
-      ));
+          .collection(ExameModel.collection)
+          .document(state.exameState.exameCurrent.id)
+          .updateData({
+        'questionId': FieldValue.arrayRemove([questionModel.id])
+      }).then((value) {
+        firestore
+            .collection(QuestionModel.collection)
+            .document(questionModel.id)
+            .delete();
+        //TODO: Eliminar esta função
+        dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
+          questionId: questionModel.id,
+          isAddOrRemove: false,
+        ));
+        return state.copyWith(
+          questionState: state.questionState.copyWith(
+            questionCurrent: null,
+          ),
+        );
+      });
+      // await firestore
+      //     .collection(QuestionModel.collection)
+      //     .document(questionModel.id)
+      //     .delete();
+      // dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
+      //   questionId: questionModel.id,
+      //   isAddOrRemove: false,
+      // ));
     } else {
+      questionModel.name = name;
+      questionModel.description = description;
+      questionModel.start = start;
+      questionModel.end = end;
+      questionModel.scoreQuestion = scoreQuestion;
+      questionModel.attempt = attempt;
+      questionModel.time = time;
+      questionModel.error = error;
+      questionModel.scoreQuestion = scoreQuestion;
+      questionModel.isDelivered = isDelivered;
+      questionModel.resetTask = resetTask;
+
       await firestore
           .collection(QuestionModel.collection)
           .document(questionModel.id)
@@ -400,4 +449,42 @@ class DeleteStudentInQuestionCurrentAndTaskAsyncQuestionAction
   void before() => dispatch(WaitAction.add(this));
   @override
   void after() => dispatch(WaitAction.remove(this));
+}
+
+class UpdateOrderQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
+  final int oldIndex;
+  final int newIndex;
+
+  UpdateOrderQuestionListAsyncQuestionAction({
+    this.oldIndex,
+    this.newIndex,
+  });
+  @override
+  Future<AppState> reduce() async {
+    print('UpdateOrderQuestionListAsyncQuestionAction...');
+    Firestore firestore = Firestore.instance;
+    ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
+        .fromMap(state.exameState.exameCurrent.toMap());
+    int _newIndex = newIndex;
+    if (newIndex > oldIndex) {
+      _newIndex -= 1;
+    }
+    dynamic exameOld = exameModel.questionId[oldIndex];
+    exameModel.questionId.removeAt(oldIndex);
+    exameModel.questionId.insert(_newIndex, exameOld);
+
+    await firestore
+        .collection(ExameModel.collection)
+        .document(state.exameState.exameCurrent.id)
+        .updateData({'questionId': exameModel.questionId});
+
+    return null;
+  }
+
+  // @override
+  // void after() {
+  //   // dispatch(StreamColClassroomAsyncClassroomAction());
+  //   dispatch(GetDocsUserModelAsyncLoggedAction(
+  //       id: state.loggedState.userModelLogged.id));
+  // }
 }

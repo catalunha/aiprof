@@ -12,6 +12,7 @@ class ClassroomModel extends FirestoreModel {
   bool isActive;
   Map<String, UserModel> studentUserRefMapTemp;
   Map<String, UserModel> studentUserRefMap;
+  List<dynamic> exameId;
   // dynamic number;
   // dynamic questionNumber;
 
@@ -27,6 +28,7 @@ class ClassroomModel extends FirestoreModel {
     this.userRef,
     this.studentUserRefMapTemp,
     this.studentUserRefMap,
+    this.exameId,
   }) : super(id);
 
   @override
@@ -54,6 +56,8 @@ class ClassroomModel extends FirestoreModel {
         studentUserRefMap[item.key] = UserModel(item.key).fromMap(item.value);
       }
     }
+    if (map.containsKey('exameId')) exameId = map['exameId'];
+
     return this;
   }
 
@@ -83,6 +87,8 @@ class ClassroomModel extends FirestoreModel {
         data["studentUserRefMap"][item.key] = item.value.toMapRef();
       }
     }
+    if (exameId != null) data['exameId'] = this.exameId;
+
     return data;
   }
 
@@ -105,6 +111,8 @@ class ClassroomModel extends FirestoreModel {
         '\nProfessor: ${userRef.name.split(' ')[0]} (${userRef.id.substring(0, 4)})';
     _return = _return +
         '\nEstudantes: ${studentUserRefMap?.length != null ? studentUserRefMap.length : 0}';
+    _return = _return +
+        '\nQuestion: ${exameId?.length != null && exameId.length > 0 ? exameId.length : "NENHUMA"}. ';
     _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }

@@ -18,6 +18,7 @@ class ExameModel extends FirestoreModel {
   int error;
   int scoreQuestion;
   Map<String, bool> questionMap;
+  List<dynamic> questionId;
 
   ExameModel(
     String id, {
@@ -30,6 +31,7 @@ class ExameModel extends FirestoreModel {
     this.error,
     this.scoreQuestion,
     this.questionMap,
+    this.questionId,
     this.userRef,
     this.name,
     this.description,
@@ -65,6 +67,8 @@ class ExameModel extends FirestoreModel {
         questionMap[item.key] = item.value;
       }
     }
+    if (map.containsKey('questionId')) questionId = map['questionId'];
+
     return this;
   }
 
@@ -95,6 +99,7 @@ class ExameModel extends FirestoreModel {
         data["questionMap"][item.key] = item.value;
       }
     }
+    if (questionId != null) data['questionId'] = this.questionId;
 
     return data;
   }
@@ -125,6 +130,8 @@ class ExameModel extends FirestoreModel {
     _return = _return + ' Tentativa: ${attempt == null ? "0" : attempt}.';
     _return = _return + ' Erro relativo: ${error == null ? "0" : error}%.';
     _return = _return + '\nDescrição: $description';
+    _return = _return +
+        '\nQuestion: ${questionId?.length != null && questionId.length > 0 ? questionId.length : "NENHUMA"}. ';
     _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }
