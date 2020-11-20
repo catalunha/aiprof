@@ -1,5 +1,6 @@
 // +++ Actions Sync
 import 'package:aiprof/actions/logged_action.dart';
+import 'package:aiprof/actions/user_action.dart';
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
@@ -102,40 +103,48 @@ class GetDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
 
   @override
   AppState reduce() {
-    classroomList.sort((a, b) => a.name.compareTo(b.name));
+    final Map<String, ClassroomModel> mapping = {
+      for (int i = 0; i < classroomList.length; i++)
+        classroomList[i].id: classroomList[i]
+    };
+    List<ClassroomModel> classroomListTemp = [
+      for (String id in state.loggedState.userModelLogged.classroomId)
+        mapping[id]
+    ];
 
-    ClassroomModel classroomModel;
+    // ClassroomModel classroomModel;
     print('Get2DocsTaskListAsyncTaskAction... ${classroomList.length}');
+    print('Get2DocsTaskListAsyncTaskAction... ${classroomListTemp.length}');
 
-    if (state.classroomState.classroomCurrent != null) {
-      int index = classroomList.indexWhere(
-          (element) => element.id == state.classroomState.classroomCurrent.id);
-      print(index);
-      if (index >= 0) {
-        ClassroomModel classroomModelTemp = classroomList.firstWhere(
-            (element) =>
-                element.id == state.classroomState.classroomCurrent.id);
-        classroomModel = ClassroomModel(classroomModelTemp.id)
-            .fromMap(classroomModelTemp.toMap());
-      }
-    }
-    List<UserModel> studentList = [];
-    if (state.classroomState?.classroomCurrent?.studentUserRefMap != null) {
-      for (var item
-          in state.classroomState.classroomCurrent.studentUserRefMap.entries) {
-        studentList.add(UserModel(item.key).fromMap(item.value.toMap()));
-      }
-      // print(studentList);
-      studentList.sort((a, b) => a.name.compareTo(b.name));
-    }
+    // if (state.classroomState.classroomCurrent != null) {
+    //   int index = classroomListTemp.indexWhere(
+    //       (element) => element.id == state.classroomState.classroomCurrent.id);
+    //   print(index);
+    //   if (index >= 0) {
+    //     ClassroomModel classroomModelTemp = classroomListTemp.firstWhere(
+    //         (element) =>
+    //             element.id == state.classroomState.classroomCurrent.id);
+    //     classroomModel = ClassroomModel(classroomModelTemp.id)
+    //         .fromMap(classroomModelTemp.toMap());
+    //   }
+    // }
+    // List<UserModel> studentList = [];
+    // if (state.classroomState?.classroomCurrent?.studentUserRefMap != null) {
+    //   for (var item
+    //       in state.classroomState.classroomCurrent.studentUserRefMap.entries) {
+    //     studentList.add(UserModel(item.key).fromMap(item.value.toMap()));
+    //   }
+    //   // print(studentList);
+    //   studentList.sort((a, b) => a.name.compareTo(b.name));
+    // }
     return state.copyWith(
       classroomState: state.classroomState.copyWith(
-        classroomList: classroomList,
-        classroomCurrent: classroomModel,
+        classroomList: classroomListTemp,
+        // classroomCurrent: classroomModel,
       ),
-      studentState: state.studentState.copyWith(
-        studentList: studentList,
-      ),
+      // studentState: state.studentState.copyWith(
+      //   studentList: studentList,
+      // ),
     );
   }
 }
@@ -180,6 +189,9 @@ class AddDocClassroomCurrentAsyncClassroomAction extends ReduxAction<AppState> {
           .document(state.loggedState.userModelLogged.id)
           .updateData({
         'classroomId': FieldValue.arrayUnion([classroomAdded.documentID])
+      }).then((value) {
+        dispatch(GetDocUserAsyncUserAction());
+        dispatch(StreamColClassroomAsyncClassroomAction());
       });
     }
     return null;
@@ -188,7 +200,7 @@ class AddDocClassroomCurrentAsyncClassroomAction extends ReduxAction<AppState> {
   // @override
   // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
   // @override
-  // void after() => dispatch(StreamColClassroomAsyncClassroomAction());
+  // void after() => dispatch(GetDocUserAsyncUserAction());
 }
 
 class UpdateDocClassroomCurrentAsyncClassroomAction
@@ -219,9 +231,24 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
             .fromMap(state.classroomState.classroomCurrent.toMap());
     if (isDelete) {
       await firestore
-          .collection(ClassroomModel.collection)
-          .document(classroomModel.id)
-          .delete();
+          .collection(UserModel.collection)
+          .document(state.loggedState.userModelLogged.id)
+          .updateData({
+        'classroomId': FieldValue.arrayRemove([classroomModel.id])
+      }).then((value) async {
+        dispatchFuture(GetDocUserAsyncUserAction()).then((value) {
+          firestore
+              .collection(ClassroomModel.collection)
+              .document(classroomModel.id)
+              .delete();
+        });
+      });
+
+      return state.copyWith(
+        classroomState: state.classroomState.copyWith(
+          classroomCurrent: null,
+        ),
+      );
     } else {
       classroomModel.company = company;
       classroomModel.component = component;
@@ -236,14 +263,7 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
       //     'classroomId': FieldValue.arrayUnion([classroomModel.id])
       //   });
       // }
-      if (classroomModel.isActive != isActive && !isActive) {
-        await firestore
-            .collection(UserModel.collection)
-            .document(state.loggedState.userModelLogged.id)
-            .updateData({
-          'classroomId': FieldValue.arrayRemove([classroomModel.id])
-        });
-      }
+
       classroomModel.isActive = isActive;
 
       await firestore
@@ -255,7 +275,9 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
   }
 
   // @override
-  // void after() => dispatch(StreamColClassroomAsyncClassroomAction());
+  // void after() {
+  //   dispatch(StreamColClassroomAsyncClassroomAction());
+  // }
 }
 
 class UpdateDocclassroomIdInUserAsyncClassroomAction

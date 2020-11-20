@@ -19,7 +19,7 @@ class LoginPageDS extends StatefulWidget {
 }
 
 class LoginPageDSState extends State<LoginPageDS> {
-  static final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   String _userName;
   String _password;
   void validateInputsLogin() {

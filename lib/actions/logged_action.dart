@@ -1,3 +1,4 @@
+import 'package:aiprof/actions/classroom_action.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
@@ -84,11 +85,35 @@ class CurrentUserModelSyncLoggedAction extends ReduxAction<AppState> {
       loggedState: state.loggedState.copyWith(
         userModelLogged: userModel,
       ),
-      userState: state.userState.copyWith(
-        userCurrent: userModel,
+      // userState: state.userState.copyWith(
+      //   userCurrent: userModel,
+      // ),
+    );
+  }
+}
+
+class GetDocUserAsyncUserAction extends ReduxAction<AppState> {
+  @override
+  Future<AppState> reduce() async {
+    print('GetDocUserAsyncUserAction...');
+    Firestore firestore = Firestore.instance;
+
+    final docRef = firestore
+        .collection(UserModel.collection)
+        .document(state.loggedState.userModelLogged.id);
+
+    final docsSnap = await docRef.get();
+
+    UserModel userModel = UserModel(docsSnap.documentID).fromMap(docsSnap.data);
+    return state.copyWith(
+      loggedState: state.loggedState.copyWith(
+        userModelLogged: userModel,
       ),
     );
   }
+
+  @override
+  void after() => dispatch(StreamColClassroomAsyncClassroomAction());
 }
 
 // class UpdateDocUserModelAsyncLoggedAction extends ReduxAction<AppState> {
