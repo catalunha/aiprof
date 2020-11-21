@@ -30,7 +30,7 @@ class _ExameListDSState extends State<ExameListDS> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            '/${widget.classroomRef.name}: com ${widget.exameList.length} exames.'),
+            '/${widget.classroomRef.name}: com ${widget.exameList.length} exame(s).'),
         actions: [
           // LogoutButton(),
         ],

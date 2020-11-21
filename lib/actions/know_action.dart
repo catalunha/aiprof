@@ -56,12 +56,12 @@ class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
     Firestore firestore = Firestore.instance;
     Query collRef;
 
-    if (state.knowState.knowFilter == KnowFilter.isactive) {
+    if (state.knowState.knowFilter == KnowFilter.isActive) {
       collRef = firestore
           .collection(KnowModel.collection)
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: true);
-    } else if (state.knowState.knowFilter == KnowFilter.isNotactive) {
+    } else if (state.knowState.knowFilter == KnowFilter.isNotActive) {
       collRef = firestore
           .collection(KnowModel.collection)
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);

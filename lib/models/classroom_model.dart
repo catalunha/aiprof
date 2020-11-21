@@ -112,7 +112,7 @@ class ClassroomModel extends FirestoreModel {
     _return = _return +
         '\nEstudantes: ${studentUserRefMap?.length != null ? studentUserRefMap.length : 0}';
     _return = _return +
-        '\nQuestion: ${exameId?.length != null && exameId.length > 0 ? exameId.length : "NENHUMA"}. ';
+        '\nQuestões: ${exameId?.length != null && exameId.length > 0 ? exameId.length : "NENHUMA"}. ';
     _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }

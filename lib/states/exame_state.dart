@@ -17,7 +17,7 @@ class ExameState {
     this.studentIdSelected,
   });
   factory ExameState.initialState() => ExameState(
-        exameFilter: ExameFilter.isactive,
+        exameFilter: ExameFilter.isActive,
         exameList: <ExameModel>[],
         exameCurrent: null,
         questionIdSelected: null,

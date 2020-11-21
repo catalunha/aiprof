@@ -16,7 +16,7 @@ class KnowState {
     this.folderCurrent,
   });
   factory KnowState.initialState() => KnowState(
-        knowFilter: KnowFilter.isactive,
+        knowFilter: KnowFilter.isActive,
         knowList: <KnowModel>[],
         knowCurrent: null,
         folderCurrent: null,

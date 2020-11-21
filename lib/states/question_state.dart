@@ -13,7 +13,7 @@ class QuestionState {
     this.questionCurrent,
   });
   factory QuestionState.initialState() => QuestionState(
-        questionFilter: QuestionFilter.isactive,
+        questionFilter: QuestionFilter.isActive,
         questionList: <QuestionModel>[],
         questionCurrent: null,
       );

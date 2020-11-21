@@ -17,7 +17,7 @@ class SimulationState {
     this.outputCurrent,
   });
   factory SimulationState.initialState() => SimulationState(
-        simulationFilter: SimulationFilter.isactive,
+        simulationFilter: SimulationFilter.isActive,
         simulationList: <SimulationModel>[],
         simulationCurrent: null,
         inputCurrent: null,

@@ -112,7 +112,7 @@ class GetDocsQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
         questionListOrdered.add(mapping[id]);
     }
     QuestionModel questionModel;
-    if (state.exameState.exameCurrent != null) {
+    if (state.questionState.questionCurrent != null) {
       int index = questionListOrdered.indexWhere(
           (element) => element.id == state.questionState.questionCurrent.id);
       // print(index);

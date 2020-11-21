@@ -140,13 +140,13 @@ class StreamColSituationAsyncSituationAction extends ReduxAction<AppState> {
     // //--- collection old
 
     //+++ collection new
-    if (state.situationState.situationFilter == SituationFilter.isactive) {
+    if (state.situationState.situationFilter == SituationFilter.isActive) {
       collRef = firestore
           .collection(SituationModel.collection)
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
       // .where('isActive', isEqualTo: true);
     } else if (state.situationState.situationFilter ==
-        SituationFilter.isNotactive) {
+        SituationFilter.isNotActive) {
       collRef = firestore
           .collection(SituationModel.collection)
           .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);

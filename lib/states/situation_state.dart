@@ -13,7 +13,7 @@ class SituationState {
     this.situationCurrent,
   });
   factory SituationState.initialState() => SituationState(
-        situationFilter: SituationFilter.isactive,
+        situationFilter: SituationFilter.isActive,
         situationList: <SituationModel>[],
         situationCurrent: null,
       );

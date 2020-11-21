@@ -13,7 +13,7 @@ class StudentState {
     this.studentCurrent,
   });
   factory StudentState.initialState() => StudentState(
-        studentFilter: StudentFilter.isactive,
+        studentFilter: StudentFilter.isActive,
         studentList: <UserModel>[],
         studentCurrent: null,
       );

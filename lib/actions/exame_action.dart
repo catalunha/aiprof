@@ -14,6 +14,7 @@ class SetExameCurrentSyncExameAction extends ReduxAction<AppState> {
 
   @override
   AppState reduce() {
+    print('SetExameCurrentSyncExameAction: $id');
     ExameModel exameModel;
     if (id == null) {
       exameModel = ExameModel(null);
