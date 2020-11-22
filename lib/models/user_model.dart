@@ -7,13 +7,7 @@ class UserModel extends FirestoreModel {
   String email;
   bool isTeacher;
   bool isActive;
-  // String phone;
-  // String nickname;
-  // String photoUrl;
-  // List<dynamic> route;
-  // int classNumber;
-  // int folderNumber;
-  // int situationNumber;
+  bool status;
   List<dynamic> classroomId;
 
   UserModel(String id,
@@ -24,6 +18,7 @@ class UserModel extends FirestoreModel {
       this.email,
       this.isActive,
       this.isTeacher,
+      this.status,
       // this.photoUrl,
       // this.classNumber,
       // this.folderNumber,
@@ -41,6 +36,7 @@ class UserModel extends FirestoreModel {
     // if (map.containsKey('phone')) phone = map['phone'];
     if (map.containsKey('isActive')) isActive = map['isActive'];
     if (map.containsKey('isTeacher')) isTeacher = map['isTeacher'];
+    if (map.containsKey('status')) status = map['status'];
     // if (map.containsKey('folderNumber')) folderNumber = map['folderNumber'];
     // if (map.containsKey('situationNumber')) situationNumber = map['situationNumber'];
     // if (map.containsKey('classNumber')) classNumber = map['classNumber'];
@@ -54,6 +50,7 @@ class UserModel extends FirestoreModel {
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (id != null) data['id'] = this.id;
     if (name != null) data['name'] = this.name;
     // if (nickname != null) data['nickname'] = this.nickname;
     if (code != null) data['code'] = this.code;
@@ -61,6 +58,7 @@ class UserModel extends FirestoreModel {
     if (email != null) data['email'] = this.email;
     if (isActive != null) data['isActive'] = this.isActive;
     if (isTeacher != null) data['isTeacher'] = this.isTeacher;
+    if (status != null) data['status'] = this.status;
     // if (folderNumber != null) data['folderNumber'] = this.folderNumber;
     // if (situationNumber != null) data['situationNumber'] = this.situationNumber;
     // if (photoUrl != null) data['photoUrl'] = this.photoUrl;

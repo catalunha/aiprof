@@ -12,13 +12,11 @@ class ExameEditDS extends StatefulWidget {
   final int time;
   final int error;
   final int scoreQuestion;
-  final bool isDelivered;
   final bool isAddOrUpdate;
   final Function(String, String, dynamic, dynamic, int, int, int, int, int)
       onAdd;
   final Function(
-          String, String, dynamic, dynamic, int, int, int, int, int, bool, bool)
-      onUpdate;
+      String, String, dynamic, dynamic, int, int, int, int, int, bool) onUpdate;
 
   const ExameEditDS({
     Key key,
@@ -31,7 +29,6 @@ class ExameEditDS extends StatefulWidget {
     this.time,
     this.error,
     this.scoreQuestion,
-    this.isDelivered,
     this.isAddOrUpdate,
     this.onAdd,
     this.onUpdate,
@@ -54,7 +51,6 @@ class _ExameEditDSState extends State<ExameEditDS> {
   int _time;
   int _error;
   int _scoreQuestion;
-  bool _isDelivered;
   bool _isDelete = false;
   void validateData() {
     if (formKey.currentState.validate()) {
@@ -63,7 +59,7 @@ class _ExameEditDSState extends State<ExameEditDS> {
           ? widget.onAdd(_name, _description, _start, _end, _scoreExame,
               _attempt, _time, _error, _scoreQuestion)
           : widget.onUpdate(_name, _description, _start, _end, _scoreExame,
-              _attempt, _time, _error, _scoreQuestion, _isDelivered, _isDelete);
+              _attempt, _time, _error, _scoreQuestion, _isDelete);
     } else {
       setState(() {});
     }
@@ -72,7 +68,6 @@ class _ExameEditDSState extends State<ExameEditDS> {
   @override
   void initState() {
     super.initState();
-    _isDelivered = widget.isDelivered;
     _start = widget.start != null ? widget.start : DateTime.now();
     _end = widget.end != null ? widget.end : DateTime.now();
     isInvisibilityDelete = true;
@@ -296,46 +291,52 @@ class _ExameEditDSState extends State<ExameEditDS> {
             },
           ),
           Text('Inicio do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _start,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                print(datetime);
-                setState(() {
-                  _start = datetime;
-                });
-              },
-            ),
+          Row(
+            children: [
+              SizedBox(
+                width: 70,
+              ),
+              Expanded(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CupertinoDatePicker(
+                    initialDateTime: _start,
+                    use24hFormat: true,
+                    onDateTimeChanged: (datetime) {
+                      print(datetime);
+                      setState(() {
+                        _start = datetime;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
           Text('Fim do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _end,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                print(datetime);
-                setState(() {
-                  _end = datetime;
-                });
-              },
-            ),
-          ),
-          widget.isAddOrUpdate
-              ? Container()
-              : SwitchListTile(
-                  value: _isDelivered,
-                  title: _isDelivered
-                      ? Text('Exame será distribuído.')
-                      : Text('Distribuir este exame ?'),
-                  onChanged: (value) {
-                    setState(() {
-                      _isDelivered = value;
-                    });
-                  },
+          Row(
+            children: [
+              SizedBox(
+                width: 70,
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 100,
+                  child: CupertinoDatePicker(
+                    initialDateTime: _end,
+                    use24hFormat: true,
+                    onDateTimeChanged: (datetime) {
+                      print(datetime);
+                      setState(() {
+                        _end = datetime;
+                      });
+                    },
+                  ),
                 ),
+              ),
+            ],
+          ),
           widget.isAddOrUpdate
               ? Container()
               : Column(

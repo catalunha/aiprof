@@ -179,9 +179,7 @@ class _SimulationEditDSState extends State<SimulationEditDS> {
               onPressed: () => widget.onEditInput(input.id)),
           Text('${input.name}'),
           Text(' = '),
-          input.type == 'texto' || input.type == 'url'
-              ? Text('...')
-              : Text('${input.value}'),
+          Text('${input.value}'),
           Container(
             width: 10,
           ),

@@ -1,4 +1,9 @@
+import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/models/exame_model.dart';
+import 'package:aiprof/models/question_model.dart';
 import 'package:aiprof/models/simulation_model.dart';
+import 'package:aiprof/models/situation_model.dart';
+import 'package:aiprof/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +11,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 class TaskEditDS extends StatefulWidget {
   final String id;
+  final ClassroomModel classroomRef;
+  final ExameModel exameRef;
+  final QuestionModel questionRef;
+  final SituationModel situationRef;
+  final UserModel studentUserRef;
   //dados do exame
   final dynamic start;
   final dynamic end;
@@ -25,7 +35,7 @@ class TaskEditDS extends StatefulWidget {
   final Function(
           dynamic, dynamic, int, int, int, int, int, bool, int, bool, bool)
       onUpdateTask;
-  final Function(String, bool) onUpdateOutput;
+  final Function(String, String, bool) onUpdateOutput;
   final Function() onSeeTextTask;
 
   const TaskEditDS({
@@ -45,6 +55,11 @@ class TaskEditDS extends StatefulWidget {
     this.onUpdateOutput,
     this.id,
     this.onSeeTextTask,
+    this.classroomRef,
+    this.exameRef,
+    this.questionRef,
+    this.situationRef,
+    this.studentUserRef,
   }) : super(key: key);
   @override
   _TaskEditDSState createState() => _TaskEditDSState();
@@ -90,7 +105,8 @@ class _TaskEditDSState extends State<TaskEditDS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar tarefa ${widget.id.substring(0, 4)}'),
+        title: Text(
+            '${widget.classroomRef.name}/${widget.exameRef.name}/${widget.questionRef.name}/${widget.id.substring(0, 4)}: de ${widget.studentUserRef.name}'),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -110,6 +126,31 @@ class _TaskEditDSState extends State<TaskEditDS> {
       key: formKey,
       child: ListView(
         children: [
+          ListTile(
+            title: Text('Proposta da tarefa.'),
+            leading: IconButton(
+              tooltip: 'Um link ao um site ou arquivo',
+              icon: Icon(Icons.link),
+              onPressed: () async {
+                if (widget.situationRef.url != null) {
+                  if (await canLaunch(widget.situationRef.url)) {
+                    await launch(widget.situationRef.url);
+                  }
+                }
+              },
+            ),
+          ),
+          Row(children: [
+            Text(
+                'Entradas para a desenvolvimento: ${widget.simulationInput.length}'),
+          ]),
+          ...simulationInputBuilder(context, widget.simulationInput),
+          Row(children: [
+            Text(
+                'Saídas do desenvolvimento: ${widget.simulationOutput.length}'),
+          ]),
+          ...simulationOutputBuilder(
+              context, widget.id, widget.simulationOutput),
           TextFormField(
             initialValue:
                 widget.scoreExame == null ? '1' : widget.scoreExame.toString(),
@@ -198,6 +239,52 @@ class _TaskEditDSState extends State<TaskEditDS> {
               return null;
             },
           ),
+          Text('Inicio do desenvolvimento:'),
+          Row(
+            children: [
+              SizedBox(
+                width: 70,
+              ),
+              Expanded(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CupertinoDatePicker(
+                    initialDateTime: _start,
+                    use24hFormat: true,
+                    onDateTimeChanged: (datetime) {
+                      setState(() {
+                        _start = datetime;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Text('Fim do desenvolvimento:'),
+          Row(
+            children: [
+              SizedBox(
+                width: 70,
+              ),
+              Expanded(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CupertinoDatePicker(
+                    initialDateTime: _end,
+                    use24hFormat: true,
+                    onDateTimeChanged: (datetime) {
+                      setState(() {
+                        _end = datetime;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
           TextFormField(
             initialValue:
                 widget.attempted == null ? '0' : widget.attempted.toString(),
@@ -215,43 +302,6 @@ class _TaskEditDSState extends State<TaskEditDS> {
               }
               return null;
             },
-          ),
-          Row(children: [
-            Text(
-                'Entradas para a desenvolvimento: ${widget.simulationInput.length}'),
-          ]),
-          ...simulationInputBuilder(context, widget.simulationInput),
-          Row(children: [
-            Text(
-                'Saídas do desenvolvimento: ${widget.simulationOutput.length}'),
-          ]),
-          ...simulationOutputBuilder(context, widget.simulationOutput),
-          Text('Inicio do desenvolvimento:'),
-          Container(
-            height: 100,
-            width: 300,
-            child: CupertinoDatePicker(
-              initialDateTime: _start,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                setState(() {
-                  _start = datetime;
-                });
-              },
-            ),
-          ),
-          Text('Fim do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _end,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                setState(() {
-                  _end = datetime;
-                });
-              },
-            ),
           ),
           SwitchListTile(
             value: _nullStarted,
@@ -363,7 +413,7 @@ class _TaskEditDSState extends State<TaskEditDS> {
   }
 
   List<Widget> simulationOutputBuilder(
-      BuildContext context, List<Output> simulationOutputList) {
+      BuildContext context, String taskId, List<Output> simulationOutputList) {
     List<Widget> itemList = [];
     for (Output simulationOutput in simulationOutputList) {
       Widget icone = Icon(Icons.question_answer);
@@ -410,9 +460,10 @@ class _TaskEditDSState extends State<TaskEditDS> {
         children: [
           Text('${simulationOutput.name}'),
           Text(' = '),
-          simulationOutput.type == 'texto' || simulationOutput.type == 'url'
-              ? Text('(${simulationOutput.value.length}c)')
-              : Text('${simulationOutput.value} (${simulationOutput.answer})'),
+          // simulationOutput.type == 'texto' || simulationOutput.type == 'url'
+          //     ? Text('(${simulationOutput.value.length}c)')
+          //     :
+          Text('${simulationOutput.value} (${simulationOutput.answer})'),
           Container(
             width: 10,
           ),
@@ -439,7 +490,7 @@ class _TaskEditDSState extends State<TaskEditDS> {
                       ? true
                       : false
                   : false;
-              widget.onUpdateOutput(simulationOutput.id, !_right);
+              widget.onUpdateOutput(taskId, simulationOutput.id, !_right);
             },
           ),
           // IconButton(

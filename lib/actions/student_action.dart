@@ -225,7 +225,7 @@ class RemoveStudentForClassroomAsyncStudentAction
   @override
   Future<AppState> reduce() async {
     Firestore firestore = Firestore.instance;
-
+    //O user removido de uma classroom apenas nao tem mais acesso a aquela classroom. mas todo seu hitorico de task fica salvo.
     await firestore
         .collection(UserModel.collection)
         .document(studentId)

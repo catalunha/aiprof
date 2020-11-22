@@ -13,15 +13,16 @@ class QuestionEditDS extends StatefulWidget {
   final int time;
   final int error;
   final int scoreQuestion;
-  final SituationModel situationRef;
+  final SituationModel situationModel;
   final bool isDelivered;
+  final bool withStudent;
+  final bool withTask;
   final bool isAddOrUpdate;
   final Function() onSituationSelect;
 
   final Function(String, String, dynamic, dynamic, int, int, int, int) onAdd;
-  final Function(
-          String, String, dynamic, dynamic, int, int, int, int, bool, bool)
-      onUpdate;
+  final Function(String, String, dynamic, dynamic, int, int, int, int, bool,
+      bool, bool) onUpdate;
 
   const QuestionEditDS({
     Key key,
@@ -36,10 +37,12 @@ class QuestionEditDS extends StatefulWidget {
     this.isAddOrUpdate,
     this.onAdd,
     this.onUpdate,
-    this.situationRef,
+    this.situationModel,
     this.onSituationSelect,
     this.isDelivered,
     this.id,
+    this.withStudent,
+    this.withTask,
   }) : super(key: key);
   @override
   _QuestionEditDSState createState() => _QuestionEditDSState();
@@ -59,6 +62,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
   int _time;
   int _error;
   bool _isDelete = false;
+  bool _isDelivered = false;
   bool _resetTask = false;
 
   void validateData() {
@@ -84,6 +88,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
               _time,
               _error,
               _scoreQuestion,
+              _isDelivered,
               _isDelete,
               _resetTask,
             );
@@ -136,7 +141,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
             }
           }
           if (liberated) {
-            if (widget.situationRef == null) {
+            if (widget.situationModel == null) {
               liberated = false;
               showSnackBarHandler(
                   context, 'Favor definir uma situação para esta questão.');
@@ -208,22 +213,40 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
               return null;
             },
           ),
-          TextFormField(
-            initialValue: widget.description,
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            decoration: InputDecoration(
-              labelText: 'Descrição',
-            ),
-            onSaved: (newValue) => _description = newValue,
-            // validator: (value) {
-            //   if (value.isEmpty) {
-            //     return 'Informe o que se pede.';
-            //   }
-            //   return null;
-            // },
-          ),
-          // Text('>>> $_scoreQuestion $_time $_attempt $_error'),
+          widget?.isDelivered != null && !widget.isDelivered
+              ? ListTile(
+                  title: Text('Selecione uma situação ou problema :'),
+                  subtitle: Text('${widget.situationModel?.name}'),
+                  trailing: Icon(Icons.search),
+                  onTap: () => widget.onSituationSelect(),
+                )
+              : Container(),
+          (!widget.isAddOrUpdate && widget.withStudent)
+              ? SwitchListTile(
+                  value: _isDelivered,
+                  title: _isDelivered
+                      ? Text('Questão será distribuída.')
+                      : Text('Distribuir esta questão aos alunos ?'),
+                  onChanged: (value) {
+                    setState(() {
+                      _isDelivered = value;
+                    });
+                  },
+                )
+              : Container(),
+          (!widget.isAddOrUpdate && widget.withTask)
+              ? SwitchListTile(
+                  value: _resetTask,
+                  title: _resetTask
+                      ? Text('Tarefas aplicadas serão reabertas.')
+                      : Text('Reabrir tarefas ja aplicadas ?'),
+                  onChanged: (value) {
+                    setState(() {
+                      _resetTask = value;
+                    });
+                  },
+                )
+              : Container(),
           TextFormField(
             initialValue: widget.scoreQuestion == null
                 ? '1'
@@ -301,56 +324,68 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
               return null;
             },
           ),
-          widget?.isDelivered != null && !widget.isDelivered
-              ? ListTile(
-                  title: Text('Selecione uma situação ou problema :'),
-                  subtitle: Text('${widget.situationRef?.name}'),
-                  trailing: Icon(Icons.search),
-                  onTap: () => widget.onSituationSelect(),
-                )
-              : Text('Questão já aplicada não pode mudar situação ou problema'),
           Text('Inicio do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _start,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                print(datetime);
-                setState(() {
-                  _start = datetime;
-                });
-              },
-            ),
+          Row(
+            children: [
+              SizedBox(
+                width: 70,
+              ),
+              Expanded(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CupertinoDatePicker(
+                    initialDateTime: _start,
+                    use24hFormat: true,
+                    onDateTimeChanged: (datetime) {
+                      setState(() {
+                        _start = datetime;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
           Text('Fim do desenvolvimento:'),
-          SizedBox(
-            height: 100,
-            child: CupertinoDatePicker(
-              initialDateTime: _end,
-              use24hFormat: true,
-              onDateTimeChanged: (datetime) {
-                print(datetime);
-                setState(() {
-                  _end = datetime;
-                });
-              },
-            ),
-          ),
-          widget.isAddOrUpdate
-              ? Container()
-              : SwitchListTile(
-                  value: _resetTask,
-                  title: _resetTask
-                      ? Text('Tarefas aplicadas serão reabertas.')
-                      : Text('Reabrir tarefas ja aplicadas ?'),
-                  onChanged: (value) {
-                    setState(() {
-                      _resetTask = value;
-                    });
-                  },
+          Row(
+            children: [
+              SizedBox(
+                width: 70,
+              ),
+              Expanded(
+                child: SizedBox(
+                  width: 100,
+                  height: 100,
+                  child: CupertinoDatePicker(
+                    initialDateTime: _end,
+                    use24hFormat: true,
+                    onDateTimeChanged: (datetime) {
+                      print(datetime);
+                      setState(() {
+                        _end = datetime;
+                      });
+                    },
+                  ),
                 ),
-
+              ),
+            ],
+          ),
+          TextFormField(
+            initialValue: widget.description,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            decoration: InputDecoration(
+              labelText: 'Descrição',
+            ),
+            onSaved: (newValue) => _description = newValue,
+            // validator: (value) {
+            //   if (value.isEmpty) {
+            //     return 'Informe o que se pede.';
+            //   }
+            //   return null;
+            // },
+          ),
           widget.isAddOrUpdate
               ? Container()
               : Column(

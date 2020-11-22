@@ -59,7 +59,7 @@ class _FolderSelectToQuestionDSState extends State<FolderSelectToQuestionDS> {
     );
   }
 
-  Widget infoCodeContent(SituationModel situationModel, Folder folder) {
+  Widget infoCodeContent(SituationModel situationRef, Folder folder) {
     // bool containSituation = false;
 
     return Row(
@@ -73,10 +73,10 @@ class _FolderSelectToQuestionDSState extends State<FolderSelectToQuestionDS> {
             ),
           ),
           onTap: () {
-            widget.onSetSituationInQuestionCurrent(situationModel);
+            widget.onSetSituationInQuestionCurrent(situationRef);
           },
         ),
-        Text(' ${situationModel.name} - ${situationModel.id.substring(0, 3)}'),
+        Text(' ${situationRef.name} - ${situationRef.id.substring(0, 3)}'),
       ],
     );
   }

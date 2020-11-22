@@ -1,5 +1,10 @@
 import 'package:aiprof/actions/task_action.dart';
+import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/models/exame_model.dart';
+import 'package:aiprof/models/question_model.dart';
 import 'package:aiprof/models/simulation_model.dart';
+import 'package:aiprof/models/situation_model.dart';
+import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/uis/task/task_edit_ds.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +13,11 @@ import 'package:async_redux/async_redux.dart';
 
 class ViewModel extends BaseModel<AppState> {
   String id;
+  ClassroomModel classroomRef;
+  ExameModel exameRef;
+  QuestionModel questionRef;
+  SituationModel situationRef;
+  UserModel studentUserRef;
   //dados do exame
   dynamic start;
   dynamic end;
@@ -26,12 +36,17 @@ class ViewModel extends BaseModel<AppState> {
 
   Function(dynamic, dynamic, int, int, int, int, int, bool, int, bool, bool)
       onUpdateTask;
-  Function(String, bool) onUpdateOutput;
+  Function(String, String, bool) onUpdateOutput;
   Function() onSeeTextTask;
 
   ViewModel();
   ViewModel.build({
     @required this.id,
+    @required this.classroomRef,
+    @required this.exameRef,
+    @required this.questionRef,
+    @required this.situationRef,
+    @required this.studentUserRef,
     @required this.start,
     @required this.end,
     @required this.scoreExame,
@@ -48,6 +63,11 @@ class ViewModel extends BaseModel<AppState> {
     @required this.onSeeTextTask,
   }) : super(equals: [
           id,
+          classroomRef,
+          exameRef,
+          questionRef,
+          situationRef,
+          studentUserRef,
           start,
           end,
           scoreExame,
@@ -85,6 +105,11 @@ class ViewModel extends BaseModel<AppState> {
   @override
   ViewModel fromStore() => ViewModel.build(
         id: state.taskState.taskCurrent.id,
+        classroomRef: state.taskState.taskCurrent.classroomRef,
+        exameRef: state.taskState.taskCurrent.exameRef,
+        questionRef: state.taskState.taskCurrent.questionRef,
+        situationRef: state.taskState.taskCurrent.situationRef,
+        studentUserRef: state.taskState.taskCurrent.studentUserRef,
         start: state.taskState.taskCurrent.start,
         end: state.taskState.taskCurrent.end,
         scoreExame: state.taskState.taskCurrent.scoreExame,
@@ -125,10 +150,13 @@ class ViewModel extends BaseModel<AppState> {
             isDelete: isDelete,
           ));
           dispatch(NavigateAction.pop());
+          dispatch(NavigateAction.pop());
         },
-        onUpdateOutput: (String id, bool isTruOrFalse) {
+        onUpdateOutput: (String taskId, String outputId, bool isTruOrFalse) {
           dispatch(UpdateOutputAsyncTaskAction(
-              taskSimulationOutputId: id, isTruOrFalse: isTruOrFalse));
+              taskId: taskId,
+              taskSimulationOutputId: outputId,
+              isTruOrFalse: isTruOrFalse));
         },
         onSeeTextTask: () {
           dispatch(NavigateAction.pushNamed(Routes.taskAnswerText));
@@ -144,6 +172,11 @@ class TaskEdit extends StatelessWidget {
       model: ViewModel(),
       builder: (context, viewModel) => TaskEditDS(
         id: viewModel.id,
+        classroomRef: viewModel.classroomRef,
+        exameRef: viewModel.exameRef,
+        questionRef: viewModel.questionRef,
+        situationRef: viewModel.situationRef,
+        studentUserRef: viewModel.studentUserRef,
         start: viewModel.start,
         end: viewModel.end,
         scoreExame: viewModel.scoreExame,

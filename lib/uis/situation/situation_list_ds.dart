@@ -75,7 +75,7 @@ class _SituationListDSState extends State<SituationListDS> {
                     IconButton(
                       tooltip: 'Lista de simulações',
                       icon: Icon(Icons.format_list_numbered),
-                      onPressed: () async {
+                      onPressed: () {
                         widget.onSimulationList(situation.id);
                       },
                     ),

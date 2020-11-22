@@ -1,5 +1,4 @@
 import 'package:aiprof/actions/question_action.dart';
-import 'package:aiprof/models/simulation_model.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/states/app_state.dart';
@@ -17,14 +16,16 @@ class ViewModel extends BaseModel<AppState> {
   int time;
   int error;
   int scoreQuestion;
-  SituationModel situationRef;
+  SituationModel situationModel;
   bool isDelivered;
+  bool withStudent;
+  bool withTask;
 
   bool isAddOrUpdate;
   Function() onSituationSelect;
   Function(String, String, dynamic, dynamic, int, int, int, int) onAdd;
-  Function(String, String, dynamic, dynamic, int, int, int, int, bool, bool)
-      onUpdate;
+  Function(String, String, dynamic, dynamic, int, int, int, int, bool, bool,
+      bool) onUpdate;
   ViewModel();
   ViewModel.build({
     @required this.id,
@@ -36,8 +37,10 @@ class ViewModel extends BaseModel<AppState> {
     @required this.time,
     @required this.error,
     @required this.scoreQuestion,
-    @required this.situationRef,
+    @required this.situationModel,
     @required this.isDelivered,
+    @required this.withStudent,
+    @required this.withTask,
     @required this.isAddOrUpdate,
     @required this.onSituationSelect,
     @required this.onAdd,
@@ -52,10 +55,38 @@ class ViewModel extends BaseModel<AppState> {
           time,
           error,
           scoreQuestion,
-          situationRef,
+          situationModel,
           isDelivered,
+          withStudent,
+          withTask,
           isAddOrUpdate,
         ]);
+  bool _withStudentWithoutTask() {
+    bool _return = false;
+    if (state.questionState.questionCurrent.studentUserRefMap != null) {
+      for (var item
+          in state.questionState.questionCurrent.studentUserRefMap.values) {
+        if (!item.status) {
+          _return = true;
+        }
+      }
+    }
+    return _return;
+  }
+
+  bool _withTask() {
+    bool _return = false;
+    if (state.questionState.questionCurrent.studentUserRefMap != null) {
+      for (var item
+          in state.questionState.questionCurrent.studentUserRefMap.values) {
+        if (item.status) {
+          _return = true;
+        }
+      }
+    }
+    return _return;
+  }
+
   @override
   ViewModel fromStore() => ViewModel.build(
       isAddOrUpdate: state.questionState.questionCurrent.id == null,
@@ -68,7 +99,9 @@ class ViewModel extends BaseModel<AppState> {
       time: state.questionState.questionCurrent.time,
       error: state.questionState.questionCurrent.error,
       scoreQuestion: state.questionState.questionCurrent.scoreQuestion,
-      situationRef: state.questionState.questionCurrent.situationRef,
+      situationModel: state.questionState.questionCurrent.situationModel,
+      withStudent: _withStudentWithoutTask(),
+      withTask: _withTask(),
       isDelivered: state.questionState.questionCurrent.isDelivered,
       onAdd: (
         String name,
@@ -101,6 +134,7 @@ class ViewModel extends BaseModel<AppState> {
         int time,
         int error,
         int scoreQuestion,
+        bool isDelivered,
         bool isDelete,
         bool resetTask,
       ) {
@@ -113,6 +147,7 @@ class ViewModel extends BaseModel<AppState> {
           time: time,
           error: error,
           scoreQuestion: scoreQuestion,
+          isDelivered: isDelivered,
           isDelete: isDelete,
           resetTask: resetTask,
         ));
@@ -140,7 +175,9 @@ class QuestionEdit extends StatelessWidget {
         time: viewModel.time,
         error: viewModel.error,
         scoreQuestion: viewModel.scoreQuestion,
-        situationRef: viewModel.situationRef,
+        situationModel: viewModel.situationModel,
+        withStudent: viewModel.withStudent,
+        withTask: viewModel.withTask,
         isDelivered: viewModel.isDelivered,
         onSituationSelect: viewModel.onSituationSelect,
         onAdd: viewModel.onAdd,

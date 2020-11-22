@@ -17,11 +17,8 @@ class ExameModel extends FirestoreModel {
   int time;
   int error;
   int scoreQuestion;
-  // function
-  bool isDelivered;
-  bool isProcess;
   Map<String, bool> questionMap;
-  Map<String, bool> studentMap;
+  List<dynamic> questionId;
 
   ExameModel(
     String id, {
@@ -33,10 +30,8 @@ class ExameModel extends FirestoreModel {
     this.time,
     this.error,
     this.scoreQuestion,
-    this.isDelivered,
-    this.isProcess,
-    this.studentMap,
     this.questionMap,
+    this.questionId,
     this.userRef,
     this.name,
     this.description,
@@ -66,26 +61,21 @@ class ExameModel extends FirestoreModel {
     if (map.containsKey('error')) error = map['error'];
     if (map.containsKey('scoreQuestion')) scoreQuestion = map['scoreQuestion'];
     // functions
-    if (map.containsKey('isDelivered')) isDelivered = map['isDelivered'];
-    if (map.containsKey('isProcess')) isProcess = map['isProcess'];
-    if (map["studentMap"] is Map) {
-      studentMap = Map<String, bool>();
-      for (var item in map["studentMap"].entries) {
-        studentMap[item.key] = item.value;
-      }
-    }
     if (map["questionMap"] is Map) {
       questionMap = Map<String, bool>();
       for (var item in map["questionMap"].entries) {
         questionMap[item.key] = item.value;
       }
     }
+    if (map.containsKey('questionId')) questionId = map['questionId'];
+
     return this;
   }
 
   @override
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (id != null) data['id'] = this.id;
     if (this.userRef != null) {
       data['userRef'] = this.userRef.toMapRef();
     }
@@ -103,20 +93,14 @@ class ExameModel extends FirestoreModel {
     if (error != null) data['error'] = this.error;
     if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
     //function
-    if (isDelivered != null) data['isDelivered'] = this.isDelivered;
-    if (isProcess != null) data['isProcess'] = this.isProcess;
-    if (studentMap != null && studentMap is Map) {
-      data["studentMap"] = Map<String, dynamic>();
-      for (var item in studentMap.entries) {
-        data["studentMap"][item.key] = item.value;
-      }
-    }
     if (questionMap != null && questionMap is Map) {
       data["questionMap"] = Map<String, dynamic>();
       for (var item in questionMap.entries) {
         data["questionMap"][item.key] = item.value;
       }
     }
+    if (questionId != null) data['questionId'] = this.questionId;
+
     return data;
   }
 
@@ -136,16 +120,18 @@ class ExameModel extends FirestoreModel {
         '\nTurma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
     _return = _return +
         '\nQuestões: ${questionMap?.length == null ? "0" : questionMap.length}';
-    _return = _return +
-        '\nEstudantes: ${studentMap?.length == null ? "0" : studentMap.length}';
     _return = _return + '\nInício: $start';
     _return = _return + '\nFim: $end';
+    _return =
+        _return + '\nPeso do exame: ${scoreExame == null ? "0" : scoreExame}.';
     _return = _return +
-        '\nPeso do exame: ${scoreExame == null ? "0" : scoreExame}. Peso da questão: ${scoreQuestion == null ? "0" : scoreQuestion}. Tempo: ${time == null ? "0" : time}h. Tentativa: ${attempt == null ? "0" : attempt}. Erro: ${error == null ? "0" : error}%.';
-
-    if (isDelivered) {
-      _return = _return + '\nDistribuindo avaliação';
-    }
+        ' Peso da questão: ${scoreQuestion == null ? "0" : scoreQuestion}.';
+    _return = _return + ' Tempo de resolução: ${time == null ? "0" : time}h.';
+    _return = _return + ' Tentativa: ${attempt == null ? "0" : attempt}.';
+    _return = _return + ' Erro relativo: ${error == null ? "0" : error}%.';
+    _return = _return + '\nDescrição: $description';
+    _return = _return +
+        '\nQuestion: ${questionId?.length != null && questionId.length > 0 ? questionId.length : "NENHUMA"}. ';
     _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }

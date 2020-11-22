@@ -3,6 +3,7 @@ import 'package:aiprof/models/know_model.dart';
 import 'package:aiprof/models/situation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_simple_treeview/flutter_simple_treeview.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FolderListDS extends StatefulWidget {
   final Map<String, Folder> folderMap;
@@ -10,6 +11,8 @@ class FolderListDS extends StatefulWidget {
   final Function(String, bool) onEditFolderCurrent;
   final Function(String, bool) onSetFolderCurrent;
   final Function(SituationModel) onSetSituationInFolderSyncKnowAction;
+  final Function(String) onEditSituation;
+  final Function(String) onSimulationList;
 
   const FolderListDS({
     Key key,
@@ -18,6 +21,8 @@ class FolderListDS extends StatefulWidget {
     this.onSetFolderCurrent,
     this.onSetSituationInFolderSyncKnowAction,
     this.knowModel,
+    this.onSimulationList,
+    this.onEditSituation,
   }) : super(key: key);
 
   @override
@@ -66,16 +71,6 @@ class _FolderListDSState extends State<FolderListDS> {
           height: 5,
         ),
         IconButton(
-          tooltip: 'Editar este folder',
-          icon: Icon(
-            Icons.edit,
-            size: 15,
-          ),
-          onPressed: () {
-            widget.onEditFolderCurrent(folder.id, false);
-          },
-        ),
-        IconButton(
           tooltip: 'Acrescentar subfolder',
           icon: Icon(
             Icons.add,
@@ -85,6 +80,26 @@ class _FolderListDSState extends State<FolderListDS> {
             widget.onEditFolderCurrent(folder.id, true);
           },
         ),
+        IconButton(
+          tooltip: 'Editar este folder',
+          icon: Icon(
+            Icons.edit,
+            size: 15,
+          ),
+          onPressed: () {
+            widget.onEditFolderCurrent(folder.id, false);
+          },
+        ),
+        // IconButton(
+        //   tooltip: 'Criar situação',
+        //   icon: Icon(
+        //     Icons.plus_one,
+        //     size: 15,
+        //   ),
+        //   onPressed: () {
+        //     widget.onEditSituation(null);
+        //   },
+        // ),
         IconButton(
           tooltip: 'Acrescentar situação',
           icon: Icon(
@@ -123,18 +138,34 @@ class _FolderListDSState extends State<FolderListDS> {
         ),
         Text(
             ' ${situationModel.name} - (${situationModel.id.substring(0, 4)})'),
-        // containSituation
-        //     ? IconButton(
-        //         tooltip: 'Editar situação',
-        //         icon: Icon(
-        //           Icons.assignment,
-        //           size: 15,
-        //         ),
-        //         onPressed: () {
-        //           // widget.onInfoSetorValueDataList(situationModel.id);
-        //         },
-        //       )
-        //     : Container(),
+        IconButton(
+          tooltip: 'Editar situação',
+          icon: Icon(
+            Icons.edit,
+            size: 15,
+          ),
+          onPressed: () {
+            widget.onEditSituation(situationModel.id);
+          },
+        ),
+        IconButton(
+          tooltip: 'URL para a situação',
+          icon: Icon(Icons.link),
+          onPressed: () async {
+            if (situationModel?.url != null) {
+              if (await canLaunch(situationModel.url)) {
+                await launch(situationModel.url);
+              }
+            }
+          },
+        ),
+        IconButton(
+          tooltip: 'Ver simulações',
+          icon: Icon(Icons.format_list_numbered),
+          onPressed: () {
+            widget.onSimulationList(situationModel.id);
+          },
+        ),
       ],
     );
   }
