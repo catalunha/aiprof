@@ -8,16 +8,15 @@ import 'package:aiprof/uis/question/question_list_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  ClassroomModel classroomRef;
-  ExameModel exameRef;
-  List<QuestionModel> questionList;
-  Function(String) onEditQuestionCurrent;
-  Function(String) onStudentList;
-  Function(int, int) onChangeOrderQuestionList;
+class ViewModel extends Vm {
+  final ClassroomModel classroomRef;
+  final ExameModel exameRef;
+  final List<QuestionModel> questionList;
+  final Function(String) onEditQuestionCurrent;
+  final Function(String) onStudentList;
+  final Function(int, int) onChangeOrderQuestionList;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.classroomRef,
     @required this.exameRef,
     @required this.questionList,
@@ -29,8 +28,12 @@ class ViewModel extends BaseModel<AppState> {
           exameRef,
           questionList,
         ]);
+}
+
+class Factory extends VmFactory<AppState, QuestionList> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         classroomRef: state.exameState.exameCurrent.classroomRef,
         exameRef: state.exameState.exameCurrent,
         questionList: state.questionState.questionList,
@@ -56,7 +59,7 @@ class QuestionList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       onInit: (store) => store.dispatch(StreamColQuestionAsyncQuestionAction()),
       builder: (context, viewModel) => QuestionListDS(
         classroomRef: viewModel.classroomRef,

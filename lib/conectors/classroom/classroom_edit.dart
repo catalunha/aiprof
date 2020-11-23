@@ -1,21 +1,20 @@
+import 'package:async_redux/async_redux.dart';
 import 'package:aiprof/actions/classroom_action.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/uis/classroom/classroom_edit_ds.dart';
-import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String company;
-  String component;
-  String name;
-  String description;
-  String urlProgram;
-  bool isActive;
-  bool isAddOrUpdate;
-  Function(String, String, String, String, String) onAdd;
-  Function(String, String, String, String, String, bool, bool) onUpdate;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final String company;
+  final String component;
+  final String name;
+  final String description;
+  final String urlProgram;
+  final bool isActive;
+  final bool isAddOrUpdate;
+  final Function(String, String, String, String, String) onAdd;
+  final Function(String, String, String, String, String, bool, bool) onUpdate;
+  ViewModel({
     @required this.company,
     @required this.component,
     @required this.name,
@@ -34,8 +33,12 @@ class ViewModel extends BaseModel<AppState> {
           isActive,
           isAddOrUpdate,
         ]);
+}
+
+class Factory extends VmFactory<AppState, ClassroomEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         isAddOrUpdate: state.classroomState.classroomCurrent.id == null,
         company: state.classroomState.classroomCurrent.company,
         component: state.classroomState.classroomCurrent.component,
@@ -85,7 +88,7 @@ class ClassroomEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => ClassroomEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         company: viewModel.company,

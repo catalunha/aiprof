@@ -8,17 +8,16 @@ import 'package:aiprof/uis/know/folder_list_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:async_redux/async_redux.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  Map<String, Folder> folderMap;
-  KnowModel knowModel;
-  Function(String, bool) onSetFolderCurrent;
-  Function(String, bool) onEditFolderCurrent;
-  Function(SituationModel) onSetSituationInFolderSyncKnowAction;
-  Function(String) onEditSituation;
-  Function(String) onSimulationList;
+class ViewModel extends Vm {
+  final Map<String, Folder> folderMap;
+  final KnowModel knowModel;
+  final Function(String, bool) onSetFolderCurrent;
+  final Function(String, bool) onEditFolderCurrent;
+  final Function(SituationModel) onSetSituationInFolderSyncKnowAction;
+  final Function(String) onEditSituation;
+  final Function(String) onSimulationList;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.folderMap,
     @required this.knowModel,
     @required this.onEditFolderCurrent,
@@ -27,8 +26,12 @@ class ViewModel extends BaseModel<AppState> {
     @required this.onEditSituation,
     @required this.onSimulationList,
   }) : super(equals: [folderMap, knowModel]);
+}
+
+class Factory extends VmFactory<AppState, FolderList> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         folderMap:
             state.knowState.knowCurrent?.folderMap ?? Map<String, Folder>(),
         knowModel: state.knowState.knowCurrent,
@@ -64,7 +67,7 @@ class FolderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => FolderListDS(
         folderMap: viewModel.folderMap,
         knowModel: viewModel.knowModel,

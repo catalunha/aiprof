@@ -7,12 +7,11 @@ import 'package:async_redux/async_redux.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/states/app_state.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  List<SimulationModel> simulationList;
-  List<String> simulationIncosistent;
-  Function(String) onEditSimulation;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final List<SimulationModel> simulationList;
+  final List<String> simulationIncosistent;
+  final Function(String) onEditSimulation;
+  ViewModel({
     @required this.simulationList,
     @required this.simulationIncosistent,
     @required this.onEditSimulation,
@@ -20,6 +19,20 @@ class ViewModel extends BaseModel<AppState> {
           simulationList,
           simulationIncosistent,
         ]);
+}
+
+class Factory extends VmFactory<AppState, SimulationList> {
+  Factory(widget) : super(widget);
+  @override
+  ViewModel fromStore() => ViewModel(
+        simulationList: state.simulationState.simulationList,
+        simulationIncosistent:
+            _simulationIncosistent(state.simulationState?.simulationList),
+        onEditSimulation: (String id) {
+          dispatch(SetSimulationCurrentSyncSimulationAction(id));
+          dispatch(NavigateAction.pushNamed(Routes.simulationEdit));
+        },
+      );
   List<String> _simulationIncosistent(List<SimulationModel> simulationList) {
     List<String> _simulationIncosistent = [];
     List<String> _inputList = [];
@@ -82,17 +95,6 @@ class ViewModel extends BaseModel<AppState> {
     }
     return _simulationIncosistent;
   }
-
-  @override
-  ViewModel fromStore() => ViewModel.build(
-        simulationList: state.simulationState.simulationList,
-        simulationIncosistent:
-            _simulationIncosistent(state.simulationState?.simulationList),
-        onEditSimulation: (String id) {
-          dispatch(SetSimulationCurrentSyncSimulationAction(id));
-          dispatch(NavigateAction.pushNamed(Routes.simulationEdit));
-        },
-      );
 }
 
 class SimulationList extends StatelessWidget {
@@ -100,7 +102,7 @@ class SimulationList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       onInit: (store) =>
           store.dispatch(GetDocsSimulationListAsyncSimulationAction()),
       builder: (context, viewModel) => SimulationListDS(

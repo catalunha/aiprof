@@ -4,14 +4,17 @@ import 'package:aiprof/uis/student/student_edit_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  Function(String) onAdd;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final Function(String) onAdd;
+  ViewModel({
     @required this.onAdd,
   }) : super(equals: []);
+}
+
+class Factory extends VmFactory<AppState, StudentEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         onAdd: (String studentsToImport) {
           // dispatch(BatchDocImportStudentAsyncStudentAction(
           //     studentsToImport: studentsToImport));
@@ -28,7 +31,7 @@ class StudentEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => StudentEditDS(
         onAdd: viewModel.onAdd,
       ),

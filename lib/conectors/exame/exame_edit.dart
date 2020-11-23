@@ -5,23 +5,22 @@ import 'package:aiprof/uis/exame/exame_edit_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String name;
-  String description;
-  dynamic start;
-  dynamic end;
-  int scoreExame;
-  int attempt;
-  int time;
-  int error;
-  int scoreQuestion;
-  bool isDelivered;
-  bool isAddOrUpdate;
-  Function(String, String, dynamic, dynamic, int, int, int, int, int) onAdd;
-  Function(String, String, dynamic, dynamic, int, int, int, int, int, bool)
-      onUpdate;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final String name;
+  final String description;
+  final dynamic start;
+  final dynamic end;
+  final int scoreExame;
+  final int attempt;
+  final int time;
+  final int error;
+  final int scoreQuestion;
+  final bool isAddOrUpdate;
+  final Function(String, String, dynamic, dynamic, int, int, int, int, int)
+      onAdd;
+  final Function(
+      String, String, dynamic, dynamic, int, int, int, int, int, bool) onUpdate;
+  ViewModel({
     @required this.name,
     @required this.description,
     @required this.start,
@@ -46,8 +45,12 @@ class ViewModel extends BaseModel<AppState> {
           scoreQuestion,
           isAddOrUpdate,
         ]);
+}
+
+class Factory extends VmFactory<AppState, ExameEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         isAddOrUpdate: state.exameState.exameCurrent.id == null,
         name: state.exameState.exameCurrent.name,
         description: state.exameState.exameCurrent.description,
@@ -116,7 +119,7 @@ class ExameEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => ExameEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         name: viewModel.name,

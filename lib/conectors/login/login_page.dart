@@ -5,20 +5,22 @@ import 'package:aiprof/uis/login/login_page_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:async_redux/async_redux.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  Function(String) onResetEmail;
-  Function(String, String) onLoginEmailPassword;
-  AuthenticationStatusLogged authenticationStatusLogged;
+class ViewModel extends Vm {
+  final AuthenticationStatusLogged authenticationStatusLogged;
+  final Function(String) onResetEmail;
+  final Function(String, String) onLoginEmailPassword;
 
-  ViewModel();
-
-  ViewModel.build({
+  ViewModel({
     @required this.onLoginEmailPassword,
     @required this.authenticationStatusLogged,
     @required this.onResetEmail,
   }) : super(equals: [authenticationStatusLogged]);
+}
+
+class Factory extends VmFactory<AppState, LoginPage> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         onLoginEmailPassword: (String email, String password) {
           dispatch(LoginEmailPasswordAsyncLoggedAction(
               email: email, password: password));
@@ -38,7 +40,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (BuildContext context, ViewModel viewModel) {
         return LoginPageDS(
           loginEmailPassword: viewModel.onLoginEmailPassword,

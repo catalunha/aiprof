@@ -1,5 +1,4 @@
 import 'package:aiprof/actions/classroom_action.dart';
-import 'package:aiprof/actions/situation_action.dart';
 import 'package:aiprof/models/classroom_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/routes.dart';
@@ -8,17 +7,14 @@ import 'package:aiprof/uis/classroom/classroom_list_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  UserModel userLogged;
-  List<ClassroomModel> classroomList;
-  Function(String) onEditClassroomCurrent;
-  Function(String) onStudentList;
-  Function(String) onExameList;
-  // Function() onSituationList;
-  // Function() onKnowList;
-  Function(int, int) onChangeClassroomListOrder;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final UserModel userLogged;
+  final List<ClassroomModel> classroomList;
+  final Function(String) onEditClassroomCurrent;
+  final Function(String) onStudentList;
+  final Function(String) onExameList;
+  final Function(int, int) onChangeClassroomListOrder;
+  ViewModel({
     @required this.userLogged,
     @required this.classroomList,
     @required this.onEditClassroomCurrent,
@@ -31,8 +27,12 @@ class ViewModel extends BaseModel<AppState> {
           userLogged,
           classroomList,
         ]);
+}
+
+class Factory extends VmFactory<AppState, ClassroomList> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         userLogged: state.loggedState.userModelLogged,
         classroomList: state.classroomState.classroomList,
         onEditClassroomCurrent: (String id) {
@@ -67,7 +67,7 @@ class ClassroomList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       onInit: (store) =>
           store.dispatch(StreamColClassroomAsyncClassroomAction()),
       builder: (context, viewModel) => ClassroomListDS(

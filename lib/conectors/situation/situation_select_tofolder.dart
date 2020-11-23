@@ -8,14 +8,13 @@ import 'package:aiprof/uis/situation/situation_select_tofolder_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  List<SituationModel> situationList;
-  Folder folderCurrent;
-  Function(SituationModel, bool) onSetSituationInKnow;
-  Function(SituationOrder) onSelectOrder;
+class ViewModel extends Vm {
+  final List<SituationModel> situationList;
+  final Folder folderCurrent;
+  final Function(SituationModel, bool) onSetSituationInKnow;
+  final Function(SituationOrder) onSelectOrder;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.situationList,
     @required this.folderCurrent,
     @required this.onSetSituationInKnow,
@@ -24,6 +23,29 @@ class ViewModel extends BaseModel<AppState> {
           situationList,
           folderCurrent,
         ]);
+}
+
+class Factory extends VmFactory<AppState, SituationSelectToFolder> {
+  Factory(widget) : super(widget);
+  @override
+  ViewModel fromStore() => ViewModel(
+        situationList: _situationList(),
+        folderCurrent: state.knowState.folderCurrent,
+        onSetSituationInKnow:
+            (SituationModel situationRef, bool isAddOrRemove) {
+          dispatch(SetSituationInFolderSyncKnowAction(
+            situationRef: situationRef,
+            isAddOrRemove: isAddOrRemove,
+          ));
+        },
+        onSelectOrder: (SituationOrder situationOrder) {
+          // dispatch(
+          //   SetSituationOrderSyncSituationAction(
+          //     situationOrder,
+          //   ),
+          // );
+        },
+      );
   _situationList() {
     List<SituationModel> situationList = [];
     situationList.addAll(state.situationState.situationList);
@@ -42,26 +64,6 @@ class ViewModel extends BaseModel<AppState> {
     }
     return situationList;
   }
-
-  @override
-  ViewModel fromStore() => ViewModel.build(
-        situationList: _situationList(),
-        folderCurrent: state.knowState.folderCurrent,
-        onSetSituationInKnow:
-            (SituationModel situationRef, bool isAddOrRemove) {
-          dispatch(SetSituationInFolderSyncKnowAction(
-            situationRef: situationRef,
-            isAddOrRemove: isAddOrRemove,
-          ));
-        },
-        onSelectOrder: (SituationOrder situationOrder) {
-          // dispatch(
-          //   SetSituationOrderSyncSituationAction(
-          //     situationOrder,
-          //   ),
-          // );
-        },
-      );
 }
 
 class SituationSelectToFolder extends StatelessWidget {
@@ -69,7 +71,7 @@ class SituationSelectToFolder extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       onInit: (store) =>
           store.dispatch(StreamColSituationAsyncSituationAction()),
       builder: (context, viewModel) => SituationSelectToFolderDS(

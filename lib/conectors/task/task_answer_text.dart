@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:async_redux/async_redux.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String id;
+class ViewModel extends Vm {
+  final String id;
+  final List<Input> simulationInput;
+  final List<Output> simulationOutput;
 
-  List<Input> simulationInput;
-  List<Output> simulationOutput;
-
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.id,
     @required this.simulationInput,
     @required this.simulationOutput,
@@ -20,6 +18,18 @@ class ViewModel extends BaseModel<AppState> {
           simulationInput,
           simulationOutput,
         ]);
+}
+
+class Factory extends VmFactory<AppState, TaskAnswerText> {
+  Factory(widget) : super(widget);
+  @override
+  ViewModel fromStore() => ViewModel(
+        id: state.taskState.taskCurrent.id,
+        simulationInput:
+            _simulationInput(state.taskState.taskCurrent.simulationInput),
+        simulationOutput:
+            _simulationOutput(state.taskState.taskCurrent.simulationOutput),
+      );
   List<Input> _simulationInput(Map<String, Input> simulationInput) {
     List<Input> _simulationInput = [];
     if (simulationInput != null) {
@@ -41,15 +51,6 @@ class ViewModel extends BaseModel<AppState> {
     }
     return _simulationOutput;
   }
-
-  @override
-  ViewModel fromStore() => ViewModel.build(
-        id: state.taskState.taskCurrent.id,
-        simulationInput:
-            _simulationInput(state.taskState.taskCurrent.simulationInput),
-        simulationOutput:
-            _simulationOutput(state.taskState.taskCurrent.simulationOutput),
-      );
 }
 
 class TaskAnswerText extends StatelessWidget {
@@ -57,7 +58,7 @@ class TaskAnswerText extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => TaskAnswerTextDS(
         id: viewModel.id,
         simulationInput: viewModel.simulationInput,

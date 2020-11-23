@@ -8,13 +8,12 @@ import 'package:aiprof/routes.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  List<UserModel> studentList;
-  Function() onAddStudent;
-  Function(String) onRemoveStudent;
-  Function(String) onStudentTaskList;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final List<UserModel> studentList;
+  final Function() onAddStudent;
+  final Function(String) onRemoveStudent;
+  final Function(String) onStudentTaskList;
+  ViewModel({
     @required this.studentList,
     @required this.onAddStudent,
     @required this.onRemoveStudent,
@@ -22,8 +21,12 @@ class ViewModel extends BaseModel<AppState> {
   }) : super(equals: [
           studentList,
         ]);
+}
+
+class Factory extends VmFactory<AppState, StudentList> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         studentList: state.studentState.studentList,
         onAddStudent: () {
           dispatch(NavigateAction.pushNamed(Routes.studentEdit));
@@ -45,7 +48,7 @@ class StudentList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       onInit: (store) => store.dispatch(GetDocsStudentListAsyncStudentAction()),
       builder: (context, viewModel) => StudentListDS(
         studentList: viewModel.studentList,

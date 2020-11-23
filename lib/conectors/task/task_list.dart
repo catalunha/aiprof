@@ -6,15 +6,14 @@ import 'package:aiprof/uis/task/task_list_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  List<TaskModel> taskList;
-  int nota;
-  String csv;
-  Function(String) onEditTaskCurrent;
-  Function(String, String, bool) onUpdateOutput;
+class ViewModel extends Vm {
+  final List<TaskModel> taskList;
+  final int nota;
+  final String csv;
+  final Function(String) onEditTaskCurrent;
+  final Function(String, String, bool) onUpdateOutput;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.taskList,
     @required this.nota,
     @required this.csv,
@@ -25,6 +24,27 @@ class ViewModel extends BaseModel<AppState> {
           nota,
           csv,
         ]);
+}
+
+class Factory extends VmFactory<AppState, TaskList> {
+  Factory(widget) : super(widget);
+  @override
+  ViewModel fromStore() => ViewModel(
+        taskList: state.taskState.taskList,
+        nota: _nota(state.taskState.taskList),
+        csv: _csv(state.taskState.taskList),
+        onEditTaskCurrent: (String id) {
+          dispatch(SetTaskCurrentSyncTaskAction(id));
+          dispatch(NavigateAction.pushNamed(Routes.taskEdit));
+        },
+        onUpdateOutput: (String taskId, String outputId, bool isTruOrFalse) {
+          dispatch(UpdateOutputAsyncTaskAction(
+              taskId: taskId,
+              taskSimulationOutputId: outputId,
+              isTruOrFalse: isTruOrFalse));
+        },
+      );
+
   int _nota(List<TaskModel> _taskList) {
     int _nota = 0;
     int _notaOutput;
@@ -58,23 +78,6 @@ class ViewModel extends BaseModel<AppState> {
     }
     return _csv;
   }
-
-  @override
-  ViewModel fromStore() => ViewModel.build(
-        taskList: state.taskState.taskList,
-        nota: _nota(state.taskState.taskList),
-        csv: _csv(state.taskState.taskList),
-        onEditTaskCurrent: (String id) {
-          dispatch(SetTaskCurrentSyncTaskAction(id));
-          dispatch(NavigateAction.pushNamed(Routes.taskEdit));
-        },
-        onUpdateOutput: (String taskId, String outputId, bool isTruOrFalse) {
-          dispatch(UpdateOutputAsyncTaskAction(
-              taskId: taskId,
-              taskSimulationOutputId: outputId,
-              isTruOrFalse: isTruOrFalse));
-        },
-      );
 }
 
 class TaskList extends StatelessWidget {
@@ -82,7 +85,7 @@ class TaskList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       onInit: (store) => store.dispatch(StreamColTaskAsyncTaskAction()),
       builder: (context, viewModel) => TaskListDS(
         taskList: viewModel.taskList,

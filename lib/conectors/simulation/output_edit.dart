@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:async_redux/async_redux.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String name;
-  String type;
-  String value;
-  bool isAddOrUpdate;
-  Function(String, String, String) onAdd;
-  Function(String, String, String, bool) onUpdate;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final String name;
+  final String type;
+  final String value;
+  final bool isAddOrUpdate;
+  final Function(String, String, String) onAdd;
+  final Function(String, String, String, bool) onUpdate;
+  ViewModel({
     @required this.name,
     @required this.type,
     @required this.value,
@@ -25,9 +24,12 @@ class ViewModel extends BaseModel<AppState> {
           value,
           isAddOrUpdate,
         ]);
+}
 
+class Factory extends VmFactory<AppState, OutputEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         isAddOrUpdate: state.simulationState.outputCurrent.id == null,
         name: state.simulationState.outputCurrent.name,
         type: state.simulationState.outputCurrent.type,
@@ -50,7 +52,7 @@ class OutputEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => OutputEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         name: viewModel.name,
