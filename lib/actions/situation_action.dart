@@ -76,6 +76,31 @@ class SetSituationFilterSyncSituationAction extends ReduxAction<AppState> {
   // void after() => dispatch(StreamColSituationAsyncSituationAction());
 }
 
+class SearchSituationSyncSituationAction extends ReduxAction<AppState> {
+  final String name;
+
+  SearchSituationSyncSituationAction(this.name);
+
+  @override
+  AppState reduce() {
+    List<SituationModel> _situationListFilter = [];
+    if (name.isNotEmpty) {
+      state.situationState.situationList.forEach((item) {
+        if (item.name.contains(name)) {
+          _situationListFilter.add(item);
+        }
+      });
+    } else {
+      _situationListFilter.addAll(state.situationState.situationList);
+    }
+    return state.copyWith(
+      situationState: state.situationState.copyWith(
+        situationListFilter: _situationListFilter,
+      ),
+    );
+  }
+}
+
 class SetSituationInQuestionCurrentSyncSituationAction
     extends ReduxAction<AppState> {
   final SituationModel situationRef;
@@ -225,6 +250,7 @@ class GetDocsSituationListAsyncSituationAction extends ReduxAction<AppState> {
     return state.copyWith(
       situationState: state.situationState.copyWith(
         situationList: situationList,
+        situationListFilter: situationList,
         situationCurrent: situationModel,
       ),
     );

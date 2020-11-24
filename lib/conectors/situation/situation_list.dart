@@ -10,10 +10,12 @@ class ViewModel extends Vm {
   final List<SituationModel> situationList;
   final Function(String) onEditSituationCurrent;
   final Function(String) onSimulationList;
+  final Function(String) onSearchSituation;
   ViewModel({
     @required this.situationList,
     @required this.onEditSituationCurrent,
     @required this.onSimulationList,
+    @required this.onSearchSituation,
   }) : super(equals: [
           situationList,
         ]);
@@ -23,7 +25,7 @@ class Factory extends VmFactory<AppState, SituationList> {
   Factory(widget) : super(widget);
   @override
   ViewModel fromStore() => ViewModel(
-        situationList: state.situationState.situationList,
+        situationList: state.situationState.situationListFilter,
         onEditSituationCurrent: (String id) {
           dispatch(SetSituationCurrentSyncSituationAction(id));
           dispatch(NavigateAction.pushNamed(Routes.situationEdit));
@@ -31,6 +33,9 @@ class Factory extends VmFactory<AppState, SituationList> {
         onSimulationList: (String id) {
           dispatch(SetSituationCurrentSyncSituationAction(id));
           dispatch(NavigateAction.pushNamed(Routes.simulationList));
+        },
+        onSearchSituation: (String name) {
+          dispatch(SearchSituationSyncSituationAction(name));
         },
       );
 }
@@ -47,6 +52,7 @@ class SituationList extends StatelessWidget {
         situationList: viewModel.situationList,
         onEditSituationCurrent: viewModel.onEditSituationCurrent,
         onSimulationList: viewModel.onSimulationList,
+        onSearchSituation: viewModel.onSearchSituation,
       ),
     );
   }
