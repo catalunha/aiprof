@@ -2,7 +2,7 @@ import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:aiprof/conectors/components/logout_button.dart';
-import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ClassroomListDS extends StatefulWidget {
@@ -34,7 +34,7 @@ class _ClassroomListDSState extends State<ClassroomListDS> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'Olá ${widget.userLogged.name.split(' ')[0]}. Turmas (${widget.classroomList.length})'),
+            'Olá ${widget.userLogged.name.split(' ')[0]}. Vc tem ${widget.classroomList.length} turma(s).'),
         actions: [
           IconButton(
               icon: Icon(Icons.line_style),

@@ -1,4 +1,4 @@
-import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/models/exame_model.dart';
 import 'package:aiprof/models/question_model.dart';
 import 'package:flutter/material.dart';

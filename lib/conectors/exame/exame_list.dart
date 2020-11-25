@@ -1,5 +1,5 @@
 import 'package:aiprof/actions/exame_action.dart';
-import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/models/exame_model.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/states/app_state.dart';

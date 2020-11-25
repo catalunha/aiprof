@@ -1,4 +1,4 @@
-import 'package:aiprof/conectors/classroom/classroom_list.dart';
+import 'package:aiprof/classroom/classroom_list.dart';
 import 'package:aiprof/conectors/login/login_page.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';

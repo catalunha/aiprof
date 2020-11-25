@@ -1,5 +1,5 @@
-import 'package:aiprof/conectors/classroom/classroom_list.dart';
-import 'package:aiprof/conectors/classroom/classroom_edit.dart';
+import 'package:aiprof/classroom/classroom_list.dart';
+import 'package:aiprof/classroom/classroom_edit.dart';
 import 'package:aiprof/conectors/exame/exame_edit.dart';
 import 'package:aiprof/conectors/exame/exame_list.dart';
 import 'package:aiprof/conectors/know/folder_edit.dart';

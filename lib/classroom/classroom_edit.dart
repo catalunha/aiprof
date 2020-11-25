@@ -1,7 +1,7 @@
 import 'package:async_redux/async_redux.dart';
-import 'package:aiprof/actions/classroom_action.dart';
+import 'package:aiprof/classroom/classroom_action.dart';
 import 'package:aiprof/states/app_state.dart';
-import 'package:aiprof/uis/classroom/classroom_edit_ds.dart';
+import 'package:aiprof/classroom/classroom_edit_ds.dart';
 import 'package:flutter/material.dart';
 
 class ViewModel extends Vm {
@@ -53,7 +53,7 @@ class Factory extends VmFactory<AppState, ClassroomEdit> {
           String description,
           String urlProgram,
         ) {
-          dispatch(AddDocClassroomCurrentAsyncClassroomAction(
+          dispatch(CreateDocClassroomCurrentAsyncClassroomAction(
             company: company,
             component: component,
             name: name,
@@ -69,15 +69,20 @@ class Factory extends VmFactory<AppState, ClassroomEdit> {
             String urlProgram,
             bool isActive,
             bool isDelete) {
-          dispatch(UpdateDocClassroomCurrentAsyncClassroomAction(
-            company: company,
-            component: component,
-            name: name,
-            description: description,
-            urlProgram: urlProgram,
-            isActive: isActive,
-            isDelete: isDelete,
-          ));
+          if (isDelete) {
+            dispatch(DeleteDocClassroomCurrentAsyncClassroomAction(
+                id: state.classroomState.classroomCurrent.id));
+          } else {
+            dispatch(UpdateDocClassroomCurrentAsyncClassroomAction(
+              company: company,
+              component: component,
+              name: name,
+              description: description,
+              urlProgram: urlProgram,
+              isActive: isActive,
+            ));
+          }
+
           dispatch(NavigateAction.pop());
         },
       );

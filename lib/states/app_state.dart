@@ -1,4 +1,4 @@
-import 'package:aiprof/states/classroom_state.dart';
+import 'package:aiprof/classroom/classroom_state.dart';
 import 'package:aiprof/states/exame_state.dart';
 import 'package:aiprof/states/know_state.dart';
 import 'package:aiprof/states/logged_state.dart';

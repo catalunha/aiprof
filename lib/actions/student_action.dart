@@ -1,5 +1,5 @@
 // +++ Actions Sync
-import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';

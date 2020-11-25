@@ -1,9 +1,9 @@
-import 'package:aiprof/actions/classroom_action.dart';
-import 'package:aiprof/models/classroom_model.dart';
+import 'package:aiprof/classroom/classroom_action.dart';
+import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/states/app_state.dart';
-import 'package:aiprof/uis/classroom/classroom_list_ds.dart';
+import 'package:aiprof/classroom/classroom_list_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
@@ -36,15 +36,15 @@ class Factory extends VmFactory<AppState, ClassroomList> {
         userLogged: state.loggedState.userModelLogged,
         classroomList: state.classroomState.classroomList,
         onEditClassroomCurrent: (String id) {
-          dispatch(SetClassroomCurrentSyncClassroomAction(id));
+          dispatch(ReadyClassroomCurrentSyncClassroomAction(id));
           dispatch(NavigateAction.pushNamed(Routes.classroomEdit));
         },
         onStudentList: (String id) {
-          dispatch(SetClassroomCurrentSyncClassroomAction(id));
+          dispatch(ReadyClassroomCurrentSyncClassroomAction(id));
           dispatch(NavigateAction.pushNamed(Routes.studentList));
         },
         onExameList: (String id) {
-          dispatch(SetClassroomCurrentSyncClassroomAction(id));
+          dispatch(ReadyClassroomCurrentSyncClassroomAction(id));
           dispatch(NavigateAction.pushNamed(Routes.exameList));
         },
         // onSituationList: () {
@@ -54,7 +54,7 @@ class Factory extends VmFactory<AppState, ClassroomList> {
         //   dispatch(NavigateAction.pushNamed(Routes.knowList));
         // },
         onChangeClassroomListOrder: (int oldIndex, int newIndex) {
-          dispatch(UpdateDocclassroomIdInUserAsyncClassroomAction(
+          dispatch(ChangeClassroomListOrderAsyncClassroomAction(
             oldIndex: oldIndex,
             newIndex: newIndex,
           ));
@@ -69,7 +69,7 @@ class ClassroomList extends StatelessWidget {
       //debug: this,
       vm: Factory(this),
       onInit: (store) =>
-          store.dispatch(StreamColClassroomAsyncClassroomAction()),
+          store.dispatch(ReadyDocsClassroomListAsyncClassroomAction()),
       builder: (context, viewModel) => ClassroomListDS(
         userLogged: viewModel.userLogged,
         classroomList: viewModel.classroomList,

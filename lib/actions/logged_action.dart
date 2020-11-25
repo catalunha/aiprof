@@ -1,4 +1,4 @@
-import 'package:aiprof/actions/classroom_action.dart';
+import 'package:aiprof/classroom/classroom_action.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/states/types_states.dart';
@@ -112,8 +112,8 @@ class GetDocUserAsyncUserAction extends ReduxAction<AppState> {
     );
   }
 
-  @override
-  void after() => dispatch(StreamColClassroomAsyncClassroomAction());
+  // @override
+  // void after() => dispatch(StreamColClassroomAsyncClassroomAction());
 }
 
 // class UpdateDocUserModelAsyncLoggedAction extends ReduxAction<AppState> {
