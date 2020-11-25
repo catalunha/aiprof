@@ -1,18 +1,19 @@
 import 'package:aiprof/models/situation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:convert';
 
 class SituationListDS extends StatefulWidget {
   final List<SituationModel> situationList;
   final Function(String) onEditSituationCurrent;
   final Function(String) onSimulationList;
+  final Function(String) onSearchSituation;
 
   const SituationListDS({
     Key key,
     this.situationList,
     this.onEditSituationCurrent,
     this.onSimulationList,
+    this.onSearchSituation,
   }) : super(key: key);
 
   @override
@@ -25,64 +26,23 @@ class _SituationListDSState extends State<SituationListDS> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Situações (${widget.situationList.length})'),
-        actions: [
-          // LogoutButton(),
-        ],
       ),
       body: Center(
         child: Container(
           width: 600,
-          child: ListView.builder(
-            itemCount: widget.situationList.length,
-            itemBuilder: (context, index) {
-              final situation = widget.situationList[index];
-              return Card(
-                color: !situation.isActive
-                    ? Colors.brown
-                    : Theme.of(context).cardColor,
-                child: Wrap(
-                  // alignment: WrapAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      width: 400,
-                      child: ListTile(
-                        selected: situation?.isSimulationConsistent != null
-                            ? !situation.isSimulationConsistent
-                            : true,
-                        title: Text('${situation.name}'),
-                        subtitle: Text('${situation.toString()}'),
-                      ),
-                    ),
-                    // SelectableText(json.encode(situation.toMap()).toString()),
-                    IconButton(
-                      tooltip: 'Editar esta situação',
-                      icon: Icon(Icons.edit),
-                      onPressed: () async {
-                        widget.onEditSituationCurrent(situation.id);
-                      },
-                    ),
-                    IconButton(
-                      tooltip: 'URL para a situação',
-                      icon: Icon(Icons.link),
-                      onPressed: () async {
-                        if (situation?.url != null) {
-                          if (await canLaunch(situation.url)) {
-                            await launch(situation.url);
-                          }
-                        }
-                      },
-                    ),
-                    IconButton(
-                      tooltip: 'Lista de simulações',
-                      icon: Icon(Icons.format_list_numbered),
-                      onPressed: () {
-                        widget.onSimulationList(situation.id);
-                      },
-                    ),
-                  ],
+          child: Column(
+            children: [
+              searchName(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: widget.situationList.length,
+                  itemBuilder: (context, index) {
+                    final situation = widget.situationList[index];
+                    return buildCard(situation, context);
+                  },
                 ),
-              );
-            },
+              )
+            ],
           ),
         ),
       ),
@@ -93,5 +53,77 @@ class _SituationListDSState extends State<SituationListDS> {
         },
       ),
     );
+  }
+
+  Widget buildCard(SituationModel situation, BuildContext context) {
+    return Card(
+      color: !situation.isActive ? Colors.brown : Theme.of(context).cardColor,
+      child: Wrap(
+        alignment: WrapAlignment.spaceEvenly,
+        children: [
+          Container(
+            width: 400,
+            child: buildListTile(situation),
+          ),
+          ...icones(situation),
+        ],
+      ),
+    );
+  }
+
+  Widget buildListTile(SituationModel situation) {
+    return ListTile(
+      selected: situation?.isSimulationConsistent != null
+          ? !situation.isSimulationConsistent
+          : true,
+      title: Text('${situation.name}'),
+      subtitle: Text('${situation.toString()}'),
+    );
+  }
+
+  Widget searchName() {
+    return TextField(
+      onChanged: (value) {
+        widget.onSearchSituation(value);
+      },
+      decoration: InputDecoration(
+        hintText: "buscar por nome na situação",
+        prefixIcon: Icon(Icons.search),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> icones(SituationModel situation) {
+    List<Widget> icones = [];
+    icones.add(IconButton(
+      tooltip: 'Editar esta situação',
+      icon: Icon(Icons.edit),
+      onPressed: () async {
+        widget.onEditSituationCurrent(situation.id);
+      },
+    ));
+    icones.add(IconButton(
+      tooltip: 'URL para a situação',
+      icon: Icon(Icons.link),
+      onPressed: () async {
+        if (situation?.url != null) {
+          if (await canLaunch(situation.url)) {
+            await launch(situation.url);
+          }
+        }
+      },
+    ));
+    icones.add(IconButton(
+      tooltip: 'Lista de simulações',
+      icon: Icon(Icons.format_list_numbered),
+      onPressed: () {
+        widget.onSimulationList(situation.id);
+      },
+    ));
+
+    return icones;
   }
 }

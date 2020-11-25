@@ -6,18 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:async_redux/async_redux.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String name;
-  List<Input> input = [];
-  List<Output> output = [];
-  bool isAddOrUpdate;
-  Function(String) onAdd;
-  Function(String, bool) onUpdate;
-  Function(String) onEditInput;
-  Function(String) onEditOutput;
+class ViewModel extends Vm {
+  final String name;
+  final List<Input> input;
+  final List<Output> output;
+  final bool isAddOrUpdate;
+  final Function(String) onAdd;
+  final Function(String, bool) onUpdate;
+  final Function(String) onEditInput;
+  final Function(String) onEditOutput;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.name,
     @required this.input,
     @required this.output,
@@ -32,30 +31,12 @@ class ViewModel extends BaseModel<AppState> {
           output,
           isAddOrUpdate,
         ]);
-  List<Input> _input(Map<String, Input> input) {
-    List<Input> _input = [];
-    if (input != null) {
-      for (var item in input.entries) {
-        _input.add(Input(item.key).fromMap(item.value.toMap()));
-      }
-      _input.sort((a, b) => a.name.compareTo(b.name));
-    }
-    return _input;
-  }
+}
 
-  List<Output> _output(Map<String, Output> output) {
-    List<Output> _output = [];
-    if (output != null) {
-      for (var item in output.entries) {
-        _output.add(Output(item.key).fromMap(item.value.toMap()));
-      }
-      _output.sort((a, b) => a.name.compareTo(b.name));
-    }
-    return _output;
-  }
-
+class Factory extends VmFactory<AppState, SimulationEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         isAddOrUpdate: state.simulationState.simulationCurrent.id == null,
         name: state.simulationState.simulationCurrent.name,
         input: _input(state.simulationState.simulationCurrent.input),
@@ -80,6 +61,27 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(NavigateAction.pushNamed(Routes.outputEdit));
         },
       );
+  List<Input> _input(Map<String, Input> input) {
+    List<Input> _input = [];
+    if (input != null) {
+      for (var item in input.entries) {
+        _input.add(Input(item.key).fromMap(item.value.toMap()));
+      }
+      _input.sort((a, b) => a.name.compareTo(b.name));
+    }
+    return _input;
+  }
+
+  List<Output> _output(Map<String, Output> output) {
+    List<Output> _output = [];
+    if (output != null) {
+      for (var item in output.entries) {
+        _output.add(Output(item.key).fromMap(item.value.toMap()));
+      }
+      _output.sort((a, b) => a.name.compareTo(b.name));
+    }
+    return _output;
+  }
 }
 
 class SimulationEdit extends StatelessWidget {
@@ -87,7 +89,7 @@ class SimulationEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => SimulationEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         name: viewModel.name,

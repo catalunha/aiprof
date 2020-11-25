@@ -4,29 +4,30 @@ import 'package:aiprof/actions/know_action.dart';
 import 'package:aiprof/uis/know/know_edit_ds.dart';
 import 'package:aiprof/states/app_state.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String name;
-  String description;
-  bool isAddOrUpdate;
-  Function(String, String) onAdd;
-  Function(String, String, bool) onUpdate;
-  // Function(InfoCodeModel, bool) onSetInfoCodeInKnow;
+class ViewModel extends Vm {
+  final String name;
+  final String description;
+  final bool isAddOrUpdate;
+  final Function(String, String) onAdd;
+  final Function(String, String, bool) onUpdate;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.name,
     @required this.description,
     @required this.isAddOrUpdate,
     @required this.onAdd,
     @required this.onUpdate,
-    // @required this.onSetInfoCodeInKnow,
   }) : super(equals: [
           name,
           description,
           isAddOrUpdate,
         ]);
+}
+
+class Factory extends VmFactory<AppState, KnowEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         isAddOrUpdate: state.knowState.knowCurrent.id == null,
         name: state.knowState.knowCurrent.name,
         description: state.knowState.knowCurrent.description,
@@ -50,7 +51,7 @@ class KnowEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => KnowEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         name: viewModel.name,

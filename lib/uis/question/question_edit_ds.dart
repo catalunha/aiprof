@@ -62,7 +62,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
   int _time;
   int _error;
   bool _isDelete = false;
-  bool _isDelivered = false;
+  bool _isDelivered;
   bool _resetTask = false;
 
   void validateData() {
@@ -106,6 +106,7 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
     _time = widget.time;
     _error = widget.error;
     _scoreQuestion = widget.scoreQuestion;
+    _isDelivered = widget.isDelivered ?? false;
   }
 
   @override
@@ -221,19 +222,20 @@ class _QuestionEditDSState extends State<QuestionEditDS> {
                   onTap: () => widget.onSituationSelect(),
                 )
               : Container(),
-          (!widget.isAddOrUpdate && widget.withStudent)
-              ? SwitchListTile(
-                  value: _isDelivered,
-                  title: _isDelivered
-                      ? Text('Questão será distribuída.')
-                      : Text('Distribuir esta questão aos alunos ?'),
-                  onChanged: (value) {
-                    setState(() {
-                      _isDelivered = value;
-                    });
-                  },
-                )
-              : Container(),
+          // (!widget.isAddOrUpdate && widget.withStudent)
+          //     ?
+          SwitchListTile(
+            value: _isDelivered,
+            title: _isDelivered
+                ? Text('Questão será distribuída.')
+                : Text('Distribuir esta questão aos alunos ?'),
+            onChanged: (value) {
+              setState(() {
+                _isDelivered = value;
+              });
+            },
+          ),
+          // : Container(),
           (!widget.isAddOrUpdate && widget.withTask)
               ? SwitchListTile(
                   value: _resetTask,

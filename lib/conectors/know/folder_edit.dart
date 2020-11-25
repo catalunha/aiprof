@@ -4,15 +4,14 @@ import 'package:aiprof/uis/know/folder_edit_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String name;
-  String description;
-  bool isAddOrUpdate;
-  Function(String, String) onCreate;
-  Function(String, String, bool) onUpdate;
+class ViewModel extends Vm {
+  final String name;
+  final String description;
+  final bool isAddOrUpdate;
+  final Function(String, String) onCreate;
+  final Function(String, String, bool) onUpdate;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.name,
     @required this.description,
     @required this.isAddOrUpdate,
@@ -23,8 +22,12 @@ class ViewModel extends BaseModel<AppState> {
           description,
           isAddOrUpdate,
         ]);
+}
+
+class Factory extends VmFactory<AppState, FolderEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         isAddOrUpdate: state.knowState.folderCurrent.id == null,
         name: state.knowState.folderCurrent.name,
         description: state.knowState.folderCurrent.description,
@@ -51,7 +54,7 @@ class FolderEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => FolderEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         name: viewModel.name,

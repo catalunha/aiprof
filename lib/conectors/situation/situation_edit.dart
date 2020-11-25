@@ -4,17 +4,16 @@ import 'package:aiprof/uis/situation/situation_edit_ds.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String area;
-  String name;
-  String description;
-  String url;
-  bool isActive;
-  bool isAddOrUpdate;
-  Function(String, String, String, String) onAdd;
-  Function(String, String, String, String, bool, bool) onUpdate;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final String area;
+  final String name;
+  final String description;
+  final String url;
+  final bool isActive;
+  final bool isAddOrUpdate;
+  final Function(String, String, String, String) onAdd;
+  final Function(String, String, String, String, bool, bool) onUpdate;
+  ViewModel({
     @required this.area,
     @required this.name,
     @required this.description,
@@ -31,8 +30,12 @@ class ViewModel extends BaseModel<AppState> {
           isActive,
           isAddOrUpdate,
         ]);
+}
+
+class Factory extends VmFactory<AppState, SituationEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         isAddOrUpdate: state.situationState.situationCurrent.id == null,
         area: state.situationState.situationCurrent.area,
         name: state.situationState.situationCurrent.name,
@@ -79,7 +82,7 @@ class SituationEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => SituationEditDS(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         area: viewModel.area,

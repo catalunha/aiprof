@@ -11,36 +11,36 @@ import 'package:flutter/material.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:async_redux/async_redux.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  String id;
-  ClassroomModel classroomRef;
-  ExameModel exameRef;
-  QuestionModel questionRef;
-  SituationModel situationRef;
-  UserModel studentUserRef;
+class ViewModel extends Vm {
+  final String id;
+  final ClassroomModel classroomRef;
+  final ExameModel exameRef;
+  final QuestionModel questionRef;
+  final SituationModel situationRef;
+  final UserModel studentUserRef;
   //dados do exame
-  dynamic start;
-  dynamic end;
-  int scoreExame;
+  final dynamic start;
+  final dynamic end;
+  final int scoreExame;
   //dados da questao
-  int attempt;
-  int time;
-  int error;
-  int scoreQuestion;
+  final int attempt;
+  final int time;
+  final int error;
+  final int scoreQuestion;
   // gestão da tarefa
-  int attempted;
-  bool isOpen;
+  final int attempted;
+  final bool isOpen;
 
-  List<Input> simulationInput;
-  List<Output> simulationOutput;
+  final List<Input> simulationInput;
+  final List<Output> simulationOutput;
 
-  Function(dynamic, dynamic, int, int, int, int, int, bool, int, bool, bool)
+  final Function(
+          dynamic, dynamic, int, int, int, int, int, bool, int, bool, bool)
       onUpdateTask;
-  Function(String, String, bool) onUpdateOutput;
-  Function() onSeeTextTask;
+  final Function(String, String, bool) onUpdateOutput;
+  final Function() onSeeTextTask;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.id,
     @required this.classroomRef,
     @required this.exameRef,
@@ -80,30 +80,12 @@ class ViewModel extends BaseModel<AppState> {
           simulationInput,
           simulationOutput,
         ]);
-  List<Input> _simulationInput(Map<String, Input> simulationInput) {
-    List<Input> _simulationInput = [];
-    if (simulationInput != null) {
-      for (var item in simulationInput.entries) {
-        _simulationInput.add(Input(item.key).fromMap(item.value.toMap()));
-      }
-      _simulationInput.sort((a, b) => a.name.compareTo(b.name));
-    }
-    return _simulationInput;
-  }
+}
 
-  List<Output> _simulationOutput(Map<String, Output> simulationOutput) {
-    List<Output> _simulationOutput = [];
-    if (simulationOutput != null) {
-      for (var item in simulationOutput.entries) {
-        _simulationOutput.add(Output(item.key).fromMap(item.value.toMap()));
-      }
-      _simulationOutput.sort((a, b) => a.name.compareTo(b.name));
-    }
-    return _simulationOutput;
-  }
-
+class Factory extends VmFactory<AppState, TaskEdit> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         id: state.taskState.taskCurrent.id,
         classroomRef: state.taskState.taskCurrent.classroomRef,
         exameRef: state.taskState.taskCurrent.exameRef,
@@ -162,6 +144,27 @@ class ViewModel extends BaseModel<AppState> {
           dispatch(NavigateAction.pushNamed(Routes.taskAnswerText));
         },
       );
+  List<Input> _simulationInput(Map<String, Input> simulationInput) {
+    List<Input> _simulationInput = [];
+    if (simulationInput != null) {
+      for (var item in simulationInput.entries) {
+        _simulationInput.add(Input(item.key).fromMap(item.value.toMap()));
+      }
+      _simulationInput.sort((a, b) => a.name.compareTo(b.name));
+    }
+    return _simulationInput;
+  }
+
+  List<Output> _simulationOutput(Map<String, Output> simulationOutput) {
+    List<Output> _simulationOutput = [];
+    if (simulationOutput != null) {
+      for (var item in simulationOutput.entries) {
+        _simulationOutput.add(Output(item.key).fromMap(item.value.toMap()));
+      }
+      _simulationOutput.sort((a, b) => a.name.compareTo(b.name));
+    }
+    return _simulationOutput;
+  }
 }
 
 class TaskEdit extends StatelessWidget {
@@ -169,7 +172,7 @@ class TaskEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => TaskEditDS(
         id: viewModel.id,
         classroomRef: viewModel.classroomRef,

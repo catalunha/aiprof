@@ -1,4 +1,3 @@
-import 'package:aiprof/actions/exame_action.dart';
 import 'package:aiprof/actions/question_action.dart';
 import 'package:aiprof/actions/student_action.dart';
 import 'package:aiprof/actions/task_action.dart';
@@ -11,16 +10,15 @@ import 'package:async_redux/async_redux.dart';
 import 'package:aiprof/models/user_model.dart';
 import 'package:aiprof/states/app_state.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  bool waiting;
-  List<UserModel> studentList;
-  QuestionModel questionCurrent;
-  Function(UserModel, bool) onSetStudentInExameCurrent;
-  Function(String) onSetStudentSelected;
-  Function(String) onDeleteStudentInExameCurrent;
-  Function(bool) onSetStudentListInExameCurrent;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final bool waiting;
+  final List<UserModel> studentList;
+  final QuestionModel questionCurrent;
+  final Function(UserModel, bool) onSetStudentInExameCurrent;
+  final Function(String) onSetStudentSelected;
+  final Function(String) onDeleteStudentInExameCurrent;
+  final Function(bool) onSetStudentListInExameCurrent;
+  ViewModel({
     @required this.waiting,
     @required this.studentList,
     @required this.questionCurrent,
@@ -33,8 +31,12 @@ class ViewModel extends BaseModel<AppState> {
           studentList,
           questionCurrent,
         ]);
+}
+
+class Factory extends VmFactory<AppState, StudentSelectToQuestion> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         waiting: state.wait.isWaiting,
         studentList: state.studentState.studentList,
         questionCurrent: state.questionState.questionCurrent,
@@ -69,7 +71,7 @@ class StudentSelectToQuestion extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       onInit: (store) => store.dispatch(GetDocsStudentListAsyncStudentAction()),
       builder: (context, viewModel) => StudentSelectToQuestionDS(
         waiting: viewModel.waiting,

@@ -1,26 +1,27 @@
-import 'package:aiprof/actions/know_action.dart';
 import 'package:aiprof/actions/situation_action.dart';
 import 'package:aiprof/models/know_model.dart';
 import 'package:aiprof/models/situation_model.dart';
-import 'package:aiprof/routes.dart';
 import 'package:aiprof/states/app_state.dart';
 import 'package:aiprof/uis/know/folder_select_toquestion_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:async_redux/async_redux.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  Map<String, Folder> folderMap;
-  KnowModel knowModel;
-  Function(SituationModel) onSetSituationInQuestionCurrent;
+class ViewModel extends Vm {
+  final Map<String, Folder> folderMap;
+  final KnowModel knowModel;
+  final Function(SituationModel) onSetSituationInQuestionCurrent;
 
-  ViewModel();
-  ViewModel.build({
+  ViewModel({
     @required this.folderMap,
     @required this.knowModel,
     @required this.onSetSituationInQuestionCurrent,
   }) : super(equals: [folderMap, knowModel]);
+}
+
+class Factory extends VmFactory<AppState, FolderSelectToQuestionList> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         folderMap:
             state.knowState.knowCurrent?.folderMap ?? Map<String, Folder>(),
         knowModel: state.knowState.knowCurrent,
@@ -39,7 +40,7 @@ class FolderSelectToQuestionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
-      model: ViewModel(),
+      vm: Factory(this),
       builder: (context, viewModel) => FolderSelectToQuestionDS(
         folderMap: viewModel.folderMap,
         knowModel: viewModel.knowModel,

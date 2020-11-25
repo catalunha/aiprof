@@ -6,20 +6,23 @@ import 'package:async_redux/async_redux.dart';
 import 'package:aiprof/models/know_model.dart';
 import 'package:aiprof/states/app_state.dart';
 
-class ViewModel extends BaseModel<AppState> {
-  List<KnowModel> knowList;
-  Function(String) onEditKnowCurrent;
-  Function(String) onFolderList;
-  ViewModel();
-  ViewModel.build({
+class ViewModel extends Vm {
+  final List<KnowModel> knowList;
+  final Function(String) onEditKnowCurrent;
+  final Function(String) onFolderList;
+  ViewModel({
     @required this.knowList,
     @required this.onEditKnowCurrent,
     @required this.onFolderList,
   }) : super(equals: [
           knowList,
         ]);
+}
+
+class Factory extends VmFactory<AppState, KnowList> {
+  Factory(widget) : super(widget);
   @override
-  ViewModel fromStore() => ViewModel.build(
+  ViewModel fromStore() => ViewModel(
         knowList: state.knowState.knowList,
         onEditKnowCurrent: (String id) {
           dispatch(SetKnowCurrentSyncKnowAction(id));
@@ -37,7 +40,7 @@ class KnowList extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
-      model: ViewModel(),
+      vm: Factory(this),
       onInit: (store) => store.dispatch(StreamColExameAsyncExameAction()),
       builder: (context, viewModel) => KnowListDS(
         knowList: viewModel.knowList,
