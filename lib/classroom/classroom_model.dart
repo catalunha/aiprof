@@ -1,5 +1,5 @@
-import 'package:aiprof/models/firestore_model.dart';
-import 'package:aiprof/models/user_model.dart';
+import 'package:aiprof/base/firestore_model.dart';
+import 'package:aiprof/user/user_model.dart';
 
 class ClassroomModel extends FirestoreModel {
   static final String collection = "classroom";

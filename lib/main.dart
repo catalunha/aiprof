@@ -1,6 +1,6 @@
-import 'package:aiprof/actions/logged_action.dart';
+import 'package:aiprof/app_state.dart';
+import 'package:aiprof/login/logged_action.dart';
 import 'package:aiprof/routes.dart';
-import 'package:aiprof/states/app_state.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 

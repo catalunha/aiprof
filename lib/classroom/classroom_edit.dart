@@ -1,7 +1,7 @@
+import 'package:aiprof/app_state.dart';
+import 'package:aiprof/classroom/classroom_edit_ui.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:aiprof/classroom/classroom_action.dart';
-import 'package:aiprof/states/app_state.dart';
-import 'package:aiprof/classroom/classroom_edit_ds.dart';
 import 'package:flutter/material.dart';
 
 class ViewModel extends Vm {
@@ -94,7 +94,7 @@ class ClassroomEdit extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       vm: Factory(this),
-      builder: (context, viewModel) => ClassroomEditDS(
+      builder: (context, viewModel) => ClassroomEditUI(
         isAddOrUpdate: viewModel.isAddOrUpdate,
         company: viewModel.company,
         component: viewModel.component,

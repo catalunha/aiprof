@@ -1,5 +1,5 @@
+import 'package:aiprof/classroom/classroom_enum.dart';
 import 'package:aiprof/classroom/classroom_model.dart';
-import 'package:aiprof/states/types_states.dart';
 import 'package:meta/meta.dart';
 
 @immutable

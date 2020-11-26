@@ -1,11 +1,10 @@
-import 'package:aiprof/actions/logged_action.dart';
+import 'package:aiprof/app_state.dart';
+import 'package:aiprof/classroom/classroom_enum.dart';
 import 'package:aiprof/classroom/classroom_model.dart';
-import 'package:aiprof/models/user_model.dart';
-import 'package:aiprof/states/app_state.dart';
-import 'package:aiprof/states/types_states.dart';
+import 'package:aiprof/login/logged_action.dart';
+import 'package:aiprof/user/user_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 
 // +++ Actions Sync
 class ReadyClassroomCurrentSyncClassroomAction extends ReduxAction<AppState> {
