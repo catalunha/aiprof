@@ -1,5 +1,5 @@
 import 'package:aiprof/app_state.dart';
-import 'package:aiprof/situation/simulation/input_edit_ui.dart';
+import 'package:aiprof/uis/situation/simulation/input_edit_ui.dart';
 import 'package:aiprof/situation/simulation/simulation_action.dart';
 import 'package:flutter/material.dart';
 import 'package:async_redux/async_redux.dart';

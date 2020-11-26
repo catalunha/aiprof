@@ -1,6 +1,6 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/situation/situation_action.dart';
-import 'package:aiprof/situation/situation_edit_ui.dart';
+import 'package:aiprof/uis/situation/situation_edit_ui.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 

@@ -3,7 +3,7 @@ import 'package:aiprof/question/question_action.dart';
 import 'package:aiprof/question/question_model.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/student/student_action.dart';
-import 'package:aiprof/student/student_select_toquestion_ui.dart';
+import 'package:aiprof/uis/student/student_select_toquestion_ui.dart';
 import 'package:aiprof/task/task_action.dart';
 import 'package:aiprof/task/task_enum.dart';
 import 'package:aiprof/user/user_model.dart';

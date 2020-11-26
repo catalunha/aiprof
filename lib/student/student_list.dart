@@ -1,6 +1,6 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/student/student_action.dart';
-import 'package:aiprof/student/student_list_ui.dart';
+import 'package:aiprof/uis/student/student_list_ui.dart';
 import 'package:aiprof/task/task_action.dart';
 import 'package:aiprof/task/task_enum.dart';
 import 'package:aiprof/user/user_model.dart';

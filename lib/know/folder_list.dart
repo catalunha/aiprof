@@ -1,5 +1,5 @@
 import 'package:aiprof/app_state.dart';
-import 'package:aiprof/know/folder_list_ui.dart';
+import 'package:aiprof/uis/know/folder_list_ui.dart';
 import 'package:aiprof/know/know_action.dart';
 import 'package:aiprof/know/know_model.dart';
 import 'package:aiprof/routes.dart';

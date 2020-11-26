@@ -2,7 +2,7 @@ import 'package:aiprof/app_state.dart';
 import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/exame/exame_model.dart';
 import 'package:aiprof/question/question_action.dart';
-import 'package:aiprof/question/question_list_ui.dart';
+import 'package:aiprof/uis/question/question_list_ui.dart';
 import 'package:aiprof/question/question_model.dart';
 import 'package:aiprof/routes.dart';
 import 'package:async_redux/async_redux.dart';

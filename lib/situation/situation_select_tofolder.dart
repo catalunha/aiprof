@@ -4,7 +4,7 @@ import 'package:aiprof/know/know_model.dart';
 import 'package:aiprof/situation/situation_action.dart';
 import 'package:aiprof/situation/situation_enum.dart';
 import 'package:aiprof/situation/situation_model.dart';
-import 'package:aiprof/situation/situation_select_tofolder_ui.dart';
+import 'package:aiprof/uis/situation/situation_select_tofolder_ui.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 

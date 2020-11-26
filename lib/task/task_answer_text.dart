@@ -1,6 +1,6 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/situation/simulation/simulation_model.dart';
-import 'package:aiprof/task/task_answer_text_ui.dart';
+import 'package:aiprof/uis/task/task_answer_text_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:async_redux/async_redux.dart';
 

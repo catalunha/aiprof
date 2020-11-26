@@ -1,7 +1,7 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/login/logged_action.dart';
 import 'package:aiprof/login/login_enum.dart';
-import 'package:aiprof/login/login_page_ds.dart';
+import 'package:aiprof/uis/login/login_page_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:async_redux/async_redux.dart';
 
@@ -42,7 +42,7 @@ class LoginPage extends StatelessWidget {
       //debug: this,
       vm: Factory(this),
       builder: (BuildContext context, ViewModel viewModel) {
-        return LoginPageDS(
+        return LoginPageUI(
           loginEmailPassword: viewModel.onLoginEmailPassword,
           authenticationStatusLogged: viewModel.authenticationStatusLogged,
           sendPasswordResetEmail: viewModel.onResetEmail,

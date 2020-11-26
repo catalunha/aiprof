@@ -1,4 +1,4 @@
-import 'package:aiprof/base/firestore_model.dart';
+import 'package:aiprof/repository/firestore_model.dart';
 
 class UserModel extends FirestoreModel {
   static final String collection = "user";

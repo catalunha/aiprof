@@ -2,23 +2,23 @@ import 'package:aiprof/login/login_enum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class LoginPageDS extends StatefulWidget {
+class LoginPageUI extends StatefulWidget {
   final Function(String) sendPasswordResetEmail;
   final Function(String, String) loginEmailPassword;
   final AuthenticationStatusLogged authenticationStatusLogged;
-  const LoginPageDS({
+  const LoginPageUI({
     Key key,
     this.loginEmailPassword,
     this.authenticationStatusLogged,
     this.sendPasswordResetEmail,
   }) : super(key: key);
   @override
-  LoginPageDSState createState() {
-    return LoginPageDSState();
+  LoginPageUIState createState() {
+    return LoginPageUIState();
   }
 }
 
-class LoginPageDSState extends State<LoginPageDS> {
+class LoginPageUIState extends State<LoginPageUI> {
   final formKey = GlobalKey<FormState>();
   String _userName;
   String _password;

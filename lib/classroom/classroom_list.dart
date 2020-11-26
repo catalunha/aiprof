@@ -2,7 +2,7 @@ import 'package:aiprof/app_state.dart';
 import 'package:aiprof/classroom/classroom_action.dart';
 import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/routes.dart';
-import 'package:aiprof/classroom/classroom_list_ui.dart';
+import 'package:aiprof/uis/classroom/classroom_list_ui.dart';
 import 'package:aiprof/user/user_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,7 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/task/task_action.dart';
-import 'package:aiprof/task/task_list_ui.dart';
+import 'package:aiprof/uis/task/task_list_ui.dart';
 import 'package:aiprof/task/task_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';

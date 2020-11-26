@@ -1,6 +1,6 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/question/question_action.dart';
-import 'package:aiprof/question/question_edit_ui.dart';
+import 'package:aiprof/uis/question/question_edit_ui.dart';
 import 'package:aiprof/routes.dart';
 import 'package:aiprof/situation/situation_model.dart';
 import 'package:async_redux/async_redux.dart';

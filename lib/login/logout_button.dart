@@ -1,6 +1,6 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/login/logged_action.dart';
-import 'package:aiprof/login/logout_button_ui.dart';
+import 'package:aiprof/uis/login/logout_button_ui.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 

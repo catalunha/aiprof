@@ -1,6 +1,6 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/student/student_action.dart';
-import 'package:aiprof/student/student_edit_ui.dart';
+import 'package:aiprof/uis/student/student_edit_ui.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
 

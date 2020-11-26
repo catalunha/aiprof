@@ -1,4 +1,4 @@
-import 'package:aiprof/base/firestore_model.dart';
+import 'package:aiprof/repository/firestore_model.dart';
 import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/user/user_model.dart';
 

@@ -6,7 +6,7 @@ import 'package:aiprof/routes.dart';
 import 'package:aiprof/situation/simulation/simulation_model.dart';
 import 'package:aiprof/situation/situation_model.dart';
 import 'package:aiprof/task/task_action.dart';
-import 'package:aiprof/task/task_edit_ui.dart';
+import 'package:aiprof/uis/task/task_edit_ui.dart';
 import 'package:aiprof/user/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:async_redux/async_redux.dart';

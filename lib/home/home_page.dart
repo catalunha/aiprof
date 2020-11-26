@@ -1,5 +1,5 @@
 import 'package:aiprof/app_state.dart';
-import 'package:aiprof/home/home_page_ui.dart';
+import 'package:aiprof/uis/home/home_page_ui.dart';
 import 'package:aiprof/user/user_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:flutter/material.dart';
