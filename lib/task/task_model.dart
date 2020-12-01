@@ -31,28 +31,7 @@ class TaskModel extends FirestoreModel {
   Map<String, Input> simulationInput = Map<String, Input>();
   Map<String, Output> simulationOutput = Map<String, Output>();
 
-  TaskModel(
-    String id, {
-    this.teacherUserRef,
-    this.classroomRef,
-    this.exameRef,
-    this.questionRef,
-    this.situationRef,
-    this.studentUserRef,
-    this.start,
-    this.end,
-    this.scoreExame,
-    this.attempt,
-    this.time,
-    this.error,
-    this.scoreQuestion,
-    this.started,
-    this.lastSendAnswer,
-    this.attempted,
-    this.isOpen,
-    this.simulationInput,
-    this.simulationOutput,
-  }) : super(id);
+  TaskModel(String id) : super(id);
 
   @override
   TaskModel fromMap(Map<String, dynamic> map) {

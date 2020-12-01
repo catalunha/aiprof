@@ -2,48 +2,30 @@ import 'package:aiprof/repository/firestore_model.dart';
 import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/exame/exame_model.dart';
 import 'package:aiprof/situation/situation_model.dart';
+import 'package:aiprof/student/student_model.dart';
 import 'package:aiprof/user/user_model.dart';
 
 class QuestionModel extends FirestoreModel {
   static final String collection = "question";
-  UserModel userRef;
+  UserModel userRef; //teacherUserRef
   ClassroomModel classroomRef;
   ExameModel exameRef;
   SituationModel situationModel;
   String name;
   String description;
-  //dados do exame
+  //dados herdados do exame
   dynamic start;
   dynamic end;
   int scoreExame;
-  //dados da questao
   int scoreQuestion;
   int attempt;
   int time;
   int error;
   bool isDelivered;
   bool resetTask;
-  Map<String, UserModel> studentUserRefMap;
+  Map<String, StudentModel> studentMap;
 
-  QuestionModel(
-    String id, {
-    this.classroomRef,
-    this.exameRef,
-    this.situationModel,
-    this.start,
-    this.end,
-    this.scoreExame,
-    this.scoreQuestion,
-    this.attempt,
-    this.time,
-    this.error,
-    this.isDelivered,
-    this.userRef,
-    this.name,
-    this.description,
-    this.resetTask,
-    this.studentUserRefMap,
-  }) : super(id);
+  QuestionModel(String id) : super(id);
 
   @override
   QuestionModel fromMap(Map<String, dynamic> map) {
@@ -73,10 +55,10 @@ class QuestionModel extends FirestoreModel {
     if (map.containsKey('scoreExame')) scoreExame = map['scoreExame'];
     if (map.containsKey('scoreQuestion')) scoreQuestion = map['scoreQuestion'];
     if (map.containsKey('isDelivered')) isDelivered = map['isDelivered'];
-    if (map["studentUserRefMap"] is Map) {
-      studentUserRefMap = Map<String, UserModel>();
-      for (var item in map["studentUserRefMap"].entries) {
-        studentUserRefMap[item.key] = UserModel(item.key).fromMap(item.value);
+    if (map["studentMap"] is Map) {
+      studentMap = Map<String, StudentModel>();
+      for (var item in map["studentMap"].entries) {
+        studentMap[item.key] = StudentModel(item.key).fromMap(item.value);
       }
     }
     return this;
@@ -109,10 +91,10 @@ class QuestionModel extends FirestoreModel {
     if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
     if (isDelivered != null) data['isDelivered'] = this.isDelivered;
     if (resetTask != null) data['resetTask'] = this.resetTask;
-    if (studentUserRefMap != null && studentUserRefMap is Map) {
-      data["studentUserRefMap"] = Map<String, dynamic>();
-      for (var item in studentUserRefMap.entries) {
-        data["studentUserRefMap"][item.key] = item.value.toMap();
+    if (studentMap != null && studentMap is Map) {
+      data["studentMap"] = Map<String, dynamic>();
+      for (var item in studentMap.entries) {
+        data["studentMap"][item.key] = item.value.toMap();
       }
     }
     return data;
@@ -136,10 +118,6 @@ class QuestionModel extends FirestoreModel {
         _return + ' Exame: ${exameRef.name} (${exameRef.id.substring(0, 4)})';
     _return = _return +
         '\nSituação: ${situationModel?.name} (${situationModel?.id?.substring(0, 4)})';
-
-    // _return = _return + '\nuserRef.name: ${userRef.name}';
-    // _return = _return + '\nclassroomRef.name: ${classroomRef.name}';
-    // _return = _return + '\nexameRef.name: ${exameRef.name}';
     _return = _return + '\nInício: $start';
     _return = _return + '\nFim: $end';
     _return =
@@ -150,11 +128,8 @@ class QuestionModel extends FirestoreModel {
     _return = _return + ' Tentativa: ${attempt == null ? "0" : attempt}.';
     _return = _return + ' Erro relativo: ${error == null ? "0" : error}%.';
     _return = _return +
-        '\nAlunos: ${studentUserRefMap?.length == null ? "0" : studentUserRefMap.length}';
-
+        '\nAlunos: ${studentMap?.length == null ? "0" : studentMap.length}';
     _return = _return + '\nDistribuída: ${isDelivered ? "Sim" : "Não"}';
-    // _return = _return + '\nsituationModel.name: ${situationModel?.name}';
-    // _return = _return + '\nsimulationRef.name: ${simulationRef.id}';
     _return = _return + '\nid: ${id.substring(0, 4)}';
     return _return;
   }

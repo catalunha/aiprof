@@ -91,30 +91,6 @@ class CurrentUserModelSyncLoggedAction extends ReduxAction<AppState> {
   }
 }
 
-class GetDocUserAsyncUserAction extends ReduxAction<AppState> {
-  @override
-  Future<AppState> reduce() async {
-    print('GetDocUserAsyncUserAction...');
-    Firestore firestore = Firestore.instance;
-
-    final docRef = firestore
-        .collection(UserModel.collection)
-        .document(state.loggedState.userModelLogged.id);
-
-    final docsSnap = await docRef.get();
-
-    UserModel userModel = UserModel(docsSnap.documentID).fromMap(docsSnap.data);
-    return state.copyWith(
-      loggedState: state.loggedState.copyWith(
-        userModelLogged: userModel,
-      ),
-    );
-  }
-
-  // @override
-  // void after() => dispatch(StreamColClassroomAsyncClassroomAction());
-}
-
 // class UpdateDocUserModelAsyncLoggedAction extends ReduxAction<AppState> {
 //   final dynamic dateTimeOnBoard;
 
@@ -287,4 +263,28 @@ class GetDocsUserModelAsyncLoggedAction extends ReduxAction<AppState> {
     //     authenticationStatusLogged: AuthenticationStatusLogged.authenticated));
     return null;
   }
+}
+
+class GetDocUserAsyncUserAction extends ReduxAction<AppState> {
+  @override
+  Future<AppState> reduce() async {
+    print('GetDocUserAsyncUserAction...');
+    Firestore firestore = Firestore.instance;
+
+    final docRef = firestore
+        .collection(UserModel.collection)
+        .document(state.loggedState.userModelLogged.id);
+
+    final docsSnap = await docRef.get();
+
+    UserModel userModel = UserModel(docsSnap.documentID).fromMap(docsSnap.data);
+    return state.copyWith(
+      loggedState: state.loggedState.copyWith(
+        userModelLogged: userModel,
+      ),
+    );
+  }
+
+  // @override
+  // void after() => dispatch(StreamColClassroomAsyncClassroomAction());
 }

@@ -72,7 +72,7 @@ class StudentSelectToQuestion extends StatelessWidget {
     return StoreConnector<AppState, ViewModel>(
       //debug: this,
       vm: Factory(this),
-      onInit: (store) => store.dispatch(GetDocsStudentListAsyncStudentAction()),
+      onInit: (store) => store.dispatch(SetStudentListSyncStudentAction()),
       builder: (context, viewModel) => StudentSelectToQuestionUI(
         waiting: viewModel.waiting,
         studentList: viewModel.studentList,

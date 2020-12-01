@@ -289,11 +289,11 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
   // void after() => dispatch(StreamColExameAsyncExameAction());
 }
 
-class UpdateDocSetQuestionInExameCurrentAsyncExameAction
+class UpdateDocQuestionInExameCurrentAsyncExameAction
     extends ReduxAction<AppState> {
   final String questionId;
   final bool isAddOrRemove;
-  UpdateDocSetQuestionInExameCurrentAsyncExameAction({
+  UpdateDocQuestionInExameCurrentAsyncExameAction({
     this.questionId,
     this.isAddOrRemove,
   });
@@ -306,14 +306,13 @@ class UpdateDocSetQuestionInExameCurrentAsyncExameAction
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
 
-    if (exameModel.questionMap == null)
-      exameModel.questionMap = Map<String, bool>();
+    if (exameModel.questionId == null) exameModel.questionId = List<dynamic>();
     if (isAddOrRemove) {
-      if (!exameModel.questionMap.containsKey(questionId)) {
-        exameModel.questionMap.addAll({questionId: false});
+      if (!exameModel.questionId.contains(questionId)) {
+        exameModel.questionId.add(questionId);
       }
     } else {
-      exameModel.questionMap.remove(questionId);
+      exameModel.questionId.remove(questionId);
     }
     await firestore
         .collection(ExameModel.collection)

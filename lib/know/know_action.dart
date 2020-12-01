@@ -21,7 +21,7 @@ class SetKnowCurrentSyncKnowAction extends ReduxAction<AppState> {
     } else {
       KnowModel knowModelTemp =
           state.knowState.knowList.firstWhere((element) => element.id == id);
-      knowModel = KnowModel.clone(knowModelTemp);
+      knowModel = KnowModel(knowModelTemp.id).fromMap(knowModelTemp.toMap());
     }
     return state.copyWith(
       knowState: state.knowState.copyWith(

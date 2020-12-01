@@ -1,5 +1,6 @@
 import 'package:aiprof/repository/firestore_model.dart';
-import 'package:aiprof/user/user_model.dart';
+import 'package:aiprof/student/student_model.dart';
+import 'package:aiprof/teacher/teacher_model.dart';
 
 class ClassroomModel extends FirestoreModel {
   static final String collection = "classroom";
@@ -8,10 +9,10 @@ class ClassroomModel extends FirestoreModel {
   String component;
   String urlProgram;
   String description;
-  UserModel userRef; //change to teacherUserRef
+  TeacherModel teacher; //change to teacherUserRef
   bool isActive;
-  Map<String, UserModel> studentUserRefMapTemp;
-  Map<String, UserModel> studentUserRefMap;
+  Map<String, StudentModel> studentRefTemp;
+  Map<String, StudentModel> studentRef;
   List<dynamic> exameId;
 
   ClassroomModel(String id) : super(id);
@@ -24,20 +25,19 @@ class ClassroomModel extends FirestoreModel {
     if (map.containsKey('urlProgram')) urlProgram = map['urlProgram'];
     if (map.containsKey('description')) description = map['description'];
     if (map.containsKey('isActive')) isActive = map['isActive'];
-    userRef = map.containsKey('userRef') && map['userRef'] != null
-        ? UserModel(map['userRef']['id']).fromMap(map['userRef'])
+    teacher = map.containsKey('teacher') && map['teacher'] != null
+        ? TeacherModel(map['teacher']['id']).fromMap(map['teacher'])
         : null;
-    if (map["studentUserRefMapTemp"] is Map) {
-      studentUserRefMapTemp = Map<String, UserModel>();
-      for (var item in map["studentUserRefMapTemp"].entries) {
-        studentUserRefMapTemp[item.key] =
-            UserModel(item.key).fromMap(item.value);
+    if (map["studentRefTemp"] is Map) {
+      studentRefTemp = Map<String, StudentModel>();
+      for (var item in map["studentRefTemp"].entries) {
+        studentRefTemp[item.key] = StudentModel(item.key).fromMap(item.value);
       }
     }
-    if (map["studentUserRefMap"] is Map) {
-      studentUserRefMap = Map<String, UserModel>();
-      for (var item in map["studentUserRefMap"].entries) {
-        studentUserRefMap[item.key] = UserModel(item.key).fromMap(item.value);
+    if (map["studentRef"] is Map) {
+      studentRef = Map<String, StudentModel>();
+      for (var item in map["studentRef"].entries) {
+        studentRef[item.key] = StudentModel(item.key).fromMap(item.value);
       }
     }
     if (map.containsKey('exameId')) exameId = map['exameId'];
@@ -53,19 +53,19 @@ class ClassroomModel extends FirestoreModel {
     if (urlProgram != null) data['urlProgram'] = this.urlProgram;
     if (description != null) data['description'] = this.description;
     if (isActive != null) data['isActive'] = this.isActive;
-    if (this.userRef != null) {
-      data['userRef'] = this.userRef.toMapRef();
+    if (this.teacher != null) {
+      data['teacher'] = this.teacher.toMapRef();
     }
-    if (studentUserRefMapTemp != null && studentUserRefMapTemp is Map) {
-      data["studentUserRefMapTemp"] = Map<String, dynamic>();
-      for (var item in studentUserRefMapTemp.entries) {
-        data["studentUserRefMapTemp"][item.key] = item.value.toMapRef();
+    if (studentRefTemp != null && studentRefTemp is Map) {
+      data["studentRefTemp"] = Map<String, dynamic>();
+      for (var item in studentRefTemp.entries) {
+        data["studentRefTemp"][item.key] = item.value.toMapRef();
       }
     }
-    if (studentUserRefMap != null && studentUserRefMap is Map) {
-      data["studentUserRefMap"] = Map<String, dynamic>();
-      for (var item in studentUserRefMap.entries) {
-        data["studentUserRefMap"][item.key] = item.value.toMapRef();
+    if (studentRef != null && studentRef is Map) {
+      data["studentRef"] = Map<String, dynamic>();
+      for (var item in studentRef.entries) {
+        data["studentRef"][item.key] = item.value.toMapRef();
       }
     }
     if (exameId != null) data['exameId'] = this.exameId;
@@ -87,9 +87,9 @@ class ClassroomModel extends FirestoreModel {
     _return = _return + 'Instituição: $company';
     _return = _return + '\nComponente: $component';
     _return = _return +
-        '\nProfessor: ${userRef.name.split(' ')[0]} (${userRef.id.substring(0, 4)})';
+        '\nProfessor: ${teacher.name.split(' ')[0]} (${teacher.id.substring(0, 4)})';
     _return = _return +
-        '\nEstudantes: ${studentUserRefMap?.length != null ? studentUserRefMap.length : 0}';
+        '\nEstudantes: ${studentRef?.length != null ? studentRef.length : 0}';
     _return = _return +
         '\nQuestões: ${exameId?.length != null && exameId.length > 0 ? exameId.length : "NENHUMA"}. ';
     _return = _return + '\nid: ${id.substring(0, 4)}';

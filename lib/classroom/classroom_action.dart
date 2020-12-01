@@ -2,14 +2,15 @@ import 'package:aiprof/app_state.dart';
 import 'package:aiprof/classroom/classroom_enum.dart';
 import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/login/logged_action.dart';
+import 'package:aiprof/teacher/teacher_model.dart';
 import 'package:aiprof/user/user_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // +++ Actions Sync
-class ReadyClassroomCurrentSyncClassroomAction extends ReduxAction<AppState> {
+class SetClassroomCurrentSyncClassroomAction extends ReduxAction<AppState> {
   final String id;
-  ReadyClassroomCurrentSyncClassroomAction(this.id);
+  SetClassroomCurrentSyncClassroomAction(this.id);
   @override
   AppState reduce() {
     ClassroomModel classroomModel = id == null
@@ -19,6 +20,41 @@ class ReadyClassroomCurrentSyncClassroomAction extends ReduxAction<AppState> {
 
     return state.copyWith(
       classroomState: state.classroomState.copyWith(
+        classroomCurrent: classroomModel,
+      ),
+    );
+  }
+}
+
+class SetClassroomListSyncClassroomAction extends ReduxAction<AppState> {
+  final List<ClassroomModel> classroomList;
+  SetClassroomListSyncClassroomAction(this.classroomList);
+  @override
+  AppState reduce() {
+    final Map<String, ClassroomModel> mapping = {
+      for (int i = 0; i < classroomList.length; i++)
+        classroomList[i].id: classroomList[i]
+    };
+    List<ClassroomModel> classroomListTemp = [];
+    for (String id in state.loggedState.userModelLogged.classroomId) {
+      if (mapping.containsKey(id)) {
+        classroomListTemp.add(mapping[id]);
+      }
+    }
+    print('Get2DocsTaskListAsyncTaskAction... ${classroomList.length}');
+    // print('Get2DocsTaskListAsyncTaskAction... $classroomList');
+    print('Get2DocsTaskListAsyncTaskAction... ${classroomListTemp.length}');
+    // print('Get2DocsTaskListAsyncTaskAction... $classroomListTemp');
+
+    ClassroomModel classroomModel;
+    if (state.classroomState.classroomCurrent?.id != null) {
+      classroomModel = state.classroomState.classroomList.firstWhere(
+          (element) => element.id == state.classroomState.classroomCurrent.id);
+    }
+
+    return state.copyWith(
+      classroomState: state.classroomState.copyWith(
+        classroomList: classroomListTemp,
         classroomCurrent: classroomModel,
       ),
     );
@@ -38,15 +74,16 @@ class SetClassroomFilterSyncClassroomAction extends ReduxAction<AppState> {
   }
 }
 
-// class StreamColClassroomAsyncClassroomAction extends ReduxAction<AppState> {
+// +++ Actions Async
+// class StreamDocsClassroomAsyncClassroomAction extends ReduxAction<AppState> {
 //   @override
 //   AppState reduce() {
-//     print('StreamColClassroomAsyncClassroomAction...');
+//     print('StreamDocsClassroomAsyncClassroomAction...');
 //     Firestore firestore = Firestore.instance;
 //     Query collRef;
 //     collRef = firestore
 //         .collection(ClassroomModel.collection)
-//         .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
+//         .where('teacher.id', isEqualTo: state.loggedState.userModelLogged.id);
 
 //     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
@@ -96,49 +133,6 @@ class SetClassroomFilterSyncClassroomAction extends ReduxAction<AppState> {
 //   }
 // }
 
-class ReadyDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
-  @override
-  Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
-    Query collRef;
-    collRef = firestore
-        .collection(ClassroomModel.collection)
-        .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
-    final docsSnap = await collRef.getDocuments();
-
-    List<ClassroomModel> classroomList = docsSnap.documents
-        .map((docSnap) =>
-            ClassroomModel(docSnap.documentID).fromMap(docSnap.data))
-        .toList();
-
-    final Map<String, ClassroomModel> mapping = {
-      for (int i = 0; i < classroomList.length; i++)
-        classroomList[i].id: classroomList[i]
-    };
-    List<ClassroomModel> classroomListTemp = [
-      for (String id in state.loggedState.userModelLogged.classroomId)
-        mapping[id]
-    ];
-
-    print('Get2DocsTaskListAsyncTaskAction... ${classroomList.length}');
-    print('Get2DocsTaskListAsyncTaskAction... ${classroomListTemp.length}');
-
-    ClassroomModel classroomModel;
-    if (state.classroomState.classroomCurrent?.id != null) {
-      classroomModel = state.classroomState.classroomList.firstWhere(
-          (element) => element.id == state.classroomState.classroomCurrent.id);
-    }
-
-    return state.copyWith(
-      classroomState: state.classroomState.copyWith(
-        classroomList: classroomListTemp,
-        classroomCurrent: classroomModel,
-      ),
-    );
-  }
-}
-
-// +++ Actions Async
 class CreateDocClassroomCurrentAsyncClassroomAction
     extends ReduxAction<AppState> {
   final String company;
@@ -161,7 +155,7 @@ class CreateDocClassroomCurrentAsyncClassroomAction
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());
-    classroomModel.userRef = UserModel(state.loggedState.userModelLogged.id)
+    classroomModel.teacher = TeacherModel(state.loggedState.userModelLogged.id)
         .fromMap(state.loggedState.userModelLogged.toMapRef());
     classroomModel.company = company;
     classroomModel.component = component;
@@ -188,6 +182,50 @@ class CreateDocClassroomCurrentAsyncClassroomAction
   @override
   void after() {
     dispatch(ReadyDocsClassroomListAsyncClassroomAction());
+  }
+}
+
+class ReadyDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
+  @override
+  Future<AppState> reduce() async {
+    Firestore firestore = Firestore.instance;
+    Query collRef;
+    collRef = firestore
+        .collection(ClassroomModel.collection)
+        .where('teacher.id', isEqualTo: state.loggedState.userModelLogged.id);
+    final docsSnap = await collRef.getDocuments();
+
+    List<ClassroomModel> classroomList = docsSnap.documents
+        .map((docSnap) =>
+            ClassroomModel(docSnap.documentID).fromMap(docSnap.data))
+        .toList();
+    dispatch(SetClassroomListSyncClassroomAction(classroomList));
+
+    return null;
+    // final Map<String, ClassroomModel> mapping = {
+    //   for (int i = 0; i < classroomList.length; i++)
+    //     classroomList[i].id: classroomList[i]
+    // };
+    // List<ClassroomModel> classroomListTemp = [
+    //   for (String id in state.loggedState.userModelLogged.classroomId)
+    //     mapping[id]
+    // ];
+
+    // print('Get2DocsTaskListAsyncTaskAction... ${classroomList.length}');
+    // print('Get2DocsTaskListAsyncTaskAction... ${classroomListTemp.length}');
+
+    // ClassroomModel classroomModel;
+    // if (state.classroomState.classroomCurrent?.id != null) {
+    //   classroomModel = state.classroomState.classroomList.firstWhere(
+    //       (element) => element.id == state.classroomState.classroomCurrent.id);
+    // }
+
+    // return state.copyWith(
+    //   classroomState: state.classroomState.copyWith(
+    //     classroomList: classroomListTemp,
+    //     classroomCurrent: classroomModel,
+    //   ),
+    // );
   }
 }
 
@@ -281,7 +319,7 @@ class ChangeClassroomListOrderAsyncClassroomAction
   });
   @override
   Future<AppState> reduce() async {
-    print('UpdateDocClassroomCurrentAsyncClassroomAction...');
+    print('ChangeClassroomListOrderAsyncClassroomAction...');
     Firestore firestore = Firestore.instance;
     UserModel userModel = UserModel(state.loggedState.userModelLogged.id)
         .fromMap(state.loggedState.userModelLogged.toMap());
@@ -303,7 +341,6 @@ class ChangeClassroomListOrderAsyncClassroomAction
 
   @override
   void after() {
-    dispatch(GetDocsUserModelAsyncLoggedAction(
-        id: state.loggedState.userModelLogged.id));
+    dispatch(GetDocUserAsyncUserAction());
   }
 }

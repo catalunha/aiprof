@@ -1,11 +1,12 @@
-import 'package:aiprof/user/user_model.dart';
+import 'package:aiprof/student/student_model.dart';
 import 'package:flutter/material.dart';
 
 class StudentListUI extends StatefulWidget {
-  final List<UserModel> studentList;
+  final List<StudentModel> studentList;
   final Function() onAddStudent;
   final Function(String) onRemoveStudent;
   final Function(String) onStudentTaskList;
+  final Function(String) onChangeStudentSelected;
 
   const StudentListUI({
     Key key,
@@ -13,6 +14,7 @@ class StudentListUI extends StatefulWidget {
     this.onAddStudent,
     this.onRemoveStudent,
     this.onStudentTaskList,
+    this.onChangeStudentSelected,
   }) : super(key: key);
 
   @override
@@ -57,6 +59,14 @@ class _StudentListUIState extends State<StudentListUI> {
                     ),
                     Expanded(
                       flex: 8,
+                      // child: CheckboxListTile(
+                      //   title: Text('${student.name}'),
+                      //   subtitle: Text('${student.toString()}'),
+                      //   value: student.isSelected,
+                      //   tristate: true,
+                      //   onChanged: (value) =>
+                      //       widget.onChangeStudentSelected(student.id),
+                      // ),
                       child: ListTile(
                         title: Text('${student.name}'),
                         subtitle: Text('${student.toString()}'),

@@ -64,16 +64,16 @@ class _StudentSelectToQuestionUIState extends State<StudentSelectToQuestionUI> {
                   //     widget.questionCurrent.studentMap.isNotEmpty &&
                   //     widget.questionCurrent.studentMap.containsKey(student.id);
                   bool isStudentInExame =
-                      widget.questionCurrent?.studentUserRefMap != null
-                          ? widget.questionCurrent.studentUserRefMap
+                      widget.questionCurrent?.studentMap != null
+                          ? widget.questionCurrent.studentMap
                               .containsKey(student.id)
                           : false;
                   bool isStudentInExameWithTaskAplly =
-                      widget.questionCurrent?.studentUserRefMap != null
-                          ? (widget.questionCurrent.studentUserRefMap
+                      widget.questionCurrent?.studentMap != null
+                          ? (widget.questionCurrent.studentMap
                                   .containsKey(student.id) &&
-                              widget.questionCurrent
-                                  ?.studentUserRefMap[student.id].status)
+                              widget.questionCurrent?.studentMap[student.id]
+                                  .isDelivered)
                           : false;
                   // bool isStudentInExameWithTaskAplly = isStudentInExame &&
                   //     widget.questionCurrent.studentMap[student.id];

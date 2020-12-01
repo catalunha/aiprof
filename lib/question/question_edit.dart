@@ -134,10 +134,9 @@ class Factory extends VmFactory<AppState, QuestionEdit> {
       });
   bool _withStudentWithoutTask() {
     bool _return = false;
-    if (state.questionState.questionCurrent.studentUserRefMap != null) {
-      for (var item
-          in state.questionState.questionCurrent.studentUserRefMap.values) {
-        if (!item.status) {
+    if (state.questionState.questionCurrent.studentMap != null) {
+      for (var item in state.questionState.questionCurrent.studentMap.values) {
+        if (!item.isDelivered) {
           _return = true;
         }
       }
@@ -147,10 +146,9 @@ class Factory extends VmFactory<AppState, QuestionEdit> {
 
   bool _withTask() {
     bool _return = false;
-    if (state.questionState.questionCurrent.studentUserRefMap != null) {
-      for (var item
-          in state.questionState.questionCurrent.studentUserRefMap.values) {
-        if (item.status) {
+    if (state.questionState.questionCurrent.studentMap != null) {
+      for (var item in state.questionState.questionCurrent.studentMap.values) {
+        if (item.isDelivered) {
           _return = true;
         }
       }

@@ -2,6 +2,7 @@
 import 'package:aiprof/app_state.dart';
 import 'package:aiprof/classroom/classroom_model.dart';
 import 'package:aiprof/student/student_enum.dart';
+import 'package:aiprof/student/student_model.dart';
 import 'package:aiprof/user/user_model.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,35 +46,54 @@ class SetStudentFilterSyncStudentAction extends ReduxAction<AppState> {
     );
   }
 
-  void after() => dispatch(GetDocsStudentListAsyncStudentAction());
+  void after() => dispatch(SetStudentListSyncStudentAction());
 }
 
-class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
+class ChangeStudentSelectedSyncStudentAction extends ReduxAction<AppState> {
+  final String studentId;
+
+  ChangeStudentSelectedSyncStudentAction(this.studentId);
+
+  @override
+  AppState reduce() {
+    print(studentId);
+    List<StudentModel> studentList = [];
+    studentList.addAll(state.studentState.studentList);
+    for (var i = 0; i < studentList.length; i++) {
+      print(studentList[i].id);
+      print(studentList[i].isSelected);
+
+      if (studentList[i].id == studentId) {
+        print('1');
+        if (studentList[i].isSelected == null) {
+          print('2');
+          studentList[i].isSelected = true;
+        } else {
+          print('3');
+          studentList[i].isSelected = !studentList[i].isSelected;
+        }
+      }
+      print(studentList[i].isSelected);
+    }
+    return state.copyWith(
+      studentState: state.studentState.copyWith(
+        studentList: studentList,
+      ),
+    );
+  }
+}
+
+class SetStudentListSyncStudentAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
-    print('GetDocsStudentListAsyncStudentAction...');
-    // Firestore firestore = Firestore.instance;
-    // Query collRef;
-    // collRef = firestore
-    //     .collection(UserModel.collection)
-    //     .where('isTeacher', isEqualTo: false)
-    //     .where('classroomId',
-    //         arrayContains: state.classroomState.classroomCurrent.id);
+    print('SetStudentListSyncStudentAction...');
 
-    // final docsSnap = await collRef.getDocuments();
-
-    // final listDocs = docsSnap.documents
-    //     .map((docSnap) => UserModel(docSnap.documentID).fromMap(docSnap.data))
-    //     .toList();
-    // print(listDocs);
-    // listDocs.sort((a, b) => a.name.compareTo(b.name));
-    List<UserModel> studentList = [];
-    if (state.classroomState.classroomCurrent.studentUserRefMap != null) {
+    List<StudentModel> studentList = [];
+    if (state.classroomState.classroomCurrent.studentRef != null) {
       for (var item
-          in state.classroomState.classroomCurrent.studentUserRefMap.entries) {
-        studentList.add(UserModel(item.key).fromMap(item.value.toMap()));
+          in state.classroomState.classroomCurrent.studentRef.entries) {
+        studentList.add(StudentModel(item.key).fromMap(item.value.toMap()));
       }
-      // print(studentList);
       studentList.sort((a, b) => a.name.compareTo(b.name));
     }
     return state.copyWith(
@@ -242,7 +262,7 @@ class RemoveStudentForClassroomAsyncStudentAction
   }
 
   @override
-  void after() => dispatch(GetDocsStudentListAsyncStudentAction());
+  void after() => dispatch(SetStudentListSyncStudentAction());
 }
 
 // 123456;abc@gmail.com;Abc abc
@@ -262,8 +282,7 @@ class UpdateStudentMapTempAsyncStudentAction extends ReduxAction<AppState> {
             .fromMap(state.classroomState.classroomCurrent.toMap());
     StudentsToImport _studentsToImport = StudentsToImport(studentListString);
 
-    classroomModel.studentUserRefMapTemp =
-        _studentsToImport.studentStringToMap();
+    classroomModel.studentRefTemp = _studentsToImport.studentStringToMap();
 
     await firestore
         .collection(ClassroomModel.collection)
@@ -272,18 +291,16 @@ class UpdateStudentMapTempAsyncStudentAction extends ReduxAction<AppState> {
     return null;
   }
 
-  // @override
-  // Object wrapError(error) => UserException("ATENÇÃO:", cause: error);
-  // @override
-  // void after() => dispatch(GetDocsStudentListAsyncStudentAction());
+  @override
+  void after() => dispatch(SetStudentListSyncStudentAction());
 }
 
 class StudentsToImport {
   final String studentsToImport;
 
   StudentsToImport(this.studentsToImport);
-  Map<String, UserModel> studentStringToMap() {
-    Map<String, UserModel> studentMap = {};
+  Map<String, StudentModel> studentStringToMap() {
+    Map<String, StudentModel> studentMap = {};
     List<List<String>> studentList = List<List<String>>();
     studentList.clear();
     String matricula;
@@ -319,8 +336,8 @@ class StudentsToImport {
             // // print('::nome::$nome');
             studentList.add([matricula, email, nome]);
             String id = uuid.Uuid().v4();
-            studentMap[id] =
-                UserModel(id, code: matricula, email: email, name: nome);
+            studentMap[id] = StudentModel(id)
+                .fromMap({'code': matricula, 'email': email, 'name': nome});
           }
         }
       }

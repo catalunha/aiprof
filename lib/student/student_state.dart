@@ -1,12 +1,12 @@
 import 'package:aiprof/student/student_enum.dart';
-import 'package:aiprof/user/user_model.dart';
+import 'package:aiprof/student/student_model.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class StudentState {
   final StudentFilter studentFilter;
-  final List<UserModel> studentList;
-  final UserModel studentCurrent;
+  final List<StudentModel> studentList;
+  final StudentModel studentCurrent;
   StudentState({
     this.studentFilter,
     this.studentList,
@@ -14,13 +14,13 @@ class StudentState {
   });
   factory StudentState.initialState() => StudentState(
         studentFilter: StudentFilter.isActive,
-        studentList: <UserModel>[],
+        studentList: <StudentModel>[],
         studentCurrent: null,
       );
   StudentState copyWith({
     StudentFilter studentFilter,
-    List<UserModel> studentList,
-    UserModel studentCurrent,
+    List<StudentModel> studentList,
+    StudentModel studentCurrent,
   }) =>
       StudentState(
         studentFilter: studentFilter ?? this.studentFilter,

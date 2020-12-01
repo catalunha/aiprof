@@ -68,8 +68,6 @@ class _ClassroomListUIState extends State<ClassroomListUI> {
       list.add(
         Card(
           key: ValueKey(classroom),
-          color:
-              !classroom.isActive ? Colors.brown : Theme.of(context).cardColor,
           child: Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: [
@@ -110,25 +108,6 @@ class _ClassroomListUIState extends State<ClassroomListUI> {
                   widget.onExameList(classroom.id);
                 },
               ),
-              // IconButton(
-              //   tooltip: 'Lista de Situaçãos',
-              //   icon: Icon(Icons.help),
-              //   onPressed: () async {
-              //     widget.onSituationList();
-              //   },
-              // ),
-              // IconButton(
-              //   icon: Icon(Icons.folder_open),
-              //   onPressed: () async {
-              //     widget.onKnowList();
-              //   },
-              // ),
-              // IconButton(
-              //   icon: Icon(Icons.assignment),
-              //   onPressed: () async {
-              //     // onStudentList(classroom.id);
-              //   },
-              // ),
             ],
           ),
         ),

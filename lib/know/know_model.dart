@@ -9,21 +9,8 @@ class KnowModel extends FirestoreModel {
   String description;
   Map<String, Folder> folderMap;
 
-  KnowModel(
-    String id, {
-    this.userRef,
-    this.name,
-    this.description,
-    this.folderMap,
-  }) : super(id);
-  KnowModel.clone(KnowModel origin)
-      : this(
-          origin.id,
-          userRef: origin.userRef,
-          name: origin.name,
-          description: origin.description,
-          folderMap: origin.folderMap,
-        );
+  KnowModel(String id) : super(id);
+
   @override
   KnowModel fromMap(Map<String, dynamic> map) {
     if (map.containsKey('name')) name = map['name'];

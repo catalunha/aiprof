@@ -4,6 +4,7 @@ import 'package:aiprof/exame/exame_action.dart';
 import 'package:aiprof/exame/exame_model.dart';
 import 'package:aiprof/question/question_enum.dart';
 import 'package:aiprof/question/question_model.dart';
+import 'package:aiprof/student/student_model.dart';
 import 'package:aiprof/task/task_model.dart';
 import 'package:aiprof/user/user_model.dart';
 import 'package:async_redux/async_redux.dart';
@@ -251,7 +252,7 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
             .document(questionModel.id)
             .delete();
         //TODO: Eliminar esta função
-        dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
+        dispatch(UpdateDocQuestionInExameCurrentAsyncExameAction(
           questionId: questionModel.id,
           isAddOrRemove: false,
         ));
@@ -296,7 +297,7 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
 
 class UpdateDocSetStudentInQuestionCurrentAsyncQuestionAction
     extends ReduxAction<AppState> {
-  final UserModel studentModel;
+  final StudentModel studentModel;
   final bool isAddOrRemove;
   UpdateDocSetStudentInQuestionCurrentAsyncQuestionAction({
     this.studentModel,
@@ -310,17 +311,17 @@ class UpdateDocSetStudentInQuestionCurrentAsyncQuestionAction
         QuestionModel(state.questionState.questionCurrent.id)
             .fromMap(state.questionState.questionCurrent.toMap());
 
-    if (questionModel.studentUserRefMap == null)
-      questionModel.studentUserRefMap = Map<String, UserModel>();
+    if (questionModel.studentMap == null)
+      questionModel.studentMap = Map<String, UserModel>();
     if (isAddOrRemove) {
-      if (!questionModel.studentUserRefMap.containsKey(studentModel.id)) {
-        studentModel.status = false;
-        questionModel.studentUserRefMap.addAll({studentModel.id: studentModel});
+      if (!questionModel.studentMap.containsKey(studentModel.id)) {
+        studentModel.isDelivered = false;
+        questionModel.studentMap.addAll({studentModel.id: studentModel});
         questionModel.isDelivered = false;
       }
     }
     //  else {
-    //   questionModel.studentUserRefMap.remove(studentModel.id);
+    //   questionModel.studentMap.remove(studentModel.id);
     // }
     await firestore
         .collection(QuestionModel.collection)
@@ -357,19 +358,19 @@ class UpdateDocsSetStudentListInQuestionCurrentAsyncQuestionAction
         QuestionModel(state.questionState.questionCurrent.id)
             .fromMap(state.questionState.questionCurrent.toMap());
 
-    if (questionModel.studentUserRefMap == null)
-      questionModel.studentUserRefMap = Map<String, UserModel>();
-    for (UserModel student in state.studentState.studentList) {
+    if (questionModel.studentMap == null)
+      questionModel.studentMap = Map<String, UserModel>();
+    for (StudentModel student in state.studentState.studentList) {
       if (isAddOrRemove) {
-        if (!questionModel.studentUserRefMap.containsKey(student.id)) {
-          student.status = false;
-          questionModel.studentUserRefMap.addAll({student.id: student});
+        if (!questionModel.studentMap.containsKey(student.id)) {
+          student.isDelivered = false;
+          questionModel.studentMap.addAll({student.id: student});
           questionModel.isDelivered = false;
         }
       }
       // else {
-      //   if (questionModel.studentUserRefMap.containsKey(student.id)) {
-      //     questionModel.studentUserRefMap.remove(student.id);
+      //   if (questionModel.studentMap.containsKey(student.id)) {
+      //     questionModel.studentMap.remove(student.id);
       //   }
       // }
     }
@@ -405,15 +406,15 @@ class DeleteStudentInQuestionCurrentAndTaskAsyncQuestionAction
         QuestionModel(state.questionState.questionCurrent.id)
             .fromMap(state.questionState.questionCurrent.toMap());
 
-    questionModel.studentUserRefMap.remove(studentId);
-    questionModel.isDelivered = true;
-    if (questionModel.studentUserRefMap != null) {
-      for (var item in questionModel.studentUserRefMap.values) {
-        if (!item.status) {
-          questionModel.isDelivered = false;
-        }
-      }
-    }
+    questionModel.studentMap.remove(studentId);
+    // questionModel.isDelivered = true;
+    // if (questionModel.studentMap != null) {
+    //   for (var item in questionModel.studentMap.values) {
+    //     if (!item.isDelivered) {
+    //       questionModel.isDelivered = false;
+    //     }
+    //   }
+    // }
 
     await firestore
         .collection(QuestionModel.collection)

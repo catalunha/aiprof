@@ -4,38 +4,22 @@ import 'package:aiprof/user/user_model.dart';
 
 class ExameModel extends FirestoreModel {
   static final String collection = "exame";
-  UserModel userRef; //teacher
+  UserModel userRef; //teacherUserRef
   ClassroomModel classroomRef;
   String name;
   String description;
-  //dados do exame
+  //dados para herdar na questao
   dynamic start;
   dynamic end;
   int scoreExame;
-  //dados para herdar na questao
   int attempt;
   int time;
   int error;
   int scoreQuestion;
-  Map<String, bool> questionMap;
+  // Map<String, bool> questionMap; //remover este campo
   List<dynamic> questionId;
 
-  ExameModel(
-    String id, {
-    this.classroomRef,
-    this.start,
-    this.end,
-    this.scoreExame,
-    this.attempt,
-    this.time,
-    this.error,
-    this.scoreQuestion,
-    this.questionMap,
-    this.questionId,
-    this.userRef,
-    this.name,
-    this.description,
-  }) : super(id);
+  ExameModel(String id) : super(id);
 
   @override
   ExameModel fromMap(Map<String, dynamic> map) {
@@ -60,13 +44,6 @@ class ExameModel extends FirestoreModel {
     if (map.containsKey('time')) time = map['time'];
     if (map.containsKey('error')) error = map['error'];
     if (map.containsKey('scoreQuestion')) scoreQuestion = map['scoreQuestion'];
-    // functions
-    if (map["questionMap"] is Map) {
-      questionMap = Map<String, bool>();
-      for (var item in map["questionMap"].entries) {
-        questionMap[item.key] = item.value;
-      }
-    }
     if (map.containsKey('questionId')) questionId = map['questionId'];
 
     return this;
@@ -92,13 +69,13 @@ class ExameModel extends FirestoreModel {
     if (time != null) data['time'] = this.time;
     if (error != null) data['error'] = this.error;
     if (scoreQuestion != null) data['scoreQuestion'] = this.scoreQuestion;
-    //function
-    if (questionMap != null && questionMap is Map) {
-      data["questionMap"] = Map<String, dynamic>();
-      for (var item in questionMap.entries) {
-        data["questionMap"][item.key] = item.value;
-      }
-    }
+    // //function
+    // if (questionMap != null && questionMap is Map) {
+    //   data["questionMap"] = Map<String, dynamic>();
+    //   for (var item in questionMap.entries) {
+    //     data["questionMap"][item.key] = item.value;
+    //   }
+    // }
     if (questionId != null) data['questionId'] = this.questionId;
 
     return data;
@@ -118,8 +95,8 @@ class ExameModel extends FirestoreModel {
         '\nProfessor: ${userRef.name.split(' ')[0]} (${userRef.id.substring(0, 4)})';
     _return = _return +
         '\nTurma: ${classroomRef.name} (${classroomRef.id.substring(0, 4)}).';
-    _return = _return +
-        '\nQuestões: ${questionMap?.length == null ? "0" : questionMap.length}';
+    // _return = _return +
+    //     '\nQuestões: ${questionMap?.length == null ? "0" : questionMap.length}';
     _return = _return + '\nInício: $start';
     _return = _return + '\nFim: $end';
     _return =
