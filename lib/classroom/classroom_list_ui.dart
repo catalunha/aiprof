@@ -68,16 +68,17 @@ class _ClassroomListUIState extends State<ClassroomListUI> {
       list.add(
         Card(
           key: ValueKey(classroom),
-          color:
-              !classroom.isActive ? Colors.brown : Theme.of(context).cardColor,
+          color: classroom?.isActive != null && !classroom.isActive
+              ? Colors.brown
+              : Theme.of(context).cardColor,
           child: Wrap(
             alignment: WrapAlignment.spaceEvenly,
             children: [
               Container(
                 width: 400,
                 child: ListTile(
-                  title: Text('${classroom.name}'),
-                  subtitle: Text('${classroom.toString()}'),
+                  title: Text('${classroom?.name}'),
+                  subtitle: Text('${classroom?.toString()}'),
                 ),
               ),
               IconButton(
