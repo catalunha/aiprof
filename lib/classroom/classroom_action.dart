@@ -42,7 +42,7 @@ class SetClassroomFilterSyncClassroomAction extends ReduxAction<AppState> {
 //   @override
 //   AppState reduce() {
 //     print('StreamColClassroomAsyncClassroomAction...');
-//     Firestore firestore = Firestore.instance;
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 //     Query collRef;
 //     collRef = firestore
 //         .collection(ClassroomModel.collection)
@@ -51,9 +51,9 @@ class SetClassroomFilterSyncClassroomAction extends ReduxAction<AppState> {
 //     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
 //     Stream<List<ClassroomModel>> streamList = streamQuerySnapshot.map(
-//         (querySnapshot) => querySnapshot.documents
-//             .map((docSnapshot) => ClassroomModel(docSnapshot.documentID)
-//                 .fromMap(docSnapshot.data))
+//         (querySnapshot) => querySnapshot.docs
+//             .map((docSnapshot) => ClassroomModel(docSnapshot.id)
+//                 .fromMap(docSnapshot.data()))
 //             .toList());
 //     streamList.listen((List<ClassroomModel> list) {
 //       dispatch(GetDocsClassroomListAsyncClassroomAction(list));
@@ -99,16 +99,15 @@ class SetClassroomFilterSyncClassroomAction extends ReduxAction<AppState> {
 class ReadyDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query collRef;
     collRef = firestore
         .collection(ClassroomModel.collection)
         .where('userRef.id', isEqualTo: state.loggedState.userModelLogged.id);
-    final docsSnap = await collRef.getDocuments();
+    final docsSnap = await collRef.get();
 
-    List<ClassroomModel> classroomList = docsSnap.documents
-        .map((docSnap) =>
-            ClassroomModel(docSnap.documentID).fromMap(docSnap.data))
+    List<ClassroomModel> classroomList = docsSnap.docs
+        .map((docSnap) => ClassroomModel(docSnap.id).fromMap(docSnap.data()))
         .toList();
 
     final Map<String, ClassroomModel> mapping = {
@@ -157,7 +156,7 @@ class CreateDocClassroomCurrentAsyncClassroomAction
   @override
   Future<AppState> reduce() async {
     print('CreateDocClassroomCurrentAsyncClassroomAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());
@@ -173,12 +172,12 @@ class CreateDocClassroomCurrentAsyncClassroomAction
     final classroomAdded = await firestore
         .collection(ClassroomModel.collection)
         .add(classroomModel.toMap());
-    if (classroomAdded.documentID != null) {
+    if (classroomAdded.id != null) {
       await firestore
           .collection(UserModel.collection)
-          .document(state.loggedState.userModelLogged.id)
-          .updateData({
-        'classroomId': FieldValue.arrayUnion([classroomAdded.documentID])
+          .doc(state.loggedState.userModelLogged.id)
+          .update({
+        'classroomId': FieldValue.arrayUnion([classroomAdded.id])
       });
       await dispatchFuture(GetDocUserAsyncUserAction());
     }
@@ -211,7 +210,7 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
   @override
   Future<AppState> reduce() async {
     print('UpdateDocClassroomCurrentAsyncClassroomAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());
@@ -225,8 +224,8 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
 
     await firestore
         .collection(ClassroomModel.collection)
-        .document(classroomModel.id)
-        .updateData(classroomModel.toMap());
+        .doc(classroomModel.id)
+        .update(classroomModel.toMap());
 
     return null;
   }
@@ -247,15 +246,15 @@ class DeleteDocClassroomCurrentAsyncClassroomAction
   @override
   Future<AppState> reduce() async {
     print('DeleteDocClassroomCurrentAsyncClassroomAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     await firestore
         .collection(UserModel.collection)
-        .document(state.loggedState.userModelLogged.id)
-        .updateData({
+        .doc(state.loggedState.userModelLogged.id)
+        .update({
       'classroomId': FieldValue.arrayRemove([id])
     });
     await dispatchFuture(GetDocUserAsyncUserAction());
-    await firestore.collection(ClassroomModel.collection).document(id).delete();
+    await firestore.collection(ClassroomModel.collection).doc(id).delete();
 
     return state.copyWith(
       classroomState: state.classroomState.copyWith(
@@ -282,7 +281,7 @@ class ChangeClassroomListOrderAsyncClassroomAction
   @override
   Future<AppState> reduce() async {
     print('UpdateDocClassroomCurrentAsyncClassroomAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     UserModel userModel = UserModel(state.loggedState.userModelLogged.id)
         .fromMap(state.loggedState.userModelLogged.toMap());
     int _newIndex = newIndex;
@@ -295,8 +294,8 @@ class ChangeClassroomListOrderAsyncClassroomAction
 
     await firestore
         .collection(UserModel.collection)
-        .document(state.loggedState.userModelLogged.id)
-        .updateData({'classroomId': userModel.classroomId});
+        .doc(state.loggedState.userModelLogged.id)
+        .update({'classroomId': userModel.classroomId});
 
     return null;
   }

@@ -40,12 +40,10 @@ class SetSituationCurrentASyncSituationAction extends ReduxAction<AppState> {
   Future<AppState> reduce() async {
     SituationModel situationModel;
 
-    Firestore firestore = Firestore.instance;
-    DocumentSnapshot docRef = await firestore
-        .collection(SituationModel.collection)
-        .document(id)
-        .get();
-    situationModel = SituationModel(docRef.documentID).fromMap(docRef.data);
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentSnapshot docRef =
+        await firestore.collection(SituationModel.collection).doc(id).get();
+    situationModel = SituationModel(docRef.id).fromMap(docRef.data());
 
     return state.copyWith(
       situationState: state.situationState.copyWith(
@@ -112,14 +110,14 @@ class SetSituationInQuestionCurrentSyncSituationAction
           QuestionModel(state.questionState.questionCurrent.id)
               .fromMap(state.questionState.questionCurrent.toMap());
 
-      Firestore firestore = Firestore.instance;
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
       final situationSnap = await firestore
           .collection(SituationModel.collection)
-          .document(situationRef.id)
+          .doc(situationRef.id)
           .get();
 
       questionCurrent.situationModel =
-          SituationModel(situationSnap.documentID).fromMap(situationSnap.data);
+          SituationModel(situationSnap.id).fromMap(situationSnap.data());
 
       return state.copyWith(
         questionState: state.questionState.copyWith(
@@ -137,7 +135,7 @@ class StreamColSituationAsyncSituationAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     print('StreamColSituationAsyncSituationAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query collRef;
     // //+++ collection old
     // if (state.situationState.situationFilter == SituationFilter.isactive) {
@@ -154,9 +152,9 @@ class StreamColSituationAsyncSituationAction extends ReduxAction<AppState> {
     // }
     // final docsSnapOld = await collRef.getDocuments();
 
-    // List<SituationModel> listDocsOld = docsSnapOld.documents
+    // List<SituationModel> listDocsOld = docsSnapOld.docs
     //     .map((docSnapOld) =>
-    //         SituationModel(docSnapOld.documentID).fromMap(docSnapOld.data))
+    //         SituationModel(docSnapOld.id).fromMap(docSnapOld.data()))
     //     .toList();
     // //--- collection old
 
@@ -176,9 +174,9 @@ class StreamColSituationAsyncSituationAction extends ReduxAction<AppState> {
     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
     Stream<List<SituationModel>> streamList = streamQuerySnapshot.map(
-        (querySnapshot) => querySnapshot.documents
-            .map((docSnapshot) => SituationModel(docSnapshot.documentID)
-                .fromMap(docSnapshot.data))
+        (querySnapshot) => querySnapshot.docs
+            .map((docSnapshot) =>
+                SituationModel(docSnapshot.id).fromMap(docSnapshot.data()))
             .toList());
     streamList.listen((List<SituationModel> list) {
       dispatch(GetDocsSituationListAsyncSituationAction(list));
@@ -186,9 +184,9 @@ class StreamColSituationAsyncSituationAction extends ReduxAction<AppState> {
     return null;
     // final docsSnapNew = await collRef.getDocuments();
 
-    // List<SituationModel> listDocsNew = docsSnapNew.documents
+    // List<SituationModel> listDocsNew = docsSnapNew.docs
     //     .map((docSnapNew) =>
-    //         SituationModel(docSnapNew.documentID).fromMap(docSnapNew.data))
+    //         SituationModel(docSnapNew.id).fromMap(docSnapNew.data()))
     //     .toList();
     //--- collection new
 
@@ -268,7 +266,7 @@ class AddDocSituationCurrentAsyncSituationAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('AddDocSituationCurrentAsyncSituationAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     SituationModel situationModel =
         SituationModel(state.situationState.situationCurrent.id)
             .fromMap(state.situationState.situationCurrent.toMap());
@@ -284,12 +282,12 @@ class AddDocSituationCurrentAsyncSituationAction extends ReduxAction<AppState> {
     await firestore
         .collection(SituationModel.collection)
         .add(situationModel.toMap());
-    // if (situationAdded.documentID != null) {
+    // if (situationAdded.id != null) {
     //   await firestore
     //       .collection(UserModel.collection)
-    //       .document(state.loggedState.userModelLogged.id)
-    //       .updateData({
-    //     'situationId': FieldValue.arrayUnion([situationAdded.documentID])
+    //       .doc(state.loggedState.userModelLogged.id)
+    //       .update({
+    //     'situationId': FieldValue.arrayUnion([situationAdded.id])
     //   });
     // }
     return null;
@@ -321,14 +319,14 @@ class UpdateDocSituationCurrentAsyncSituationAction
   @override
   Future<AppState> reduce() async {
     print('UpdateDocSituationCurrentAsyncSituationAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     SituationModel situationModel =
         SituationModel(state.situationState.situationCurrent.id)
             .fromMap(state.situationState.situationCurrent.toMap());
     if (isDelete) {
       await firestore
           .collection(SituationModel.collection)
-          .document(situationModel.id)
+          .doc(situationModel.id)
           .delete();
     } else {
       situationModel.area = area;
@@ -338,16 +336,16 @@ class UpdateDocSituationCurrentAsyncSituationAction
       // if (situationModel.isActive != isActive && isActive) {
       //   await firestore
       //       .collection(UserModel.collection)
-      //       .document(state.loggedState.userModelLogged.id)
-      //       .updateData({
+      //       .doc(state.loggedState.userModelLogged.id)
+      //       .update({
       //     'situationId': FieldValue.arrayUnion([situationModel.id])
       //   });
       // }
       // if (situationModel.isActive != isActive && !isActive) {
       //   await firestore
       //       .collection(UserModel.collection)
-      //       .document(state.loggedState.userModelLogged.id)
-      //       .updateData({
+      //       .doc(state.loggedState.userModelLogged.id)
+      //       .update({
       //     'situationId': FieldValue.arrayRemove([situationModel.id])
       //   });
       // }
@@ -355,8 +353,8 @@ class UpdateDocSituationCurrentAsyncSituationAction
 
       await firestore
           .collection(SituationModel.collection)
-          .document(situationModel.id)
-          .updateData(situationModel.toMap());
+          .doc(situationModel.id)
+          .update(situationModel.toMap());
     }
     return null;
   }
@@ -377,7 +375,7 @@ class UpdateFieldDocSituationCurrentAsyncSituationAction
   @override
   Future<AppState> reduce() async {
     print('UpdateFieldDocSituationCurrentAsyncSituationAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     // SituationModel situationModel =
     //     SituationModel(state.situationState.situationCurrent.id)
     //         .fromMap(state.situationState.situationCurrent.toMap());
@@ -388,16 +386,16 @@ class UpdateFieldDocSituationCurrentAsyncSituationAction
     // // if (situationModel.isActive != isActive && isActive) {
     // //   await firestore
     // //       .collection(UserModel.collection)
-    // //       .document(state.loggedState.userModelLogged.id)
-    // //       .updateData({
+    // //       .doc(state.loggedState.userModelLogged.id)
+    // //       .update({
     // //     'situationId': FieldValue.arrayUnion([situationModel.id])
     // //   });
     // // }
     // // if (situationModel.isActive != isActive && !isActive) {
     // //   await firestore
     // //       .collection(UserModel.collection)
-    // //       .document(state.loggedState.userModelLogged.id)
-    // //       .updateData({
+    // //       .doc(state.loggedState.userModelLogged.id)
+    // //       .update({
     // //     'situationId': FieldValue.arrayRemove([situationModel.id])
     // //   });
     // // }
@@ -405,8 +403,8 @@ class UpdateFieldDocSituationCurrentAsyncSituationAction
 
     await firestore
         .collection(SituationModel.collection)
-        .document(state.situationState.situationCurrent.id)
-        .updateData({field: value});
+        .doc(state.situationState.situationCurrent.id)
+        .update({field: value});
     return null;
   }
 }

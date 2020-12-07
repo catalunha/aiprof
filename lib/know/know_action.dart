@@ -53,7 +53,7 @@ class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('StreamColExameAsyncExameAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query collRef;
 
     if (state.knowState.knowFilter == KnowFilter.isActive) {
@@ -70,9 +70,9 @@ class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
     Stream<List<KnowModel>> streamList = streamQuerySnapshot.map(
-        (querySnapshot) => querySnapshot.documents
+        (querySnapshot) => querySnapshot.docs
             .map((docSnapshot) =>
-                KnowModel(docSnapshot.documentID).fromMap(docSnapshot.data))
+                KnowModel(docSnapshot.id).fromMap(docSnapshot.data()))
             .toList());
     streamList.listen((List<KnowModel> knowList) {
       dispatch(GetDocsKnowListAsyncKnowAction(knowList));
@@ -80,9 +80,9 @@ class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
     return null;
     // final docsSnapNew = await collRef.getDocuments();
 
-    // List<KnowModel> listDocs = docsSnapNew.documents
+    // List<KnowModel> listDocs = docsSnapNew.docs
     //     .map((docSnapNew) =>
-    //         KnowModel(docSnapNew.documentID).fromMap(docSnapNew.data))
+    //         KnowModel(docSnapNew.id).fromMap(docSnapNew.data()))
     //     .toList();
 
     // return state.copyWith(
@@ -118,7 +118,7 @@ class AddDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('AddDocKnowCurrentAsyncKnowAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     KnowModel knowModel = KnowModel(state.knowState.knowCurrent.id)
         .fromMap(state.knowState.knowCurrent.toMap());
     knowModel.userRef = UserModel(state.loggedState.userModelLogged.id)
@@ -146,21 +146,21 @@ class UpdateDocKnowCurrentAsyncKnowAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('UpdateDocKnowCurrentAsyncKnowAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     KnowModel knowModel = KnowModel(state.knowState.knowCurrent.id)
         .fromMap(state.knowState.knowCurrent.toMap());
     if (isDelete) {
       await firestore
           .collection(KnowModel.collection)
-          .document(knowModel.id)
+          .doc(knowModel.id)
           .delete();
     } else {
       knowModel.name = name;
       knowModel.description = description;
       await firestore
           .collection(KnowModel.collection)
-          .document(knowModel.id)
-          .updateData(knowModel.toMap());
+          .doc(knowModel.id)
+          .update(knowModel.toMap());
     }
     return null;
   }
@@ -344,7 +344,7 @@ class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
   });
   @override
   AppState reduce() {
-    // Firestore firestore = Firestore.instance;
+    // FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     Folder folder;
     folder = state.knowState.folderCurrent;
@@ -362,8 +362,8 @@ class SetSituationInFolderSyncKnowAction extends ReduxAction<AppState> {
     knowModel.folderMap[folder.id] = folder;
     // await firestore
     //     .collection(KnowModel.collection)
-    //     .document(knowModel.id)
-    //     .updateData(knowModel.toMap());
+    //     .doc(knowModel.id)
+    //     .update(knowModel.toMap());
 
     return state.copyWith(
       knowState: state.knowState.copyWith(

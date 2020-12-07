@@ -23,7 +23,7 @@ class AuthenticationStatusSyncLoggedAction extends ReduxAction<AppState> {
 }
 
 class LoginSuccessfulSyncLoggedAction extends ReduxAction<AppState> {
-  final FirebaseUser firebaseUser;
+  final User firebaseUser;
 
   LoginSuccessfulSyncLoggedAction({this.firebaseUser});
   @override
@@ -95,15 +95,15 @@ class GetDocUserAsyncUserAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('GetDocUserAsyncUserAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     final docRef = firestore
         .collection(UserModel.collection)
-        .document(state.loggedState.userModelLogged.id);
+        .doc(state.loggedState.userModelLogged.id);
 
     final docsSnap = await docRef.get();
 
-    UserModel userModel = UserModel(docsSnap.documentID).fromMap(docsSnap.data);
+    UserModel userModel = UserModel(docsSnap.id).fromMap(docsSnap.data());
     return state.copyWith(
       loggedState: state.loggedState.copyWith(
         userModelLogged: userModel,
@@ -124,11 +124,11 @@ class GetDocUserAsyncUserAction extends ReduxAction<AppState> {
 //   @override
 //   Future<AppState> reduce() async {
 //     print('UpdateDocUserModelAsyncLoggedAction...');
-//     Firestore firestore = Firestore.instance;
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 //     UserModel userModel = state.loggedState.userModelLogged;
 //     final colRef =
-//         firestore.collection(UserModel.collection).document(userModel.id);
-//     await colRef.updateData(userModel.toMap());
+//         firestore.collection(UserModel.collection).doc(userModel.id);
+//     await colRef.update(userModel.toMap());
 //     return state.copyWith(
 //       loggedState: state.loggedState.copyWith(
 //         userModelLogged: userModel,
@@ -146,27 +146,36 @@ class LoginEmailPasswordAsyncLoggedAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('LoginEmailPasswordAsyncLoggedAction...');
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    FirebaseUser firebaseUser;
+    // FirebaseAuth _auth = FirebaseAuth.instance;
+    // User firebaseUser;
     try {
       store.dispatch(AuthenticationStatusSyncLoggedAction(
           authenticationStatusLogged:
               AuthenticationStatusLogged.authenticating));
-      final AuthResult authResult = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      firebaseUser = authResult.user;
-      assert(!firebaseUser.isAnonymous);
-      assert(await firebaseUser.getIdToken() != null);
-      final FirebaseUser currentUser = await _auth.currentUser();
-      assert(firebaseUser.uid == currentUser.uid);
-      store.dispatch(
-          LoginSuccessfulSyncLoggedAction(firebaseUser: firebaseUser));
+      print('LoginEmailPasswordAsyncLoggedAction...$email $password');
+      final UserCredential authResult = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      // firebaseUser = authResult.user;
+      print(
+          'LoginEmailPasswordAsyncLoggedAction: ${authResult.user.displayName}');
+      // assert(!firebaseUser.isAnonymous);
+      // assert(await firebaseUser.getIdToken() != null);
+      // final User currentUser = _auth.currentUser;
+      // assert(firebaseUser.uid == currentUser.uid);
+      // store.dispatch(
+      //     LoginSuccessfulSyncLoggedAction(firebaseUser: firebaseUser));
 
       print(
-          '_userLoginEmailPasswordAction: Login bem sucedido. ${currentUser.uid}');
+          '_userLoginEmailPasswordAction: Login bem sucedido. ${authResult.user.uid}');
+      // } on FirebaseAuthException catch (error) {
     } catch (error) {
+      if (error.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (error.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
       store.dispatch(LoginFailSyncLoggedAction(error: error));
-      print('_userLoginEmailPasswordAction: Login MAL sucedido. $error');
+      print('LoginEmailPasswordAsyncLoggedAction: Login MAL sucedido. $error');
     }
     return null;
   }
@@ -229,13 +238,14 @@ class OnAuthStateChangedSyncLoggedAction extends ReduxAction<AppState> {
   Future<AppState> reduce() async {
     print('OnAuthStateChangedSyncLoggedAction...');
 
-    FirebaseAuth.instance.onAuthStateChanged.listen((event) {
-      if (event == null) {
+    FirebaseAuth.instance.authStateChanges().listen((User user) {
+      if (user == null) {
         print('User is currently signed out!');
       } else {
         print('User is signed in!');
-        print('Auth de ultimo login uid: ${event.uid}');
-        store.dispatch(LoginSuccessfulSyncLoggedAction(firebaseUser: event));
+        print('Auth de ultimo login uid: ${user.uid}');
+        print('User: ${user.toString()}');
+        store.dispatch(LoginSuccessfulSyncLoggedAction(firebaseUser: user));
       }
     });
     return null;
@@ -249,15 +259,15 @@ class GetDocsUserModelAsyncLoggedAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('GetDocsUserModelAsyncLoggedAction...$id');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    final docRef = firestore.collection(UserModel.collection).document(id);
+    final docRef = firestore.collection(UserModel.collection).doc(id);
     final docSnap = await docRef.get();
     if (docSnap.exists) {
-      if (docSnap.data['isTeacher']) {
+      if (docSnap.data()['isTeacher']) {
         print('É professor liberar acesso.');
         dispatch(CurrentUserModelSyncLoggedAction(
-            userModel: UserModel(docSnap.documentID).fromMap(docSnap.data)));
+            userModel: UserModel(docSnap.id).fromMap(docSnap.data())));
         store.dispatch(AuthenticationStatusSyncLoggedAction(
             authenticationStatusLogged:
                 AuthenticationStatusLogged.authenticated));
@@ -274,7 +284,7 @@ class GetDocsUserModelAsyncLoggedAction extends ReduxAction<AppState> {
     }
     // if (docSnap.exists) {
     //   dispatch(CurrentUserModelSyncLoggedAction(
-    //       userModel: UserModel(docSnap.documentID).fromMap(docSnap.data)));
+    //       userModel: UserModel(docSnap.id).fromMap(docSnap.data())));
     // } else {
     //   dispatch(CurrentUserModelSyncLoggedAction(
     //       userModel: UserModel(id)

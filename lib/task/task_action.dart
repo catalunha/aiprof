@@ -48,7 +48,7 @@ class StreamColTaskAsyncTaskAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     print('StreamColTaskAsyncTaskAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query collRef;
     if (state.taskState.taskFilter == TaskFilter.whereClassroomAndStudent) {
       collRef = firestore
@@ -70,9 +70,9 @@ class StreamColTaskAsyncTaskAction extends ReduxAction<AppState> {
     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
     Stream<List<TaskModel>> streamList = streamQuerySnapshot.map(
-        (querySnapshot) => querySnapshot.documents
+        (querySnapshot) => querySnapshot.docs
             .map((docSnapshot) =>
-                TaskModel(docSnapshot.documentID).fromMap(docSnapshot.data))
+                TaskModel(docSnapshot.id).fromMap(docSnapshot.data()))
             .toList());
     streamList.listen((List<TaskModel> list) {
       dispatch(GetDocsTaskListAsyncTaskAction(list));
@@ -143,14 +143,14 @@ class UpdateDocTaskCurrentAsyncTaskAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('UpdateDocQuestionCurrentAsyncQuestionAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     TaskModel taskModel = TaskModel(state.taskState.taskCurrent.id)
         .fromMap(state.taskState.taskCurrent.toMap());
 
     if (isDelete) {
       await firestore
           .collection(TaskModel.collection)
-          .document(taskModel.id)
+          .doc(taskModel.id)
           .delete();
     } else {
       taskModel.start = start;
@@ -168,8 +168,8 @@ class UpdateDocTaskCurrentAsyncTaskAction extends ReduxAction<AppState> {
       }
       await firestore
           .collection(TaskModel.collection)
-          .document(taskModel.id)
-          .updateData(taskModel.toMap());
+          .doc(taskModel.id)
+          .update(taskModel.toMap());
     }
     return null;
   }
@@ -189,13 +189,10 @@ class UpdateOutputAsyncTaskAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('UpdateDocQuestionCurrentAsyncQuestionAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-    await firestore
-        .collection(TaskModel.collection)
-        .document(taskId)
-        .updateData(
-            {'simulationOutput.$taskSimulationOutputId.right': isTruOrFalse});
+    await firestore.collection(TaskModel.collection).doc(taskId).update(
+        {'simulationOutput.$taskSimulationOutputId.right': isTruOrFalse});
 
     return null;
   }

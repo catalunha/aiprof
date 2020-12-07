@@ -84,7 +84,7 @@ class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     print('StreamColExameAsyncExameAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query collRef;
     collRef = firestore
         .collection(ExameModel.collection)
@@ -94,9 +94,9 @@ class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
     Stream<List<ExameModel>> streamList = streamQuerySnapshot.map(
-        (querySnapshot) => querySnapshot.documents
+        (querySnapshot) => querySnapshot.docs
             .map((docSnapshot) =>
-                ExameModel(docSnapshot.documentID).fromMap(docSnapshot.data))
+                ExameModel(docSnapshot.id).fromMap(docSnapshot.data()))
             .toList());
     streamList.listen((List<ExameModel> exameList) {
       dispatch(GetDocsExameListAsyncExameAction(exameList));
@@ -167,7 +167,7 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('AddDocExameCurrentAsyncExameAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
     exameModel.userRef = UserModel(state.loggedState.userModelLogged.id)
@@ -184,18 +184,18 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     exameModel.time = time;
     exameModel.error = error;
     exameModel.scoreQuestion = scoreQuestion;
-    var docRefExame = firestore.collection(ExameModel.collection).document();
-    print('Novo Exame: ${docRefExame.documentID}');
+    var docRefExame = firestore.collection(ExameModel.collection).doc();
+    print('Novo Exame: ${docRefExame.id}');
     await firestore
         .collection(ClassroomModel.collection)
-        .document(state.classroomState.classroomCurrent.id)
-        .updateData({
-      'exameId': FieldValue.arrayUnion([docRefExame.documentID])
+        .doc(state.classroomState.classroomCurrent.id)
+        .update({
+      'exameId': FieldValue.arrayUnion([docRefExame.id])
     }).then((value) async {
       await firestore
           .collection(ExameModel.collection)
-          .document(docRefExame.documentID)
-          .setData(exameModel.toMap());
+          .doc(docRefExame.id)
+          .set(exameModel.toMap());
     });
 
     // await firestore
@@ -204,9 +204,9 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
     //     .then((exame) {
     //   firestore
     //       .collection(ClassroomModel.collection)
-    //       .document(state.classroomState.classroomCurrent.id)
-    //       .updateData({
-    //     'exameId': FieldValue.arrayUnion([exame.documentID])
+    //       .doc(state.classroomState.classroomCurrent.id)
+    //       .update({
+    //     'exameId': FieldValue.arrayUnion([exame.id])
     //   });
     // });
 
@@ -245,21 +245,18 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('UpdateDocExameCurrentAsyncExameAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
 
     if (isDelete) {
       await firestore
           .collection(ClassroomModel.collection)
-          .document(state.classroomState.classroomCurrent.id)
-          .updateData({
+          .doc(state.classroomState.classroomCurrent.id)
+          .update({
         'exameId': FieldValue.arrayRemove([exameModel.id])
       }).then((value) {
-        firestore
-            .collection(ExameModel.collection)
-            .document(exameModel.id)
-            .delete();
+        firestore.collection(ExameModel.collection).doc(exameModel.id).delete();
         return state.copyWith(
           exameState: state.exameState.copyWith(
             exameCurrent: null,
@@ -279,8 +276,8 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
 
       await firestore
           .collection(ExameModel.collection)
-          .document(exameModel.id)
-          .updateData(exameModel.toMap());
+          .doc(exameModel.id)
+          .update(exameModel.toMap());
     }
     return null;
   }
@@ -301,7 +298,7 @@ class UpdateDocSetQuestionInExameCurrentAsyncExameAction
   Future<AppState> reduce() async {
     print(
         'UpdateDocSetQuestionInExameCurrentAsyncExameAction: $questionId $isAddOrRemove');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
@@ -317,8 +314,8 @@ class UpdateDocSetQuestionInExameCurrentAsyncExameAction
     }
     await firestore
         .collection(ExameModel.collection)
-        .document(exameModel.id)
-        .updateData(exameModel.toMap());
+        .doc(exameModel.id)
+        .update(exameModel.toMap());
     return state.copyWith(
       exameState: state.exameState.copyWith(
         exameCurrent: exameModel,
@@ -346,7 +343,7 @@ class UpdateOrderExameListAsyncExameAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('UpdateOrderExameListInDocClassroomAsyncExameAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());
@@ -360,8 +357,8 @@ class UpdateOrderExameListAsyncExameAction extends ReduxAction<AppState> {
 
     await firestore
         .collection(ClassroomModel.collection)
-        .document(state.classroomState.classroomCurrent.id)
-        .updateData({'exameId': classroomModel.exameId});
+        .doc(state.classroomState.classroomCurrent.id)
+        .update({'exameId': classroomModel.exameId});
 
     return null;
   }

@@ -26,8 +26,9 @@ dependencies:
 
   async_redux: ^6.0.2
 
-  cloud_firestore: ^0.13.7
-  firebase_auth: ^0.16.1
+  firebase_core: ^0.5.3
+  cloud_firestore: ^0.14.4
+  firebase_auth: ^0.18.4
 
   meta: ^1.1.7
   uuid: ^2.2.0

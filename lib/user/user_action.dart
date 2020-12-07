@@ -27,13 +27,13 @@
 //   @override
 //   Future<AppState> reduce() async {
 //     print('GetDocsUserListAsyncUserAction...');
-//     Firestore firestore = Firestore.instance;
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 //     final collRef = firestore.collection(UserModel.collection);
 //     final docsSnap = await collRef.getDocuments();
 
-//     final listDocs = docsSnap.documents
-//         .map((docSnap) => UserModel(docSnap.documentID).fromMap(docSnap.data))
+//     final listDocs = docsSnap.docs
+//         .map((docSnap) => UserModel(docSnap.id).fromMap(docSnap.data()))
 //         .toList();
 //     return state.copyWith(
 //       userState: state.userState.copyWith(
