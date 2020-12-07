@@ -84,7 +84,7 @@ class StreamColExameAsyncExameAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     print('StreamColExameAsyncExameAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     Query collRef;
     collRef = firestore
         .collection(ExameModel.collection)
@@ -167,7 +167,7 @@ class AddDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('AddDocExameCurrentAsyncExameAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
     exameModel.userRef = UserModel(state.loggedState.userModelLogged.id)
@@ -245,7 +245,7 @@ class UpdateDocExameCurrentAsyncExameAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('UpdateDocExameCurrentAsyncExameAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
 
@@ -298,7 +298,7 @@ class UpdateDocSetQuestionInExameCurrentAsyncExameAction
   Future<AppState> reduce() async {
     print(
         'UpdateDocSetQuestionInExameCurrentAsyncExameAction: $questionId $isAddOrRemove');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
 
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
@@ -343,7 +343,7 @@ class UpdateOrderExameListAsyncExameAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('UpdateOrderExameListInDocClassroomAsyncExameAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());

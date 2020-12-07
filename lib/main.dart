@@ -1,7 +1,10 @@
 import 'package:aiprof/app_state.dart';
+import 'package:aiprof/base/datasource_action.dart';
 import 'package:aiprof/login/logged_action.dart';
 import 'package:aiprof/routes.dart';
 import 'package:async_redux/async_redux.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -16,6 +19,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final Store<AppState> store;
+
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   MyApp({Key key})
@@ -38,6 +42,16 @@ class MyApp extends StatelessWidget {
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
+          store.dispatch(SetFirebaseApp(_initialization));
+          FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+          store.dispatch(SetRemoteFirebaseFirestore(firebaseFirestore));
+          // String host = defaultTargetPlatform == TargetPlatform.android
+          //     ? '10.0.2.2:8080'
+          //     : 'localhost:8080';
+          // firebaseFirestore.settings = Settings(host: host, sslEnabled: false);
+          // store.dispatch(SetLocalFirebaseFirestore(firebaseFirestore));
+
+          store.dispatch(SetFirebaseApp(_initialization));
           store.dispatch(OnAuthStateChangedSyncLoggedAction());
           return StoreProvider<AppState>(
             store: store,

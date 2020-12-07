@@ -42,7 +42,7 @@ class SetClassroomFilterSyncClassroomAction extends ReduxAction<AppState> {
 //   @override
 //   AppState reduce() {
 //     print('StreamColClassroomAsyncClassroomAction...');
-//     FirebaseFirestore firestore = FirebaseFirestore.instance;
+//     FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
 //     Query collRef;
 //     collRef = firestore
 //         .collection(ClassroomModel.collection)
@@ -99,7 +99,7 @@ class SetClassroomFilterSyncClassroomAction extends ReduxAction<AppState> {
 class ReadyDocsClassroomListAsyncClassroomAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     Query collRef;
     collRef = firestore
         .collection(ClassroomModel.collection)
@@ -156,7 +156,7 @@ class CreateDocClassroomCurrentAsyncClassroomAction
   @override
   Future<AppState> reduce() async {
     print('CreateDocClassroomCurrentAsyncClassroomAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());
@@ -210,7 +210,7 @@ class UpdateDocClassroomCurrentAsyncClassroomAction
   @override
   Future<AppState> reduce() async {
     print('UpdateDocClassroomCurrentAsyncClassroomAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());
@@ -246,7 +246,7 @@ class DeleteDocClassroomCurrentAsyncClassroomAction
   @override
   Future<AppState> reduce() async {
     print('DeleteDocClassroomCurrentAsyncClassroomAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     await firestore
         .collection(UserModel.collection)
         .doc(state.loggedState.userModelLogged.id)
@@ -281,7 +281,7 @@ class ChangeClassroomListOrderAsyncClassroomAction
   @override
   Future<AppState> reduce() async {
     print('UpdateDocClassroomCurrentAsyncClassroomAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
     UserModel userModel = UserModel(state.loggedState.userModelLogged.id)
         .fromMap(state.loggedState.userModelLogged.toMap());
     int _newIndex = newIndex;

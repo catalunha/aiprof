@@ -95,7 +95,7 @@ class GetDocUserAsyncUserAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('GetDocUserAsyncUserAction...');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
 
     final docRef = firestore
         .collection(UserModel.collection)
@@ -124,7 +124,7 @@ class GetDocUserAsyncUserAction extends ReduxAction<AppState> {
 //   @override
 //   Future<AppState> reduce() async {
 //     print('UpdateDocUserModelAsyncLoggedAction...');
-//     FirebaseFirestore firestore = FirebaseFirestore.instance;
+//     FirebaseFirestore firestore = state.dataSourceState.firebaseFirestore;
 //     UserModel userModel = state.loggedState.userModelLogged;
 //     final colRef =
 //         firestore.collection(UserModel.collection).doc(userModel.id);
@@ -259,7 +259,7 @@ class GetDocsUserModelAsyncLoggedAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('GetDocsUserModelAsyncLoggedAction...$id');
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    FirebaseFirestore firestore = state.dataSourceState.firebaseFirestoreRemote;
 
     final docRef = firestore.collection(UserModel.collection).doc(id);
     final docSnap = await docRef.get();

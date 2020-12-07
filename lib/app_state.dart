@@ -1,3 +1,4 @@
+import 'package:aiprof/base/datasource_state.dart';
 import 'package:async_redux/async_redux.dart';
 import 'package:aiprof/classroom/classroom_state.dart';
 import 'package:aiprof/exame/exame_state.dart';
@@ -12,6 +13,7 @@ import 'package:aiprof/user/user_state.dart';
 
 class AppState {
   final Wait wait;
+  final DataSourceState dataSourceState;
   final LoggedState loggedState;
   final UserState userState;
   final ClassroomState classroomState;
@@ -25,6 +27,7 @@ class AppState {
 
   AppState({
     this.wait,
+    this.dataSourceState,
     this.loggedState,
     this.userState,
     this.classroomState,
@@ -39,6 +42,7 @@ class AppState {
 
   static AppState initialState() => AppState(
         wait: Wait(),
+        dataSourceState: DataSourceState.initialState(),
         loggedState: LoggedState.initialState(),
         userState: UserState.initialState(),
         classroomState: ClassroomState.initialState(),
@@ -52,6 +56,7 @@ class AppState {
       );
   AppState copyWith({
     Wait wait,
+    DataSourceState dataSourceState,
     LoggedState loggedState,
     UserState userState,
     ClassroomState classroomState,
@@ -65,6 +70,7 @@ class AppState {
   }) =>
       AppState(
         wait: wait ?? this.wait,
+        dataSourceState: dataSourceState ?? this.dataSourceState,
         loggedState: loggedState ?? this.loggedState,
         userState: userState ?? this.userState,
         classroomState: classroomState ?? this.classroomState,
@@ -78,6 +84,7 @@ class AppState {
       );
   @override
   int get hashCode =>
+      dataSourceState.hashCode ^
       taskState.hashCode ^
       questionState.hashCode ^
       exameState.hashCode ^
@@ -94,6 +101,7 @@ class AppState {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AppState &&
+          dataSourceState == other.dataSourceState &&
           taskState == other.taskState &&
           questionState == other.questionState &&
           exameState == other.exameState &&
