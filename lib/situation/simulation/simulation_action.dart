@@ -77,14 +77,14 @@ class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     print('GetDocsSimulationListAsyncSimulationAction...');
-    // Firestore firestore = Firestore.instance;
+    // FirebaseFirestore firestore = FirebaseFirestore.instance;
     //+++ old doc
     // DocumentSnapshot docRef = await firestore
     //     .collection(SituationModel.collection)
-    //     .document(state.situationState.situationCurrent.id)
+    //     .doc(state.situationState.situationCurrent.id)
     //     .get();
     // SituationModel situationModel =
-    //     SituationModel(docRef.documentID).fromMap(docRef.data);
+    //     SituationModel(docRef.id).fromMap(docRef.data());
     // //+++ Atualiza lista de situations pois uma situação foi alterar e a lista nao precisa ser relida.
     // int index = state.situationState.situationList
     //     .indexWhere((element) => element.id == situationModel.id);
@@ -120,7 +120,7 @@ class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
 //   @override
 //   Future<AppState> reduce() async {
 //     print('GetDocsSimulationListAsyncSimulationAction...');
-//     Firestore firestore = Firestore.instance;
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 //     Query collRef;
 //     //+++ old doc
 //     collRef = firestore
@@ -131,9 +131,9 @@ class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
 
 //     final docsSnapOld = await collRef.getDocuments();
 
-//     final listDocsOld = docsSnapOld.documents
+//     final listDocsOld = docsSnapOld.docs
 //         .map((docSnap) =>
-//             SimulationModel(docSnap.documentID).fromMap(docSnap.data))
+//             SimulationModel(docSnap.id).fromMap(docSnap.data()))
 //         .toList();
 //     //--- old doc
 //     //+++ new doc
@@ -144,9 +144,9 @@ class GetDocsSimulationListAsyncSimulationAction extends ReduxAction<AppState> {
 //             isEqualTo: state.situationState.situationCurrent.id);
 //     final docsSnapNew = await collRef.getDocuments();
 
-//     final listDocsNew = docsSnapNew.documents
+//     final listDocsNew = docsSnapNew.docs
 //         .map((docSnap) =>
-//             SimulationModel(docSnap.documentID).fromMap(docSnap.data))
+//             SimulationModel(docSnap.id).fromMap(docSnap.data()))
 //         .toList();
 //     //--- new doc
 
@@ -180,7 +180,7 @@ class AddDocSimulationCurrentAsyncSimulationAction
   @override
   Future<AppState> reduce() async {
     print('AddDocSimulationCurrentAsyncSimulationAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     SituationModel situationModel =
         SituationModel(state.situationState.situationCurrent.id)
             .fromMap(state.situationState.situationCurrent.toMap());
@@ -195,8 +195,8 @@ class AddDocSimulationCurrentAsyncSimulationAction
     situationModel.simulationModel[uuid.Uuid().v4()] = simulationModel;
     await firestore
         .collection(SituationModel.collection)
-        .document(situationModel.id)
-        .updateData(situationModel.toMap());
+        .doc(situationModel.id)
+        .update(situationModel.toMap());
     return null;
   }
 
@@ -219,7 +219,7 @@ class AddDocSimulationCurrentAsyncSimulationAction
 //   @override
 //   Future<AppState> reduce() async {
 //     print('AddDocSimulationCurrentAsyncSimulationAction...');
-//     Firestore firestore = Firestore.instance;
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 //     SimulationModel simulationModel =
 //         SimulationModel(state.simulationState.simulationCurrent.id)
 //             .fromMap(state.simulationState.simulationCurrent.toMap());
@@ -252,7 +252,7 @@ class UpdateDocSimulationCurrentAsyncSimulationAction
   @override
   Future<AppState> reduce() async {
     print('UpdateDocSimulationCurrentAsyncSimulationAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     SituationModel situationModel =
         SituationModel(state.situationState.situationCurrent.id)
             .fromMap(state.situationState.situationCurrent.toMap());
@@ -267,8 +267,8 @@ class UpdateDocSimulationCurrentAsyncSimulationAction
     }
     await firestore
         .collection(SituationModel.collection)
-        .document(situationModel.id)
-        .updateData(situationModel.toMap());
+        .doc(situationModel.id)
+        .update(situationModel.toMap());
     return null;
   }
 
@@ -291,7 +291,7 @@ class UpdateDocSimulationCurrentAsyncSimulationAction
 //   @override
 //   Future<AppState> reduce() async {
 //     print('UpdateDocSimulationCurrentAsyncSimulationAction...');
-//     Firestore firestore = Firestore.instance;
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 //     SimulationModel simulationModel =
 //         SimulationModel(state.simulationState.simulationCurrent.id)
 //             .fromMap(state.simulationState.simulationCurrent.toMap());
@@ -299,14 +299,14 @@ class UpdateDocSimulationCurrentAsyncSimulationAction
 //     if (isDelete) {
 //       await firestore
 //           .collection(SimulationModel.collection)
-//           .document(simulationModel.id)
+//           .doc(simulationModel.id)
 //           .delete();
 //     } else {
 //       simulationModel.name = name;
 //       await firestore
 //           .collection(SimulationModel.collection)
-//           .document(simulationModel.id)
-//           .updateData(simulationModel.toMap());
+//           .doc(simulationModel.id)
+//           .update(simulationModel.toMap());
 //     }
 //     return null;
 //   }

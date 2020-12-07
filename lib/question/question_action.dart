@@ -66,7 +66,7 @@ class StreamColQuestionAsyncQuestionAction extends ReduxAction<AppState> {
   @override
   AppState reduce() {
     print('StreamColQuestionAsyncQuestionAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     Query collRef;
     collRef = firestore
         .collection(QuestionModel.collection)
@@ -76,16 +76,16 @@ class StreamColQuestionAsyncQuestionAction extends ReduxAction<AppState> {
         .where('exameRef.id', isEqualTo: state.exameState.exameCurrent.id);
     // final docsSnap =  collRef.getDocuments();
 
-    // List<QuestionModel> listDocs = docsSnap.documents
+    // List<QuestionModel> listDocs = docsSnap.docs
     //     .map((docSnap) =>
-    //         QuestionModel(docSnap.documentID).fromMap(docSnap.data))
+    //         QuestionModel(docSnap.id).fromMap(docSnap.data()))
     //     .toList();
     Stream<QuerySnapshot> streamQuerySnapshot = collRef.snapshots();
 
     Stream<List<QuestionModel>> streamList = streamQuerySnapshot.map(
-        (querySnapshot) => querySnapshot.documents
+        (querySnapshot) => querySnapshot.docs
             .map((docSnapshot) =>
-                QuestionModel(docSnapshot.documentID).fromMap(docSnapshot.data))
+                QuestionModel(docSnapshot.id).fromMap(docSnapshot.data()))
             .toList());
     streamList.listen((List<QuestionModel> list) {
       dispatch(GetDocsQuestionListAsyncQuestionAction(list));
@@ -155,7 +155,7 @@ class AddDocQuestionCurrentAsyncQuestionAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('AddDocQuestionCurrentAsyncQuestionAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     QuestionModel questionModel =
         QuestionModel(state.questionState.questionCurrent.id)
             .fromMap(state.questionState.questionCurrent.toMap());
@@ -176,19 +176,18 @@ class AddDocQuestionCurrentAsyncQuestionAction extends ReduxAction<AppState> {
     questionModel.error = error;
     questionModel.isDelivered = false;
     questionModel.scoreExame = state.exameState.exameCurrent.scoreExame;
-    var docRefQuestion =
-        firestore.collection(QuestionModel.collection).document();
-    print('Novo Question: ${docRefQuestion.documentID}');
+    var docRefQuestion = firestore.collection(QuestionModel.collection).doc();
+    print('Novo Question: ${docRefQuestion.id}');
     await firestore
         .collection(ExameModel.collection)
-        .document(state.exameState.exameCurrent.id)
-        .updateData({
-      'questionId': FieldValue.arrayUnion([docRefQuestion.documentID])
+        .doc(state.exameState.exameCurrent.id)
+        .update({
+      'questionId': FieldValue.arrayUnion([docRefQuestion.id])
     }).then((value) async {
       await firestore
           .collection(QuestionModel.collection)
-          .document(docRefQuestion.documentID)
-          .setData(questionModel.toMap());
+          .doc(docRefQuestion.id)
+          .set(questionModel.toMap());
     });
 
     // await firestore
@@ -196,7 +195,7 @@ class AddDocQuestionCurrentAsyncQuestionAction extends ReduxAction<AppState> {
     //     .add(questionModel.toMap())
     //     .then((value) =>
     //         dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
-    //           questionId: value.documentID,
+    //           questionId: value.id,
     //           isAddOrRemove: true,
     //         )));
 
@@ -234,7 +233,7 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
   @override
   Future<AppState> reduce() async {
     print('UpdateDocQuestionCurrentAsyncQuestionAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     QuestionModel questionModel =
         QuestionModel(state.questionState.questionCurrent.id)
             .fromMap(state.questionState.questionCurrent.toMap());
@@ -242,13 +241,13 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
     if (isDelete) {
       await firestore
           .collection(ExameModel.collection)
-          .document(state.exameState.exameCurrent.id)
-          .updateData({
+          .doc(state.exameState.exameCurrent.id)
+          .update({
         'questionId': FieldValue.arrayRemove([questionModel.id])
       }).then((value) {
         firestore
             .collection(QuestionModel.collection)
-            .document(questionModel.id)
+            .doc(questionModel.id)
             .delete();
         //TODO: Eliminar esta função
         dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
@@ -263,7 +262,7 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
       });
       // await firestore
       //     .collection(QuestionModel.collection)
-      //     .document(questionModel.id)
+      //     .doc(questionModel.id)
       //     .delete();
       // dispatch(UpdateDocSetQuestionInExameCurrentAsyncExameAction(
       //   questionId: questionModel.id,
@@ -284,8 +283,8 @@ class UpdateDocQuestionCurrentAsyncQuestionAction
 
       await firestore
           .collection(QuestionModel.collection)
-          .document(questionModel.id)
-          .updateData(questionModel.toMap());
+          .doc(questionModel.id)
+          .update(questionModel.toMap());
     }
     return null;
   }
@@ -304,7 +303,7 @@ class UpdateDocSetStudentInQuestionCurrentAsyncQuestionAction
   });
   @override
   Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     QuestionModel questionModel =
         QuestionModel(state.questionState.questionCurrent.id)
@@ -324,8 +323,8 @@ class UpdateDocSetStudentInQuestionCurrentAsyncQuestionAction
     // }
     await firestore
         .collection(QuestionModel.collection)
-        .document(questionModel.id)
-        .updateData(questionModel.toMap());
+        .doc(questionModel.id)
+        .update(questionModel.toMap());
     return state.copyWith(
       questionState: state.questionState.copyWith(
         questionCurrent: questionModel,
@@ -352,7 +351,7 @@ class UpdateDocsSetStudentListInQuestionCurrentAsyncQuestionAction
   @override
   Future<AppState> reduce() async {
     print('BatchedDocsWorkerListOnBoardAsyncWorkerAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     QuestionModel questionModel =
         QuestionModel(state.questionState.questionCurrent.id)
             .fromMap(state.questionState.questionCurrent.toMap());
@@ -375,8 +374,8 @@ class UpdateDocsSetStudentListInQuestionCurrentAsyncQuestionAction
     }
     await firestore
         .collection(QuestionModel.collection)
-        .document(questionModel.id)
-        .updateData(questionModel.toMap());
+        .doc(questionModel.id)
+        .update(questionModel.toMap());
     return state.copyWith(
       questionState: state.questionState.copyWith(
         questionCurrent: questionModel,
@@ -399,7 +398,7 @@ class DeleteStudentInQuestionCurrentAndTaskAsyncQuestionAction
   DeleteStudentInQuestionCurrentAndTaskAsyncQuestionAction(this.studentId);
   @override
   Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     QuestionModel questionModel =
         QuestionModel(state.questionState.questionCurrent.id)
@@ -417,8 +416,8 @@ class DeleteStudentInQuestionCurrentAndTaskAsyncQuestionAction
 
     await firestore
         .collection(QuestionModel.collection)
-        .document(questionModel.id)
-        .updateData(questionModel.toMap());
+        .doc(questionModel.id)
+        .update(questionModel.toMap());
 
     //+++ Deletando todas as tasks relacionadas. Pois taks para este student ja foi aplicada
     Query collRef;
@@ -427,13 +426,12 @@ class DeleteStudentInQuestionCurrentAndTaskAsyncQuestionAction
         .where('questionRef.id', isEqualTo: questionModel.id);
     final docsSnap = await collRef.getDocuments();
 
-    List<String> listDocs =
-        docsSnap.documents.map((docSnap) => docSnap.documentID).toList();
+    List<String> listDocs = docsSnap.docs.map((docSnap) => docSnap.id).toList();
     print(listDocs);
     var batch = firestore.batch();
 
     for (var id in listDocs) {
-      batch.delete(firestore.collection(TaskModel.collection).document(id));
+      batch.delete(firestore.collection(TaskModel.collection).doc(id));
     }
     await batch.commit();
 
@@ -462,7 +460,7 @@ class UpdateOrderQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('UpdateOrderQuestionListAsyncQuestionAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     ExameModel exameModel = ExameModel(state.exameState.exameCurrent.id)
         .fromMap(state.exameState.exameCurrent.toMap());
     int _newIndex = newIndex;
@@ -475,8 +473,8 @@ class UpdateOrderQuestionListAsyncQuestionAction extends ReduxAction<AppState> {
 
     await firestore
         .collection(ExameModel.collection)
-        .document(state.exameState.exameCurrent.id)
-        .updateData({'questionId': exameModel.questionId});
+        .doc(state.exameState.exameCurrent.id)
+        .update({'questionId': exameModel.questionId});
 
     return null;
   }

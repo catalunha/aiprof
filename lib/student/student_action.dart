@@ -52,7 +52,7 @@ class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('GetDocsStudentListAsyncStudentAction...');
-    // Firestore firestore = Firestore.instance;
+    // FirebaseFirestore firestore = FirebaseFirestore.instance;
     // Query collRef;
     // collRef = firestore
     //     .collection(UserModel.collection)
@@ -62,8 +62,8 @@ class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
 
     // final docsSnap = await collRef.getDocuments();
 
-    // final listDocs = docsSnap.documents
-    //     .map((docSnap) => UserModel(docSnap.documentID).fromMap(docSnap.data))
+    // final listDocs = docsSnap.docs
+    //     .map((docSnap) => UserModel(docSnap.id).fromMap(docSnap.data()))
     //     .toList();
     // print(listDocs);
     // listDocs.sort((a, b) => a.name.compareTo(b.name));
@@ -89,7 +89,7 @@ class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
 //   @override
 //   Future<AppState> reduce() async {
 //     print('GetDocsStudentListAsyncStudentAction...');
-//     Firestore firestore = Firestore.instance;
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 //     Query collRef;
 //     collRef = firestore
 //         .collection(UserModel.collection)
@@ -99,8 +99,8 @@ class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
 
 //     final docsSnap = await collRef.getDocuments();
 
-//     final listDocs = docsSnap.documents
-//         .map((docSnap) => UserModel(docSnap.documentID).fromMap(docSnap.data))
+//     final listDocs = docsSnap.docs
+//         .map((docSnap) => UserModel(docSnap.id).fromMap(docSnap.data()))
 //         .toList();
 //     print(listDocs);
 //     listDocs.sort((a, b) => a.name.compareTo(b.name));
@@ -121,7 +121,7 @@ class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
 //   // @override
 //   // Future<AppState> reduce() async {
 //   //   print('AddDocStudentCurrentAsyncStudentAction...');
-//   //   Firestore firestore = Firestore.instance;
+//   //   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 //   //   return null;
 //   // }
@@ -167,14 +167,14 @@ class GetDocsStudentListAsyncStudentAction extends ReduxAction<AppState> {
 //       }
 //     }
 //     print(studentList);
-//     Firestore firestore = Firestore.instance;
+//     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
 //     var batch = firestore.batch();
 //     if (studentList.isNotEmpty) {
 //       for (var student in studentList) {
-//         // var studentDoc = firestore.collection('student').document();
-//         var studentDoc = firestore.collection(UserModel.collection).document();
-//         batch.setData(
+//         // var studentDoc = firestore.collection('student').doc();
+//         var studentDoc = firestore.collection(UserModel.collection).doc();
+//         batch.set(
 //             studentDoc,
 //             {
 //               'isActive': true,
@@ -224,19 +224,16 @@ class RemoveStudentForClassroomAsyncStudentAction
 
   @override
   Future<AppState> reduce() async {
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     //O user removido de uma classroom apenas nao tem mais acesso a aquela classroom. mas todo seu hitorico de task fica salvo.
-    await firestore
-        .collection(UserModel.collection)
-        .document(studentId)
-        .updateData({
+    await firestore.collection(UserModel.collection).doc(studentId).update({
       'classroomId':
           FieldValue.arrayRemove([state.classroomState.classroomCurrent.id])
     });
     await firestore
         .collection(ClassroomModel.collection)
-        .document(state.classroomState.classroomCurrent.id)
-        .updateData({'studentUserRefMap.$studentId': FieldValue.delete()});
+        .doc(state.classroomState.classroomCurrent.id)
+        .update({'studentUserRefMap.$studentId': FieldValue.delete()});
 
     return null;
   }
@@ -256,7 +253,7 @@ class UpdateStudentMapTempAsyncStudentAction extends ReduxAction<AppState> {
   @override
   Future<AppState> reduce() async {
     print('AddDocStudentCurrentAsyncStudentAction...');
-    Firestore firestore = Firestore.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     ClassroomModel classroomModel =
         ClassroomModel(state.classroomState.classroomCurrent.id)
             .fromMap(state.classroomState.classroomCurrent.toMap());
@@ -267,8 +264,8 @@ class UpdateStudentMapTempAsyncStudentAction extends ReduxAction<AppState> {
 
     await firestore
         .collection(ClassroomModel.collection)
-        .document(classroomModel.id)
-        .updateData(classroomModel.toMap());
+        .doc(classroomModel.id)
+        .update(classroomModel.toMap());
     return null;
   }
 

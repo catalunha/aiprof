@@ -5,7 +5,7 @@ import 'package:meta/meta.dart';
 
 @immutable
 class LoggedState {
-  final FirebaseUser firebaseUserLogged;
+  final User firebaseUserLogged;
   final AuthenticationStatusLogged authenticationStatusLogged;
   final UserModel userModelLogged;
   LoggedState({
@@ -22,7 +22,7 @@ class LoggedState {
   }
   LoggedState copyWith({
     AuthenticationStatusLogged authenticationStatusLogged,
-    FirebaseUser firebaseUserLogged,
+    User firebaseUserLogged,
     UserModel userModelLogged,
   }) {
     return LoggedState(
